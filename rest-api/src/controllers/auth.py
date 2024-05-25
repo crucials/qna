@@ -1,11 +1,9 @@
-import json
-
 import flask
-from werkzeug.exceptions import BadRequest, InternalServerError
-from marshmallow import EXCLUDE, ValidationError
+from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
+from marshmallow import EXCLUDE
 
 from utils.decorators.api_response import api_response
-from services.auth import auth_service
+from services.auth import InvalidCredentialsError, UsernameAlreadyExistsError, auth_service
 from validation_schemas.account_credentials_schema import AccountCredentialsSchema
 
 
@@ -31,10 +29,28 @@ def sign_up():
         response.set_cookie('token', token)
 
         return response
-    except ValidationError as error:
-        error_messages = list(error.messages_dict)
-        message = (error.messages_dict.get(error_messages[0])
-                   or 'invalid request body')
-        raise BadRequest(f'error in \'{error_messages[0]}\' field: \'{message[0]}\'')
-    except json.JSONDecodeError:
-        raise BadRequest('invalid json in request body')
+    except UsernameAlreadyExistsError:
+        raise Conflict('account with specified username already exists')
+
+
+@auth_controller_blueprint.get('/log-in')
+@api_response()
+def log_in():
+    try:
+        credentials = AccountCredentialsSchema().loads(
+            flask.request.get_data(as_text=True),
+            many=False,
+            unknown=EXCLUDE
+        )
+
+        if not isinstance(credentials, dict):
+            raise InternalServerError()
+        
+        token = auth_service.log_in(**credentials)
+
+        response = flask.make_response()
+        response.set_cookie('token', token)
+
+        return response
+    except InvalidCredentialsError:
+        raise BadRequest('invalid username or password')

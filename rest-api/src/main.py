@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+from marshmallow import ValidationError
 import waitress
 from flask import Flask
 from werkzeug.exceptions import HTTPException
@@ -21,12 +22,27 @@ for blueprint in controllers_blueprints:
 @app.errorhandler(HTTPException)
 def send_json_error_response(error: HTTPException):
     return {
-        "error": {
-            "code": error.code,
-            "explanation": error.description
+        'error': {
+            'code': error.code,
+            'explanation': error.description
         },
-        "data": None,
+        'data': None,
     }, error.code or 500
+
+
+@app.errorhandler(ValidationError)
+def send_json_validation_error_response(error: ValidationError):
+    invalid_fields = list(error.messages_dict)
+    message = (error.messages_dict.get(invalid_fields[0])
+                or 'invalid request body')
+    return {
+        'error': {
+            'code': 400,
+            'invalid_field': invalid_fields[0],
+            'explanation': message[0],
+        },
+        'data': None,
+    }, 400
 
 
 app.before_request(authorize_request)
