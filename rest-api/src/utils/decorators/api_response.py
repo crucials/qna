@@ -1,4 +1,5 @@
 import json
+from functools import wraps
 
 import flask
 
@@ -16,6 +17,7 @@ def api_response(json_content=True):
     """
 
     def decorator(function):
+        @wraps(function)
         def get_api_response():
             result = function()
 
