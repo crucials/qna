@@ -9,4 +9,4 @@ load_dotenv()
 client = MongoClient(os.environ.get('MONGO_DB_CONNECTION_STRING'))
 main_database = client.get_database('main')
 
-accounts = main_database.get_collection('accounts')
+accounts_collection = main_database.get_collection('accounts')
