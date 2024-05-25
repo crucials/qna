@@ -1,10 +1,11 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask
 import waitress
+from flask import Flask
 from werkzeug.exceptions import HTTPException
 
+from auth_middlewares import authorize_request
 from controllers import controllers_blueprints
 
 
@@ -27,6 +28,8 @@ def send_json_error_response(error: HTTPException):
         "data": None,
     }, error.code or 500
 
+
+app.before_request(authorize_request)
 
 if os.environ.get('MODE') == 'DEV':
     app.run(port=8000)
