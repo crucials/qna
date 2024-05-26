@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col min-h-screen">
+    <div class="flex flex-col min-h-screen overflow-x-hidden">
         <Header />
         <main class="flex-grow px-16 py-12 lg:py-9 lg:px-12 sm:p-7">
             <NuxtPage />
@@ -37,7 +37,7 @@
 
 @layer base {
     body {
-        @apply bg-neutral-900 text-white font-libre-franklin;
+        @apply bg-[#0E0E0E] text-white font-libre-franklin;
     }
 
     * {
