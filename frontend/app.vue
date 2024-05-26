@@ -1,8 +1,10 @@
 <template>
-    <Header/>
-    <main>
-        <NuxtPage/>
-    </main>
+    <div class="flex flex-col min-h-screen">
+        <Header/>
+        <main class="flex-grow p-6">
+            <NuxtPage/>
+        </main>
+    </div>
 </template>
 
 <style>

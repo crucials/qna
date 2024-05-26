@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ["./src/**/*.{js,vue,ts}"],
+    content: [
+        './pages/**/*.{js,vue,ts}',
+        './shared/**/*.{js,vue,ts}',
+        './widgets/**/*.{js,vue,ts}',
+        './entities/**/*.{js,vue,ts}',
+        './app.vue'
+    ],
     theme: {
         screens: {
             '3xl': {
