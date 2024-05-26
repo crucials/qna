@@ -12,11 +12,26 @@ export default defineNuxtConfig({
         },
     },
 
+    srcDir: './src',
+
     components: [
         {
-            path: '~/components',
-            pathPrefix: false
-        }
+            path: '~/shared',
+            pathPrefix: false,
+            // Auto-import all components from shared directory.
+        },
+
+        {
+            path: '~/widgets',
+            pathPrefix: false,
+            // Auto-import all components from shared directory.
+        },
+
+        {
+            path: '~/entities',
+            pathPrefix: false,
+            // Auto-import all components from shared directory.
+        },
     ],
 
     postcss: {

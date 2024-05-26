@@ -1,13 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        "./components/**/*.{js,vue,ts}",
-        "./layouts/**/*.vue",
-        "./pages/**/*.vue",
-        "./plugins/**/*.{js,ts}",
-        "./app.vue",
-        "./error.vue",
-    ],
+    content: ["./src/**/*.{js,vue,ts}"],
     theme: {
         screens: {
             '3xl': {
@@ -99,7 +92,12 @@ export default {
                 'enchanted-amethyst': 'linear-gradient(90deg, rgba(169,101,215,1) 0%, rgba(80,54,242,1) 100%)',
                 'silver': 'linear-gradient(90deg, rgba(64,64,64,1) 0%, rgba(104,104,104,1) 100%)',
                 'chrome': ''
-            }
+            },
+
+            fontFamily: {
+                'libre-franklin': 'Libre Franklin',
+                'inria-serif': 'Inria Serif',
+            },
         },
     },
     plugins: [],

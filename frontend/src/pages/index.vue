@@ -3,7 +3,9 @@
 </script>
 
 <template>
-    index
+    <h1 class="font-bold text-4xl">
+        test heading
+    </h1>
 </template>
 
 <style scoped>
