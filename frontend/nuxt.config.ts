@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
 
+    modules: [ '@vueuse/nuxt' ],
+
     app: {
+        
         head: {
             htmlAttrs: {
                 lang: 'en',
