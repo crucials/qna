@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <Header/>
-        <main class="flex-grow p-6">
-            <NuxtPage/>
+        <Header />
+        <main class="flex-grow px-16 py-12 lg:py-9 lg:px-12 sm:p-7">
+            <NuxtPage />
         </main>
     </div>
 </template>
@@ -38,6 +38,11 @@
 @layer base {
     body {
         @apply bg-neutral-900 text-white font-libre-franklin;
+    }
+
+    * {
+        @apply focus-visible:outline-none focus-visible:ring-4
+            focus-visible:ring-amethyst/40;
     }
 }
 </style>
