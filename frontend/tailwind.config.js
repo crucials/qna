@@ -5,7 +5,8 @@ export default {
         './shared/**/*.{js,vue,ts}',
         './widgets/**/*.{js,vue,ts}',
         './entities/**/*.{js,vue,ts}',
-        './app.vue'
+        './app.vue',
+        './error.vue',
     ],
     theme: {
         screens: {
