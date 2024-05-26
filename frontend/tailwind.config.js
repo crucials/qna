@@ -91,7 +91,9 @@ export default {
 
             colors: {
                 amethyst: {
-                    DEFAULT: '#A965D7'
+                    light: '#ba85e1',
+                    DEFAULT: '#A965D7',
+                    dark: '#7c499f',
                 }
             },
 
