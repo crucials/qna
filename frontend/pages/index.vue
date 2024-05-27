@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <HeroSection class="mb-36 lg:mb-28"/>
+    <HeroSection class="mb-28 m:mb-24"/>
     <FeaturesSection/>
 </template>
 

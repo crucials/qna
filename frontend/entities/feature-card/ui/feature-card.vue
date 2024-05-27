@@ -9,12 +9,12 @@ defineProps<{
     <li
         class="p-7 bg-neutral-600/5 rounded-lg
             backdrop-blur-[2px] border border-neutral-700 flex items-center gap-x-5
-            transition-transform duration-300 hover:scale-105"
+            transition-transform duration-300 hover:scale-105 m:bg-black/30 sm:p-4"
     >
         <slot name="icon"></slot>
 
         <div>
-            <h3 class="text-xl font-bold mb-3">
+            <h3 class="text-xl font-bold mb-3 lg:text-lg">
                 {{ title }}
             </h3>
 

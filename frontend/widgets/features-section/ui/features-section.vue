@@ -4,21 +4,27 @@
         <div class="circle-grid-background-decoration right"></div>
         <div class="circle-grid-background-decoration bottom"></div>
 
-        <h2 class="font-inria-serif font-bold text-4xl text-center mb-16 m:text-3xl">
+        <h2
+            class="font-inria-serif font-bold text-4xl text-center mb-14
+                sm:mb-8 m:text-3xl"
+        >
             Why you should try
             <span class="text-amethyst">qna</span>
         </h2>
 
-        <ul class="grid grid-cols-2 gap-7 w-3/4 mx-auto pt-8">
+        <ul
+            class="grid grid-cols-2 gap-7 w-3/4 mx-auto pt-8
+                xl:w-11/12 m:grid-cols-1 xs:pt-0"
+        >
             <FeatureCard
-                class="-translate-x-8 -translate-y-8"
+                class="-translate-x-8 -translate-y-8 xs:transform-none"
                 title="Attractive UI"
                 description="Make users more interested in your survey with modern
                     UI an UX design."
             >
                 <template #icon>
                     <svg
-                        class="flex-shrink-0 w-20"
+                        class="flex-shrink-0 w-20 lg:w-16"
                         viewBox="0 0 84 84"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +44,7 @@
             >
                 <template #icon>
                     <svg
-                        class="w-[74px]"
+                        class="flex-shrink-0 w-[74px] lg:w-14"
                         viewBox="0 0 76 76"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -50,14 +56,14 @@
             </FeatureCard>
 
             <FeatureCard
-                class="translate-x-8 translate-y-8"
+                class="translate-x-8 translate-y-8 xs:transform-none"
                 title="Attractive UI"
                 description="Make users more interested in your survey with modern
                     UI an UX design."
             >
                 <template #icon>
                     <svg
-                        class="w-14"
+                        class="flex-shrink-0 w-14 lg:w-10"
                         viewBox="0 0 58 76"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -82,10 +88,10 @@
 }
 
 .circle-grid-background-decoration.right {
-    @apply -right-20 top-10;
+    @apply -right-20 top-10 m:hidden;
 }
 
 .circle-grid-background-decoration.bottom {
-    @apply left-1/2 -bottom-5 -translate-x-1/2;
+    @apply left-1/2 -bottom-5 -translate-x-1/2 m:hidden;
 }
 </style>

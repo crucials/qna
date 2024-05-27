@@ -4,8 +4,10 @@ const mounted = useMounted()
 </script>
 
 <template>
-    <section class="flex items-start gap-x-5 gap-y-12 justify-between flex-wrap
-        m:gap-y-7">
+    <section
+        class="flex items-start gap-x-5 gap-y-12 justify-between flex-wrap
+            m:gap-y-7"
+    >
         <div
             class="flex items-center gap-x-8 gap-y-7 w-full
                 m:flex-col m:items-start"
@@ -29,13 +31,15 @@ const mounted = useMounted()
                 in your dashboard.
             </p>
 
-            <OutlinedButton class="mr-5">
-                Start using
-            </OutlinedButton>
+            <div class="flex gap-5 flex-wrap">
+                <OutlinedButton>
+                    Start using
+                </OutlinedButton>
 
-            <FilledButton>
-                Learn more
-            </FilledButton>
+                <FilledButton>
+                    Learn more
+                </FilledButton>
+            </div>
         </div>
 
         <figure
