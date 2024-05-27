@@ -27,6 +27,7 @@ def api_response(json_content=True):
                     'error': None,
                 }))
                 result.headers.set('Content-Type', 'application/json')
+
                 return result
             elif isinstance(result, flask.Response):
                 return result
@@ -35,6 +36,7 @@ def api_response(json_content=True):
                 'data': function(),
                 'error': None
             }
+        
         return get_api_response
 
     return decorator
