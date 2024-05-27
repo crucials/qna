@@ -2,8 +2,10 @@ import flask
 from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
 from marshmallow import EXCLUDE
 
+from auth_middlewares import restrict_unauthorized_access
 from utils.decorators.api_response import api_response
 from services.auth import InvalidCredentialsError, UsernameAlreadyExistsError, auth_service
+from utils.get_account_from_headers import get_account_from_headers
 from validation_schemas.account_credentials_schema import AccountCredentialsSchema
 
 
@@ -54,3 +56,15 @@ def log_in():
         return response
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')
+    
+@auth_controller_blueprint.get('/account')
+@api_response()
+def get_current_account():
+    restrict_unauthorized_access()
+    account = get_account_from_headers(flask.request.headers)
+
+    print(account)
+
+    return {
+        'name': account['name']
+    }
