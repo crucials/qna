@@ -6,9 +6,11 @@ defineProps<{
 </script>
 
 <template>
-    <li class="p-7 bg-neutral-600/5 rounded-lg
-        backdrop-blur-[2px] border border-neutral-700 flex items-center gap-x-5
-        transition-transform duration-300 hover:scale-105">
+    <li
+        class="p-7 bg-neutral-600/5 rounded-lg
+            backdrop-blur-[2px] border border-neutral-700 flex items-center gap-x-5
+            transition-transform duration-300 hover:scale-105"
+    >
         <slot name="icon"></slot>
 
         <div>
