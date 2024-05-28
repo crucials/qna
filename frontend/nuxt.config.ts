@@ -2,18 +2,29 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
 
-    modules: [ '@vueuse/nuxt' ],
+    modules: [
+        '@vueuse/nuxt',
 
-    app: {
-        head: {
-            htmlAttrs: {
-                lang: 'en',
-            },
-            title: 'qna',
-            link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+        [
+            '@pinia/nuxt',
+            {
+                autoImports: [
+                    'defineStore', 'storeToRefs'
+                ]
+            }
+        ]
+    ],
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
         },
     },
 
+    dir: {
+        'middleware': 'app/*'
+    },
+    
     components: [
         {
             path: '~/shared',
@@ -29,12 +40,26 @@ export default defineNuxtConfig({
             path: '~/entities',
             pathPrefix: false,
         },
+
+        {
+            path: '~/features',
+            pathPrefix: false,
+        },
     ],
 
-    postcss: {
-        plugins: {
-            tailwindcss: {},
-            autoprefixer: {},
+    app: {
+        head: {
+            htmlAttrs: {
+                lang: 'en',
+            },
+            title: 'qna',
+            link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
         },
     },
+
+    runtimeConfig: {
+        public: {
+            apiBaseUrl: process.env.API_BASE_URL,
+        }
+    }
 })
