@@ -14,14 +14,23 @@ def authorize_request():
     """
     this middleware registered on all routes by default
 
-    gets account data from jwt in cookies and puts in
-    `Account` header as json. if token is invalid, does nothing
+    gets account data from jwt in `Authorization` header and puts it in
+    `Account` header as json for request handlers. if token is invalid, does nothing
     """
 
-    token = flask.request.cookies.get('token')
-
-    if token is None:
+    auth_header = flask.request.headers.get('Authorization')
+    if auth_header is None:
         return
+    
+    auth_header_parts = auth_header.split(' ')
+
+    if len(auth_header_parts) != 2:
+        return
+
+    if auth_header_parts[0] != 'Bearer':
+        return
+    
+    token = auth_header_parts[1]
     
     try:
         payload = jwt.decode(token, key=os.environ.get('JWT_SECRET_KEY'),

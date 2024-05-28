@@ -28,13 +28,7 @@ def sign_up():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        token = auth_service.sign_up(**credentials)
-
-        response = flask.make_response()
-        response.set_cookie('token', token, max_age=TOKEN_COOKIE_MAX_AGE,
-                            samesite='none', secure=True, httponly=True)
-
-        return response
+        return auth_service.sign_up(**credentials)
     except UsernameAlreadyExistsError:
         raise Conflict('account with specified username already exists')
 
@@ -51,17 +45,11 @@ def log_in():
 
         if not isinstance(credentials, dict):
             raise InternalServerError()
-        
-        token = auth_service.log_in(**credentials)
 
-        response = flask.make_response()
-        response.set_cookie('token', token, max_age=TOKEN_COOKIE_MAX_AGE,
-                            samesite='none', secure=True, httponly=True)
-
-        return response
+        return auth_service.log_in(**credentials)
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')
-    
+
 @auth_controller_blueprint.get('/account')
 @api_response()
 def get_current_account():

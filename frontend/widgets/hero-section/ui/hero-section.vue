@@ -52,16 +52,12 @@ const mounted = useMounted()
                     bg-amethyst blur-[170px] lg:w-40 lg:h-40"
             ></div>
 
-            <Transition
-                enter-from-class="opacity-0 translate-x-32 blur-sm"
-            >
-                <img
-                    v-if="mounted"
-                    class="w-full relative transition-all duration-700"
-                    src="~/assets/images/notebook-illustration.png"
-                    alt="Notebook illustration"
-                />
-            </Transition>
+            <img
+                class="w-full relative transition-all duration-700"
+                :class="{ 'opacity-0 translate-x-32 blur-sm': !mounted }"
+                src="~/assets/images/notebook-illustration.png"
+                alt="Notebook illustration"
+            />
         </figure>
     </section>    
 </template>
