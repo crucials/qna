@@ -4,6 +4,8 @@
         <main class="flex-grow px-16 py-12 lg:py-9 lg:px-12 sm:p-7">
             <NuxtPage />
         </main>
+
+        <Notifications />
     </div>
 </template>
 

@@ -95,6 +95,9 @@ export default {
                     light: '#ba85e1',
                     DEFAULT: '#A965D7',
                     dark: '#7c499f',
+                },
+                error: {
+                    DEFAULT: '#EF2323'
                 }
             },
 
