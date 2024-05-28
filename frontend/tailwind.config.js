@@ -5,6 +5,7 @@ export default {
         './shared/**/*.{js,vue,ts}',
         './widgets/**/*.{js,vue,ts}',
         './entities/**/*.{js,vue,ts}',
+        './features/**/*.{js,vue,ts}',
         './app.vue',
         './error.vue',
     ],

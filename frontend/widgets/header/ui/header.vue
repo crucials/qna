@@ -7,6 +7,6 @@
             <Logo class="w-11 sm:w-10" />
         </NuxtLink>
 
-        <AuthLinks />
+        <AccountLinks />
     </header>
 </template>
