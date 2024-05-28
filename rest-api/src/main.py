@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+from flask_cors import CORS
 from marshmallow import ValidationError
 import waitress
 from flask import Flask
@@ -14,6 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+cors = CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'), supports_credentials=True)
 
 for blueprint in controllers_blueprints:
     app.register_blueprint(blueprint)

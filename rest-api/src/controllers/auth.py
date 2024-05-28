@@ -1,3 +1,4 @@
+import os
 import flask
 from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
 from marshmallow import EXCLUDE
@@ -8,6 +9,8 @@ from services.auth import InvalidCredentialsError, UsernameAlreadyExistsError, a
 from utils.get_account_from_headers import get_account_from_headers
 from validation_schemas.account_credentials_schema import AccountCredentialsSchema
 
+
+TOKEN_COOKIE_MAX_AGE = 2592000
 
 auth_controller_blueprint = flask.Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -28,14 +31,15 @@ def sign_up():
         token = auth_service.sign_up(**credentials)
 
         response = flask.make_response()
-        response.set_cookie('token', token)
+        response.set_cookie('token', token, max_age=TOKEN_COOKIE_MAX_AGE,
+                            samesite='none', secure=True, httponly=True)
 
         return response
     except UsernameAlreadyExistsError:
         raise Conflict('account with specified username already exists')
 
 
-@auth_controller_blueprint.get('/log-in')
+@auth_controller_blueprint.post('/log-in')
 @api_response()
 def log_in():
     try:
@@ -51,7 +55,8 @@ def log_in():
         token = auth_service.log_in(**credentials)
 
         response = flask.make_response()
-        response.set_cookie('token', token)
+        response.set_cookie('token', token, max_age=TOKEN_COOKIE_MAX_AGE,
+                            samesite='none', secure=True, httponly=True)
 
         return response
     except InvalidCredentialsError:
