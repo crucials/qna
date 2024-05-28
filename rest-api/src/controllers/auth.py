@@ -56,8 +56,6 @@ def get_current_account():
     restrict_unauthorized_access()
     account = get_account_from_headers(flask.request.headers)
 
-    print(account)
-
     return {
         'name': account['name']
     }
