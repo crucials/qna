@@ -15,7 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-cors = CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'), supports_credentials=True)
+cors = CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'))
 
 for blueprint in controllers_blueprints:
     app.register_blueprint(blueprint)
@@ -40,7 +40,7 @@ def send_json_validation_error_response(error: ValidationError):
     return {
         'error': {
             'code': 400,
-            'invalid_field': invalid_fields[0],
+            'field': invalid_fields[0],
             'explanation': message[0],
         },
         'data': None,

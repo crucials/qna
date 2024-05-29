@@ -1,4 +1,3 @@
-import os
 import flask
 from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
 from marshmallow import EXCLUDE
