@@ -20,7 +20,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
         Dashboard
     </NuxtLink>
 
-    <div class="flex items-center gap-x-6 ml-auto">
+    <div v-else class="flex items-center gap-x-6 ml-auto">
         <AuthDialog />
     </div>
 </template>
