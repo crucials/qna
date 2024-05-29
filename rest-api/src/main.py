@@ -15,6 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
 cors = CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'))
 
 for blueprint in controllers_blueprints:

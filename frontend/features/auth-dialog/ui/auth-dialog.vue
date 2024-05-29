@@ -2,8 +2,9 @@
 import { useTokenCookie } from '~/shared/model/token-cookie'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
 import { useForm } from '~/shared/model/form'
-import { logInForToken } from '../api/log-in'
+import { logIn } from '~/features/auth-dialog/api/log-in'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
+import { signUp } from '~/features/auth-dialog/api/sign-up'
 
 const token = useTokenCookie()
 const { showNotification } = useNotificationsStore()
@@ -16,8 +17,8 @@ const { form, setError } = useForm({
     password: ''
 })
 
-async function logIn() {
-    const response = await logInForToken(form.value.data.name, form.value.data.password)
+async function sendLogInRequest() {
+    const response = await logIn(form.value.data.name, form.value.data.password)
 
     if(response.error.value?.data.error) {
         setError(response.error.value.data.error)
@@ -30,12 +31,26 @@ async function logIn() {
         token.value = sessionData.token
         account.value = sessionData.account
 
-        form.value.data = {
-            name: '',
-            password: ''
-        }
+        showNotification({ message: 'Logged in', type: 'success' })
+        opened.value = false
+    }
+}
 
-        showNotification({ message: 'logged in', type: 'success' })
+async function sendSignUpRequest() {
+    const response = await signUp(form.value.data.name, form.value.data.password)
+
+    if(response.error.value?.data.error) {
+        setError(response.error.value.data.error)
+        return
+    }
+
+    if(response.data.value?.data) {
+        const sessionData = response.data.value.data
+        
+        token.value = sessionData.token
+        account.value = sessionData.account
+
+        showNotification({ message: 'Account created', type: 'success' })
         opened.value = false
     }
 }
@@ -81,11 +96,11 @@ async function logIn() {
                 />
 
                 <div class="flex gap-5 flex-wrap mt-2">
-                    <FilledButton @click="logIn">
+                    <FilledButton @click="sendLogInRequest">
                         Log in
                     </FilledButton>
 
-                    <OutlinedButton>
+                    <OutlinedButton @click="sendSignUpRequest">
                         Sign up
                     </OutlinedButton>
                 </div>

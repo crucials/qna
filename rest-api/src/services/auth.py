@@ -43,10 +43,12 @@ class AuthService:
             'account_id': new_account.inserted_id.__str__()
         }
 
+        print(new_account_dict)
+
         return SessionData(
             jwt.encode(payload,os.environ.get('JWT_SECRET_KEY'),
                        algorithm='HS256'),
-            new_account_dict
+            AccountDto.create_from_account_document(new_account_dict)
         )
 
     def log_in(self, name: str, password: str):
