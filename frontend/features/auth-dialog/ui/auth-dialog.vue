@@ -7,6 +7,7 @@ import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
 const token = useTokenCookie()
 const { showNotification } = useNotificationsStore()
+const { account } = storeToRefs(useCurrentAccountStore())
 
 const opened = ref(false)
 
@@ -24,7 +25,10 @@ async function logIn() {
     }
 
     if(response.data.value?.data) {
-        token.value = response.data.value.data
+        const sessionData = response.data.value.data
+        
+        token.value = sessionData.token
+        account.value = sessionData.account
 
         form.value.data = {
             name: '',

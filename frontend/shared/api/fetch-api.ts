@@ -30,7 +30,7 @@ export async function fetchApi<TResponseData = null>(
             showNotification({
                 type: 'error',
                 message: 'Error: ' + response.error.value.data.error.explanation
-            }, 50)
+            })
 
             return response
         }
@@ -38,7 +38,7 @@ export async function fetchApi<TResponseData = null>(
         showNotification({
             type: 'error',
             message: 'Failed to send request to the server. Try again later'
-        }, 50)
+        })
     }
 
     return response

@@ -12,7 +12,7 @@ export function useForm<TFormData extends Object>(initialValue: TFormData) {
         error: null
     })
 
-    function setError(error: ApiError, removeAfterSeconds = 10) {
+    function setError(error: ApiError, removeAfterSeconds = 7) {
         form.value.error = {
             field: error.field,
             explanation: error.explanation

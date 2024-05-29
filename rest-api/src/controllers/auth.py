@@ -27,7 +27,11 @@ def sign_up():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        return auth_service.sign_up(**credentials)
+        session = auth_service.sign_up(**credentials)
+        return {
+            'token': session.token,
+            'account': session.account
+        }
     except UsernameAlreadyExistsError:
         raise Conflict('account with specified username already exists')
 
@@ -45,7 +49,11 @@ def log_in():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        return auth_service.log_in(**credentials)
+        session = auth_service.log_in(**credentials)
+        return {
+            'token': session.token,
+            'account': session.account
+        }
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')
 

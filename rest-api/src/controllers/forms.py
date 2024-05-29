@@ -1,7 +1,4 @@
-import bson
-import bson.json_util
 import flask
-from werkzeug.exceptions import InternalServerError
 
 from auth_middlewares import restrict_unauthorized_access
 from utils.decorators.api_response import api_response
@@ -17,6 +14,4 @@ forms_controller_blueprint.before_request(restrict_unauthorized_access)
 @forms_controller_blueprint.get('/')
 @api_response()
 def get_all_forms():
-    current_account = get_account_from_headers(flask.request.headers)
-
     return ['form1', 'form2']
