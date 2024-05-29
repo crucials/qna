@@ -7,7 +7,7 @@ const { notifications } = storeToRefs(useNotificationsStore())
 <template>
     <TransitionGroup
         tag="ul"
-        class="fixed bottom-7 right-7 flex flex-col gap-y-4 w-[410px]
+        class="fixed bottom-7 right-7 flex flex-col gap-y-4 w-[410px] z-50
             sm:w-11/12 sm:right-auto sm:left-1/2 sm:-translate-x-1/2"
         enter-from-class="translate-x-12 opacity-0"
         leave-to-class="translate-x-12 opacity-0"

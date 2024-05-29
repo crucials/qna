@@ -1,8 +1,10 @@
+export interface ApiError {
+    code: number
+    explanation: string
+    field?: string
+}
+
 export type ApiResponse<TData = null> = {
     data: TData | null
-    error: {
-        code: number
-        explanation: string
-        invalidField?: string
-    } | null
+    error: ApiError | null
 }

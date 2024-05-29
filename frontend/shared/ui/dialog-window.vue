@@ -53,7 +53,7 @@ onKeyStroke('Escape', () => {
     <Transition enter-from-class="opacity-0">
         <div
             v-show="dialogOpened"
-            class="fixed bg-black/60 w-full h-screen top-0 left-0 z-50
+            class="fixed bg-black/40 w-full h-screen top-0 left-0 z-30
                 transition-opacity duration-100"
             @mousedown="changeOpenedState(false)"
         ></div>
@@ -63,9 +63,9 @@ onKeyStroke('Escape', () => {
         v-bind="$attrs"
         class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
             min-w-5 min-h-3 bg-neutral-900 p-6 rounded-lg
-            mx-0 block text-white z-50
+            mx-0 block text-white z-30
             origin-center scale-0 open:scale-100 transition-transform duration-300
-            sm:min-w-2.5 sm:w-4/5"
+            sm:min-w-2.5 sm:w-11/12 sm:p-4"
         :open="dialogOpened"
     >
         <h3 v-if="heading" class="text-2xl font-bold tracking-wide mb-6">

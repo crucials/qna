@@ -1,9 +1,44 @@
 <script setup lang="ts">
+import { useTokenCookie } from '~/shared/model/token-cookie'
+import { useNotificationsStore } from '~/shared/model/notifications-store'
+import { useForm } from '~/shared/model/form'
+import { logInForToken } from '../api/log-in'
+import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
+const token = useTokenCookie()
+const { showNotification } = useNotificationsStore()
+
+const opened = ref(false)
+
+const { form, setError } = useForm({
+    name: '',
+    password: ''
+})
+
+async function logIn() {
+    const response = await logInForToken(form.value.data.name, form.value.data.password)
+
+    if(response.error.value?.data.error) {
+        setError(response.error.value.data.error)
+        return
+    }
+
+    if(response.data.value?.data) {
+        token.value = response.data.value.data
+
+        form.value.data = {
+            name: '',
+            password: ''
+        }
+
+        showNotification({ message: 'logged in', type: 'success' })
+        opened.value = false
+    }
+}
 </script>
 
 <template>
-    <DialogWindow class="p-3.5 w-2/5">
+    <DialogWindow class="p-3.5 w-[44%] min-w-6 sm:p-3" v-model:opened="opened">
         <template #triggerButton>
             <button
                 class="font-medium text-lg lg:text-base transition-colors
@@ -13,19 +48,43 @@
             </button>
         </template>
 
-        <div class="flex items-start gap-x-6">
+        <div class="flex items-start gap-x-6 sm:flex-wrap">
             <img
                 src="~/assets/images/abstract-illustration.jpg"
                 alt="Abstract wavy illustration"
-                class="w-[290px] rounded-2xl"
+                class="w-2/5 min-w-2.5 rounded-3xl
+                    sm:w-full sm:h-52 sm:object-cover sm:object-top"
             />
 
-            <form @submit.prevent="" class="p-4">
-                <h2 class="text-2xl font-bold mb-6">
+            <form @submit.prevent="" class="p-4 flex-grow flex flex-col gap-y-5">
+                <h2 class="text-2xl font-bold">
                     welcome to qna
                 </h2>
 
-                
+                <TextField
+                    v-model="form.data.name"
+                    placeholder="name"
+                    class="w-full"
+                    :error="form.error?.field === 'name'"
+                />
+
+                <TextField
+                    v-model="form.data.password"
+                    field-type="password"
+                    placeholder="password"
+                    class="w-full"
+                    :error="form.error?.field === 'password'"
+                />
+
+                <div class="flex gap-5 flex-wrap mt-2">
+                    <FilledButton @click="logIn">
+                        Log in
+                    </FilledButton>
+
+                    <OutlinedButton>
+                        Sign up
+                    </OutlinedButton>
+                </div>
             </form>
         </div>
     </DialogWindow>
