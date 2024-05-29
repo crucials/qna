@@ -33,7 +33,7 @@ def api_response(json_content=True):
                 return result
 
             return {
-                'data': function(),
+                'data': result,
                 'error': None
             }
         
