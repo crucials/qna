@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCurrentAccountStore } from '~/shared/model/current-account'
+import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
 const { account } = storeToRefs(useCurrentAccountStore())
 </script>
@@ -19,4 +19,8 @@ const { account } = storeToRefs(useCurrentAccountStore())
 
         Dashboard
     </NuxtLink>
+
+    <div class="flex items-center gap-x-6 ml-auto">
+        <AuthDialog />
+    </div>
 </template>
