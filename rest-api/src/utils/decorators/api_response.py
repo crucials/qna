@@ -36,7 +36,7 @@ def api_response(json_content=True):
                 'data': result,
                 'error': None
             }
-        
+
         return get_api_response
 
     return decorator

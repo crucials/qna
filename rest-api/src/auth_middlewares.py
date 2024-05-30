@@ -21,7 +21,7 @@ def authorize_request():
     auth_header = flask.request.headers.get('Authorization')
     if auth_header is None:
         return
-    
+
     auth_header_parts = auth_header.split(' ')
 
     if len(auth_header_parts) != 2:
@@ -29,9 +29,9 @@ def authorize_request():
 
     if auth_header_parts[0] != 'Bearer':
         return
-    
+
     token = auth_header_parts[1]
-    
+
     try:
         payload = jwt.decode(token, key=os.environ.get('JWT_SECRET_KEY'),
                              algorithms=['HS256'])
@@ -39,7 +39,7 @@ def authorize_request():
 
         if not account_id:
             return
-    
+
         account = accounts_service.get_account_by_id(account_id)
 
         if not account:

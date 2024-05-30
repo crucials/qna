@@ -46,7 +46,7 @@ class AuthService:
         print(new_account_dict)
 
         return SessionData(
-            jwt.encode(payload,os.environ.get('JWT_SECRET_KEY'),
+            jwt.encode(payload, os.environ.get('JWT_SECRET_KEY'),
                        algorithm='HS256'),
             AccountDto.create_from_account_document(new_account_dict)
         )
@@ -57,11 +57,11 @@ class AuthService:
         tuple with json token as the first item and account as the second one
         """
 
-        account = accounts_collection.find_one({ 'name': name })
+        account = accounts_collection.find_one({'name': name})
 
         if account is None:
             raise InvalidCredentialsError()
-        
+
         if not bcrypt.checkpw(password.encode(), account['password']):
             raise InvalidCredentialsError()
 

@@ -57,6 +57,7 @@ def log_in():
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')
 
+
 @auth_controller_blueprint.get('/account')
 @api_response()
 def get_current_account():

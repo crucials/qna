@@ -10,4 +10,4 @@ client = MongoClient(os.environ.get('MONGO_DB_CONNECTION_STRING'))
 main_database = client.get_database('main')
 
 accounts_collection = main_database.get_collection('accounts')
-accounts_collection.create_index({ 'name': 'text' }, unique=True)
+accounts_collection.create_index({'name': 'text'}, unique=True)

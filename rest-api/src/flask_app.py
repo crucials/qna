@@ -24,7 +24,6 @@ def create_flask_app():
     for blueprint in controllers_blueprints:
         app.register_blueprint(blueprint)
 
-
     @app.errorhandler(HTTPException)
     def send_json_error_response(error: HTTPException):
         return {
@@ -35,12 +34,11 @@ def create_flask_app():
             'data': None,
         }, error.code or 500
 
-
     @app.errorhandler(ValidationError)
     def send_json_validation_error_response(error: ValidationError):
         invalid_fields = list(error.messages_dict)
         message = (error.messages_dict.get(invalid_fields[0])
-                or 'invalid request body')
+                   or 'invalid request body')
         return {
             'error': {
                 'code': 400,
@@ -49,7 +47,6 @@ def create_flask_app():
             },
             'data': None,
         }, 400
-
 
     app.before_request(authorize_request)
 
