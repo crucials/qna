@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// const notebookImageVisible = ref(false);
 const mounted = useMounted()
 </script>
 
@@ -36,7 +35,7 @@ const mounted = useMounted()
                     Start using
                 </OutlinedButton>
 
-                <FilledButton>
+                <FilledButton tag="a" href="#features">
                     Learn more
                 </FilledButton>
             </div>

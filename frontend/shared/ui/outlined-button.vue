@@ -1,5 +1,12 @@
+<script setup lang="ts">
+withDefaults(defineProps<{
+    tag?: string
+}>(), { tag: 'button' })
+</script>
+
 <template>
-    <button
+    <component
+        :is="tag"
         class="p-0.5 bg-enchanted-amethyst rounded-md"
     >
         <div
@@ -9,5 +16,5 @@
         >
             <slot></slot>
         </div>
-    </button>
+    </component>
 </template>

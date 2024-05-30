@@ -38,6 +38,10 @@
 }
 
 @layer base {
+    html {
+        @apply scroll-smooth
+    }
+
     body {
         @apply bg-[#0E0E0E] text-white font-libre-franklin;
     }

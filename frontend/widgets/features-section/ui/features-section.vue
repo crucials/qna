@@ -1,5 +1,5 @@
 <template>
-    <section class="relative min-h-7.5">
+    <section class="relative min-h-7.5" id="features">
         <div class="circle-grid-background-decoration left"></div>
         <div class="circle-grid-background-decoration right"></div>
         <div class="circle-grid-background-decoration bottom"></div>
