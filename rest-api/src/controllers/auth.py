@@ -56,14 +56,3 @@ def log_in():
         }
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')
-
-
-@auth_controller_blueprint.get('/account')
-@api_response()
-def get_current_account():
-    restrict_unauthorized_access()
-    account = get_account_from_headers(flask.request.headers)
-
-    return {
-        'name': account['name']
-    }

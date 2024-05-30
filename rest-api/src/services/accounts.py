@@ -7,6 +7,11 @@ class AccountsService:
         return accounts_collection.find_one({
             '_id': ObjectId(id)
         })
+    
+    def delete_account_by_id(self, id: str):
+        accounts_collection.delete_one({
+            '_id': ObjectId(id)
+        })
 
 
 accounts_service = AccountsService()
