@@ -6,6 +6,7 @@ import { logIn } from '~/features/auth-dialog/api/log-in'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 import { signUp } from '~/features/auth-dialog/api/sign-up'
 
+const router = useRouter()
 const token = useTokenCookie()
 const { showNotification } = useNotificationsStore()
 const { account } = storeToRefs(useCurrentAccountStore())
@@ -33,6 +34,7 @@ async function sendLogInRequest() {
 
         showNotification({ message: 'Logged in', type: 'success' })
         opened.value = false
+        router.push('/dashboard')
     }
 }
 
@@ -52,6 +54,7 @@ async function sendSignUpRequest() {
 
         showNotification({ message: 'Account created', type: 'success' })
         opened.value = false
+        router.push('/dashboard')
     }
 }
 </script>
