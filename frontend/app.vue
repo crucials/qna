@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col min-h-screen overflow-x-hidden">
-        <Header />
+        <Navigation />
         <main class="flex-grow px-16 py-12 lg:py-9 lg:px-12 sm:p-7">
             <NuxtPage />
         </main>
