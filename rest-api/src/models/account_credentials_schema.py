@@ -3,7 +3,7 @@ import string
 from marshmallow import Schema, fields, validate
 
 
-class AccountCredentialsSchema(Schema):
+class AccountCredentialsValidationSchema(Schema):
     __alphanumeric_validation = validate.ContainsOnly(
         string.ascii_lowercase + string.digits + '_',
         error='only alphanumeric characters, digits and underscores are allowed'

@@ -1,16 +1,19 @@
 import flask
 
 from auth_middlewares import restrict_unauthorized_access
-from dto.account_dto import AccountDto
+from models.account_dto import AccountDto
 from services.accounts import accounts_service
 from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
+from controllers.current_account.forms import forms_controller_blueprint
 
 
 current_account_controller_blueprint = flask.Blueprint('current-account', __name__,
                                                        url_prefix='/current-account')
 
 current_account_controller_blueprint.before_request(restrict_unauthorized_access)
+
+current_account_controller_blueprint.register_blueprint(forms_controller_blueprint)
 
 
 @current_account_controller_blueprint.get('/')

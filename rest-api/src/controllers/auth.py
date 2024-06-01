@@ -6,7 +6,7 @@ from auth_middlewares import restrict_unauthorized_access
 from utils.decorators.api_response import api_response
 from services.auth import InvalidCredentialsError, UsernameAlreadyExistsError, auth_service
 from utils.get_account_from_headers import get_account_from_headers
-from validation_schemas.account_credentials_schema import AccountCredentialsSchema
+from models.account_credentials_schema import AccountCredentialsValidationSchema
 
 
 TOKEN_COOKIE_MAX_AGE = 2592000
@@ -18,7 +18,7 @@ auth_controller_blueprint = flask.Blueprint('auth', __name__, url_prefix='/auth'
 @api_response()
 def sign_up():
     try:
-        credentials = AccountCredentialsSchema().loads(
+        credentials = AccountCredentialsValidationSchema().loads(
             flask.request.get_data(as_text=True),
             many=False,
             unknown=EXCLUDE
@@ -40,7 +40,7 @@ def sign_up():
 @api_response()
 def log_in():
     try:
-        credentials = AccountCredentialsSchema().loads(
+        credentials = AccountCredentialsValidationSchema().loads(
             flask.request.get_data(as_text=True),
             many=False,
             unknown=EXCLUDE

@@ -8,6 +8,7 @@ from werkzeug.exceptions import HTTPException
 
 from auth_middlewares import authorize_request
 from controllers import controllers_blueprints
+from utils.create_validation_error_response import create_validation_error_response
 
 
 app = None
@@ -34,19 +35,7 @@ def create_flask_app():
             'data': None,
         }, error.code or 500
 
-    @app.errorhandler(ValidationError)
-    def send_json_validation_error_response(error: ValidationError):
-        invalid_fields = list(error.messages_dict)
-        message = (error.messages_dict.get(invalid_fields[0])
-                   or 'invalid request body')
-        return {
-            'error': {
-                'code': 400,
-                'field': invalid_fields[0],
-                'explanation': message[0],
-            },
-            'data': None,
-        }, 400
+    app.register_error_handler(ValidationError, create_validation_error_response)
 
     app.before_request(authorize_request)
 

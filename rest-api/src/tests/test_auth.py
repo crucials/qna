@@ -1,8 +1,6 @@
-from urllib import response
 import uuid
 
 import pytest
-import flask
 from flask.testing import FlaskClient
 
 from flask_app import create_flask_app

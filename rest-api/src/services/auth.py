@@ -5,7 +5,7 @@ from pymongo.errors import DuplicateKeyError
 import jwt
 import bcrypt
 
-from dto.account_dto import AccountDto
+from models.account_dto import AccountDto
 from mongo_database import accounts_collection
 
 
@@ -32,7 +32,8 @@ class AuthService:
             new_account_dict = {
                 'name': name,
                 'password': bcrypt.hashpw(password.encode(),
-                                          bcrypt.gensalt(rounds=6))
+                                          bcrypt.gensalt(rounds=6)),
+                'forms': [],
             }
 
             new_account = accounts_collection.insert_one(new_account_dict)
@@ -42,8 +43,6 @@ class AuthService:
         payload = {
             'account_id': new_account.inserted_id.__str__()
         }
-
-        print(new_account_dict)
 
         return SessionData(
             jwt.encode(payload, os.environ.get('JWT_SECRET_KEY'),
