@@ -5,7 +5,7 @@ from auth_middlewares import restrict_unauthorized_access
 from models.account_dto import AccountDto
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from services.forms import surveys_service
+from services.surveys import surveys_service
 from utils.get_account_from_headers import get_account_from_headers
 from models.survey_schema import SurveyValidationSchema
 
