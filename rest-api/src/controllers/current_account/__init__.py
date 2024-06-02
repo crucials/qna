@@ -1,5 +1,3 @@
-import bson
-import bson.json_util
 import flask
 
 from auth_middlewares import restrict_unauthorized_access
@@ -28,10 +26,11 @@ def get_current_account():
         vars(AccountDto.create_from_account_document(account))
     )
 
+
 @current_account_controller_blueprint.delete('/')
 @api_response()
 def delete_account():
     account = get_account_from_headers(flask.request.headers)
     accounts_service.delete_account_by_id(account['_id'])
-    
+
     return {}

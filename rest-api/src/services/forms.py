@@ -8,7 +8,7 @@ class FormsService:
     def create_form(self, account_id: ObjectId, form):
         questions = form.pop('questions')
         form['_id'] = ObjectId()
-        
+
         for question in questions:
             question['form_id'] = form['_id']
             question['type'] = question['type'].__str__()

@@ -22,7 +22,7 @@ def create_form():
     form = FormValidationSchema().loads(flask.request.get_data(as_text=True),
                                         many=False,
                                         unknown=RAISE)
-    
+
     updated_account_dto = AccountDto.create_from_account_document(
         forms_service.create_form(account['_id'], form)
     )

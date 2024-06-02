@@ -7,7 +7,7 @@ def convert_bson_to_json_dict(bson_document: dict):
 
     handles only `ObjectId` datatype
     """
-    
+
     json_dict = dict(**bson_document)
 
     def stringify_object_ids(data: dict | list):
