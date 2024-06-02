@@ -35,9 +35,9 @@ const mounted = useMounted()
                     Start using
                 </OutlinedButton>
 
-                <FilledButton tag="a" href="#features">
+                <SolidButton tag="a" href="#features">
                     Learn more
-                </FilledButton>
+                </SolidButton>
             </div>
         </div>
 

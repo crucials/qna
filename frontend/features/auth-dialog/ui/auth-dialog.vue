@@ -99,9 +99,9 @@ async function sendSignUpRequest() {
                 />
 
                 <div class="flex gap-5 flex-wrap mt-2">
-                    <FilledButton @click="sendLogInRequest">
+                    <SolidButton @click="sendLogInRequest">
                         Log in
-                    </FilledButton>
+                    </SolidButton>
 
                     <OutlinedButton @click="sendSignUpRequest">
                         Sign up
