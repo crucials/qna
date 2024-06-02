@@ -1,16 +1,14 @@
 from dataclasses import dataclass
 
-from models.form import FormDto
 
-
-@dataclass
+@dataclass(kw_only=True)
 class AccountDto:
+    _id: str
     name: str
-    forms: list[FormDto]
+    forms: list
 
     @staticmethod
-    def create_from_account_document(account):
-        return AccountDto(
-            account['name'],
-            [FormDto.create_from_form_document(form) for form in account['forms']]
-        )
+    def create_from_account_document(account: dict):
+        fields_to_omit = ['password']
+        return AccountDto(**{key: account[key] for key in account.keys()
+                             if key not in fields_to_omit})

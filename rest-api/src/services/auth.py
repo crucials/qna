@@ -5,7 +5,6 @@ from pymongo.errors import DuplicateKeyError
 import jwt
 import bcrypt
 
-from models.account_dto import AccountDto
 from mongo_database import accounts_collection
 
 
@@ -32,7 +31,7 @@ class AuthService:
             new_account_dict = {
                 'name': name,
                 'password': bcrypt.hashpw(password.encode(),
-                                          bcrypt.gensalt(rounds=6)),
+                                          bcrypt.gensalt(rounds=6)).decode(),
                 'forms': [],
             }
 
@@ -47,7 +46,7 @@ class AuthService:
         return SessionData(
             jwt.encode(payload, os.environ.get('JWT_SECRET_KEY'),
                        algorithm='HS256'),
-            AccountDto.create_from_account_document(new_account_dict)
+            new_account_dict
         )
 
     def log_in(self, name: str, password: str):
@@ -61,13 +60,13 @@ class AuthService:
         if account is None:
             raise InvalidCredentialsError()
 
-        if not bcrypt.checkpw(password.encode(), account['password']):
+        if not bcrypt.checkpw(password.encode(), account['password'].encode()):
             raise InvalidCredentialsError()
 
         return SessionData(
             jwt.encode({'account_id': account['_id'].__str__()},
                        os.environ.get('JWT_SECRET_KEY')),
-            AccountDto.create_from_account_document(account)
+            account
         )
 
 

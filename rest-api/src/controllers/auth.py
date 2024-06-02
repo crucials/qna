@@ -2,10 +2,10 @@ import flask
 from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
 from marshmallow import EXCLUDE
 
-from auth_middlewares import restrict_unauthorized_access
+from models.account_dto import AccountDto
+from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from services.auth import InvalidCredentialsError, UsernameAlreadyExistsError, auth_service
-from utils.get_account_from_headers import get_account_from_headers
 from models.account_credentials_schema import AccountCredentialsValidationSchema
 
 
@@ -30,7 +30,9 @@ def sign_up():
         session = auth_service.sign_up(**credentials)
         return {
             'token': session.token,
-            'account': session.account
+            'account': convert_bson_to_json_dict(
+                vars(AccountDto.create_from_account_document(session.account))
+            )
         }
     except UsernameAlreadyExistsError:
         raise Conflict('account with specified username already exists')
@@ -52,7 +54,9 @@ def log_in():
         session = auth_service.log_in(**credentials)
         return {
             'token': session.token,
-            'account': session.account
+            'account': convert_bson_to_json_dict(
+                vars(AccountDto.create_from_account_document(session.account))
+            )
         }
     except InvalidCredentialsError:
         raise BadRequest('invalid username or password')

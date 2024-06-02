@@ -1,8 +1,11 @@
+import bson
+import bson.json_util
 import flask
 
 from auth_middlewares import restrict_unauthorized_access
 from models.account_dto import AccountDto
 from services.accounts import accounts_service
+from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
 from controllers.current_account.forms import forms_controller_blueprint
@@ -21,7 +24,9 @@ current_account_controller_blueprint.register_blueprint(forms_controller_bluepri
 def get_current_account():
     account = get_account_from_headers(flask.request.headers)
 
-    return vars(AccountDto.create_from_account_document(account))
+    return convert_bson_to_json_dict(
+        vars(AccountDto.create_from_account_document(account))
+    )
 
 @current_account_controller_blueprint.delete('/')
 @api_response()
