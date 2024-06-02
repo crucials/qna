@@ -9,6 +9,7 @@ withDefaults(defineProps<{
         :is=tag
         class="block py-2.5 px-8 bg-amethyst rounded-md text-base xs:text-sm
             transition-colors duration-300 hover:bg-amethyst-dark"
+        :type="tag === 'button' ? 'button' : undefined"
     >
         <slot></slot>
     </component>

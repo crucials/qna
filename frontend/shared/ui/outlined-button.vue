@@ -8,6 +8,7 @@ withDefaults(defineProps<{
     <component
         :is="tag"
         class="p-0.5 bg-enchanted-amethyst rounded-md"
+        :type="tag === 'button' ? 'button' : undefined"
     >
         <div
             class="py-2.5 px-8 bg-neutral-900 rounded-md text-base xs:text-sm
