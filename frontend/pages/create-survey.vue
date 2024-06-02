@@ -11,4 +11,6 @@ definePageMeta({
     <h1 class="font-bold text-4xl mb-10 sm:text-3xl">
         Create survey
     </h1>
+
+    <SurveyForm />
 </template>
