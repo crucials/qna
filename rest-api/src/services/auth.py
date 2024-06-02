@@ -32,7 +32,7 @@ class AuthService:
                 'name': name,
                 'password': bcrypt.hashpw(password.encode(),
                                           bcrypt.gensalt(rounds=6)).decode(),
-                'forms': [],
+                'surveys': [],
             }
 
             new_account = accounts_collection.insert_one(new_account_dict)

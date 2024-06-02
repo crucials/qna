@@ -6,7 +6,7 @@ from services.accounts import accounts_service
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
-from controllers.current_account.forms import forms_controller_blueprint
+from controllers.current_account.surveys import surveys_controller_blueprint
 
 
 current_account_controller_blueprint = flask.Blueprint('current-account', __name__,
@@ -14,7 +14,7 @@ current_account_controller_blueprint = flask.Blueprint('current-account', __name
 
 current_account_controller_blueprint.before_request(restrict_unauthorized_access)
 
-current_account_controller_blueprint.register_blueprint(forms_controller_blueprint)
+current_account_controller_blueprint.register_blueprint(surveys_controller_blueprint)
 
 
 @current_account_controller_blueprint.get('/')

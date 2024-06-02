@@ -62,7 +62,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
         <ul class="grid grid-cols-[repeat(3,281px)] gap-5 m:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
             <li class="aspect-square m:aspect-auto rounded-lg">
                 <NuxtLink
-                    to="/forms/create"
+                    to="/surveys/create"
                     class="block border border-transparent w-full h-full
                         bg-black rounded-lg p-8
                         transition-colors duration-300 hover:border-white"
@@ -98,7 +98,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
                     </svg>
 
                     <span class="text-3xl">
-                        Browse my forms and data
+                        Browse my surveys and data
                     </span>
                 </NuxtLink>
             </li>

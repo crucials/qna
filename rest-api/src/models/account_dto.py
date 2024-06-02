@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class AccountDto:
     _id: str
     name: str
-    forms: list
+    surveys: list
 
     @staticmethod
     def create_from_account_document(account: dict):

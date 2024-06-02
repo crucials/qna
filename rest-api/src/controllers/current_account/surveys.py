@@ -5,25 +5,26 @@ from auth_middlewares import restrict_unauthorized_access
 from models.account_dto import AccountDto
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from services.forms import forms_service
+from services.forms import surveys_service
 from utils.get_account_from_headers import get_account_from_headers
-from models.form import FormValidationSchema
+from models.survey_schema import SurveyValidationSchema
 
 
-forms_controller_blueprint = flask.Blueprint('forms', __name__, url_prefix='/forms')
+surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
+                                               url_prefix='/surveys')
 
-forms_controller_blueprint.before_request(restrict_unauthorized_access)
+surveys_controller_blueprint.before_request(restrict_unauthorized_access)
 
 
-@forms_controller_blueprint.post('/')
+@surveys_controller_blueprint.post('/')
 @api_response()
-def create_form():
+def create_survey():
     account = get_account_from_headers(flask.request.headers)
-    form = FormValidationSchema().loads(flask.request.get_data(as_text=True),
+    form = SurveyValidationSchema().loads(flask.request.get_data(as_text=True),
                                         many=False,
                                         unknown=RAISE)
 
     updated_account_dto = AccountDto.create_from_account_document(
-        forms_service.create_form(account['_id'], form)
+        surveys_service.create_survey(account['_id'], form)
     )
     return convert_bson_to_json_dict(vars(updated_account_dto))
