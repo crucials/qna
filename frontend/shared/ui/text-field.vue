@@ -38,8 +38,8 @@ const inputElementType = computed(() => {
                 placeholder:text-neutral-500 transition-colors w-full"
             :class="{
                 'pr-8': fieldType === 'password',
+                [UNDERLINED_FIELD_STYLES]: underlined && !error,
                 'border-red-500 border-2': error,
-                [UNDERLINED_FIELD_STYLES]: underlined
             }"
         />
 
