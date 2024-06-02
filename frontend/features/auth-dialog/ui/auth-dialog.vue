@@ -21,7 +21,7 @@ const { form, setError } = useForm({
 async function sendLogInRequest() {
     const response = await logIn(form.value.data.name, form.value.data.password)
 
-    if(response.error.value?.data.error) {
+    if(response.error.value?.data?.error) {
         setError(response.error.value.data.error)
         return
     }
@@ -41,7 +41,7 @@ async function sendLogInRequest() {
 async function sendSignUpRequest() {
     const response = await signUp(form.value.data.name, form.value.data.password)
 
-    if(response.error.value?.data.error) {
+    if(response.error.value?.data?.error) {
         setError(response.error.value.data.error)
         return
     }
@@ -99,11 +99,11 @@ async function sendSignUpRequest() {
                 />
 
                 <div class="flex gap-5 flex-wrap mt-2">
-                    <SolidButton @click="sendLogInRequest">
+                    <SolidButton @click="sendLogInRequest" type="submit">
                         Log in
                     </SolidButton>
 
-                    <OutlinedButton @click="sendSignUpRequest">
+                    <OutlinedButton @click="sendSignUpRequest" type="submit">
                         Sign up
                     </OutlinedButton>
                 </div>
