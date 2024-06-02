@@ -1,8 +1,14 @@
 <script setup lang="ts">
+const UNDERLINED_FIELD_STYLES = 'border-t-0 border-r-0 border-l-0 border-b-1 ' +
+    'border-b-neutral-600 bg-transparent rounded-none ' +
+    'focus-visible:rounded-lg focus-visible:border-none'
+
 const props = withDefaults(defineProps<{
     modelValue: string
     fieldType?: 'text' | 'password' | 'email' | 'tel' | 'date'
     error?: boolean
+    underlined?: boolean
+    wrapperClass?: string
 }>(), { fieldType: 'text' })
 
 const emit = defineEmits<{
@@ -21,7 +27,7 @@ const inputElementType = computed(() => {
 </script>
 
 <template>
-    <div class="relative">
+    <div class="relative" :class="wrapperClass">
         <input
             v-bind="$attrs"
             :type="inputElementType"
@@ -29,10 +35,11 @@ const inputElementType = computed(() => {
                 emit('update:modelValue',(event.target as HTMLInputElement).value)"
             class="block py-3 px-5 border-neutral-700 border bg-neutral-900 rounded-lg
                 focus-visible:ring-2 focus-visible:ring-amethyst-light/60
-                placeholder:text-neutral-500 transition-colors"
+                placeholder:text-neutral-500 transition-colors w-full"
             :class="{
                 'pr-8': fieldType === 'password',
-                'border-red-500 border-2': error
+                'border-red-500 border-2': error,
+                [UNDERLINED_FIELD_STYLES]: underlined
             }"
         />
 
