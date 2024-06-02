@@ -9,11 +9,12 @@ def create_validation_error_response(error: ValidationError):
         first_invalid_field = get_first_dict_key(error.messages_dict)
 
         first_message = DEFAULT_ERROR_MESSAGE
+
         if first_invalid_field is not None:
-            first_message = error.messages_dict[first_invalid_field][0]
-        
-        if isinstance(first_message, dict):
-            first_message = DEFAULT_ERROR_MESSAGE
+            messages = error.messages_dict[first_invalid_field]
+
+            if isinstance(messages, list):
+                first_message = messages[0]
 
         return {
             'error': {
