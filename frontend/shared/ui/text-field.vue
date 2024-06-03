@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<{
     error?: boolean
     underlined?: boolean
     wrapperClass?: string
+    multiline?: boolean
 }>(), { fieldType: 'text' })
 
 const emit = defineEmits<{
@@ -28,10 +29,12 @@ const inputElementType = computed(() => {
 
 <template>
     <div class="relative" :class="wrapperClass">
-        <input
+        <component
+            :is="multiline ? 'textarea' : 'input'"
             v-bind="$attrs"
             :type="inputElementType"
-            @input="event =>
+            :value="modelValue"
+            @input="(event: Event) =>
                 emit('update:modelValue',(event.target as HTMLInputElement).value)"
             class="block py-3 px-5 border-neutral-700 border bg-neutral-900 rounded-lg
                 focus-visible:ring-2 focus-visible:ring-amethyst-light/60
