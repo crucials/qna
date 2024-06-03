@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const UNDERLINED_FIELD_STYLES = 'border-t-0 border-r-0 border-l-0 border-b-1 ' +
+const UNDERLINED_FIELD_STYLES = 'border-t-transparent border-r-transparent border-l-transparent border-b-1 ' +
     'border-b-neutral-600 bg-transparent rounded-none ' +
-    'focus-visible:rounded-lg focus-visible:border-none'
+    'focus-visible:rounded-lg focus-visible:border-transparent'
 
 const props = withDefaults(defineProps<{
     modelValue: string
@@ -35,7 +35,8 @@ const inputElementType = computed(() => {
                 emit('update:modelValue',(event.target as HTMLInputElement).value)"
             class="block py-3 px-5 border-neutral-700 border bg-neutral-900 rounded-lg
                 focus-visible:ring-2 focus-visible:ring-amethyst-light/60
-                placeholder:text-neutral-500 transition-colors w-full"
+                placeholder:text-neutral-500 transition-colors w-full
+                disabled:opacity-65"
             :class="{
                 'pr-8': fieldType === 'password',
                 [UNDERLINED_FIELD_STYLES]: underlined && !error,

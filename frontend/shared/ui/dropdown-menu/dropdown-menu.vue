@@ -24,7 +24,7 @@ onClickOutside(dropdownWrapper, () => opened.value = false)
                 class="transition-all duration-300
                     absolute top-[calc(100%+10px)] right-0
                     flex flex-col gap-y-3
-                    p-4 rounded-md bg-neutral-950 border border-neutral-600"
+                    p-4 rounded-md bg-black/80 border border-neutral-600"
                 :class="dropdownListClass"
                 @click="opened = false"
             >
