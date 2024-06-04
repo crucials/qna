@@ -59,7 +59,10 @@ const { account } = storeToRefs(useCurrentAccountStore())
             What do you want to do?
         </h1>
 
-        <ul class="grid grid-cols-[repeat(3,281px)] gap-5 m:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+        <ul
+            class="grid grid-cols-[repeat(3,281px)] gap-5
+                m:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+        >
             <li class="aspect-square m:aspect-auto rounded-lg">
                 <NuxtLink
                     to="/surveys/create"
