@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened'
+import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened-store'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
 const router = useRouter()

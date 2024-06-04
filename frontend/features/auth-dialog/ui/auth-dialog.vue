@@ -4,7 +4,7 @@ import { useNotificationsStore } from '~/shared/model/notifications-store'
 import { useForm } from '~/shared/model/form'
 import { logIn } from '~/features/auth-dialog/api/log-in'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
-import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened'
+import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened-store'
 import { signUp } from '~/features/auth-dialog/api/sign-up'
 
 const router = useRouter()
