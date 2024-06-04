@@ -12,13 +12,16 @@ export function useForm<TFormData extends Object>(initialValue: TFormData) {
         error: null
     })
 
+    let lastErrorTimeoutId: number | undefined = undefined
     function setError(error: ApiError, removeAfterSeconds = 7) {
         form.value.error = {
             field: error.field,
             explanation: error.explanation
         }
 
-        setTimeout(() => {
+        window.clearTimeout(lastErrorTimeoutId)
+        
+        lastErrorTimeoutId = window.setTimeout(() => {
             form.value.error = null
         }, removeAfterSeconds * 1000)
     }
