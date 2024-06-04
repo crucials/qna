@@ -49,6 +49,7 @@ const emit = defineEmits<{
                 type="button"
                 class="ml-2 p-2 rounded-full bg-neutral-900
                     hover:scale-110 transition-transform"
+                title="Remove option"
                 @click="emit('remove-option', option)"
             >
                 <CrossIcon class="w-3" paths-class="stroke-neutral-600" />
