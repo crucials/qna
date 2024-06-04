@@ -9,7 +9,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <label class="flex items-center gap-x-3 hover:cursor-pointer">
+    <label class="flex items-center gap-x-3 hover:cursor-pointer w-fit">
         <input
             type="checkbox"
             :checked="modelValue"
