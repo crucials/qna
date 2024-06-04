@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Question } from '~/entities/question/model/question'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     question: Question
     orderNumber?: number
     tag?: string
@@ -12,6 +12,18 @@ const emit = defineEmits<{
 }>()
 
 const answer = ref('')
+const newOption = ref('')
+
+function addOption() {
+    if(props.question.options) {
+        emit('update:question', {
+            ...props.question,
+            options: [...props.question.options, newOption.value]
+        })
+
+        newOption.value = ''
+    }
+}
 </script>
 
 <template>
@@ -31,15 +43,54 @@ const answer = ref('')
             })"
             underlined
             placeholder="Enter the question title"
-            class="mb-6"
+            class="mb-6 text-lg sm:text-base"
         />
 
         <TextField
+            v-if="question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'"
             v-model="answer"
             disabled
+            :multiline="question.type === 'MULTILINE_TEXT'"
+            rows="6"
             placeholder="Answer would be typed here"
-            class="mb-6"
+            class="mb-7"
         />
+
+        <div
+            v-if="question.type === 'ONE_OPTION' && question.options"
+            class="mb-7"
+        >
+            <RadioButtons
+                v-model="answer"
+                :options="question.options"
+                :name="question.text"
+                removable-options
+                @remove-option="option => emit('update:question', {
+                    ...question,
+                    options: question.options?.filter(
+                        someOption => someOption !== option
+                    ) || []
+                })"
+                disabled
+                class="mb-6"
+            />
+
+            <div class="flex gap-x-5">
+                <TextField
+                    v-model="newOption"
+                    placeholder="Option name"
+                    class="flex-grow"
+                />
+
+                <SolidButton
+                    :disabled="question.options.includes(newOption)
+                        || newOption.trim().length === 0"
+                    @click="addOption"
+                >
+                    Add option
+                </SolidButton>
+            </div>
+        </div>
 
         <ToggleInput
             :model-value="question.optional"

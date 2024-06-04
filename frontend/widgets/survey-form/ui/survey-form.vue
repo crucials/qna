@@ -39,6 +39,7 @@ const { form, setError } = useForm<{
                 v-for="question, index in form.data.questions"
                 v-model:question="form.data.questions[index]"
                 :order-number="index + 1"
+                class="mb-14 last-of-type:mb-0"
             />
         </ul>
     </form>
