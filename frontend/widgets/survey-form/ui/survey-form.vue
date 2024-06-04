@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { Question } from '~/entities/question/model/question'
+import { fetchApi } from '~/shared/api/fetch-api';
 import { useForm } from '~/shared/model/form'
+import { useNotificationsStore } from '~/shared/model/notifications-store'
 
+const { showNotification } = useNotificationsStore()
 const { form, setError } = useForm<{
     title: string
     anonymous: boolean
@@ -31,13 +34,41 @@ function updateQuestion(questionId: number, newValue: Question) {
         ...newValue
     }
 }
+
+async function createSurvey() {
+    if(form.value.data.title.length < 3) {
+        setError({
+            field: 'title',
+            explanation: 'Survey title must be minimum of 3 chars long'
+        })
+        showNotification({
+            type: 'error',
+            message: 'Survey title must be minimum of 3 chars long'
+        })
+        return
+    }
+
+    if(form.value.data.questions.length === 0) {
+        showNotification({
+            type: 'error',
+            message: 'Add at least one question'
+        })
+        return
+    }
+
+    const response = await fetchApi('/current-account/surveys', {
+        method: 'POST',
+        body: form.value.data,
+        notificationOnError: true
+    })
+}
 </script>
 
 <template>
     <form>
         <div class="flex items-center gap-x-12 gap-y-6 lg:flex-wrap mb-20">
             <TextField
-                v-model="form.data.title"
+                v-model.trim="form.data.title"
                 placeholder="Enter the survey title"
                 underlined
                 class="text-2xl lg:text-xl sm:text-lg"
@@ -59,10 +90,14 @@ function updateQuestion(questionId: number, newValue: Question) {
             :key="index"
             :question="question"
             :order-number="index + 1"
-            class="mb-16 last-of-type:mb-0"
+            class="mb-16"
             tag="fieldset"
             @update:question="newValue => updateQuestion(question.id, newValue)"
             @remove-question="form.data.questions.splice(index, 1)"
         />
+
+        <SolidButton class="text-lg" @click="createSurvey">
+            Create survey
+        </SolidButton>
     </form>
 </template>

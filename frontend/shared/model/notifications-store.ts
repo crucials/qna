@@ -9,7 +9,6 @@ export const useNotificationsStore = defineStore('notifications', () => {
     
     let lastNotificationId = ref(0)
     function showNotification(notification: Omit<Notification, 'id'>, secondsToShow = 5) {
-        console.log(lastNotificationId)
         const newNotificationId = lastNotificationId.value + 1
         lastNotificationId.value = newNotificationId
 

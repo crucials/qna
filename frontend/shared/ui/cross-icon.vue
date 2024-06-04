@@ -1,6 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
-    pathsClass: string
+    pathsClass?: string
 }>(), { pathsClass: 'stroke-white' })
 </script>
 

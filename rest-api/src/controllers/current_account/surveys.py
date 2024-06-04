@@ -13,8 +13,6 @@ from models.survey_schema import SurveyValidationSchema
 surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
                                                url_prefix='/surveys')
 
-surveys_controller_blueprint.before_request(restrict_unauthorized_access)
-
 
 @surveys_controller_blueprint.post('/')
 @api_response()

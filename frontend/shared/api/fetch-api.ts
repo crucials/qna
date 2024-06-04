@@ -5,7 +5,7 @@ import { useTokenCookie } from '~/shared/model/token-cookie'
 interface ApiRequestOptions {
     method?: 'GET' | 'POST' | 'DELETE' | 'PUT'
     notificationOnError?: boolean
-    body: Record<string, any>
+    body?: Record<string, any>
 }
 
 export async function fetchApi<TResponseData = null>(

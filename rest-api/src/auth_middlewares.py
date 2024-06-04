@@ -54,5 +54,6 @@ def authorize_request():
 
 
 def restrict_unauthorized_access():
-    if flask.request.headers.get('Account') is None:
+    options_method_used = flask.request.method == 'OPTIONS'
+    if flask.request.headers.get('Account') is None and not options_method_used:
         raise Unauthorized('invalid authorization token was specified')
