@@ -30,17 +30,18 @@ function addOption() {
 <template>
     <component :is="tag" class="max-w-3xl">
         <div
-            class="text-amethyst mb-0.5 flex items-center gap-x-4"
+            class="text-amethyst mb-2 flex items-center gap-x-4"
         >
-            Question {{ orderNumber }}
             <button
                 type="button"
-                class="ml-2 p-2 rounded-full bg-neutral-900
+                class="ml-2 p-1.5 rounded-full bg-neutral-900
                     hover:scale-110 transition-transform"
+                title="Remove question"
                 @click="emit('remove-question')"
             >
                 <CrossIcon class="w-3" paths-class="stroke-neutral-600" />
             </button>
+            Question {{ orderNumber }}
         </div>
 
         <TextField
