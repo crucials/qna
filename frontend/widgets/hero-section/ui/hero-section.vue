@@ -1,5 +1,21 @@
 <script setup lang="ts">
+import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened'
+import { useCurrentAccountStore } from '~/shared/model/current-account-store'
+
+const router = useRouter()
 const mounted = useMounted()
+
+const { authDialogOpened } = storeToRefs(useAuthDialogOpenedStore())
+const { account } = storeToRefs(useCurrentAccountStore())
+
+function goToAuthOrDashboard() {
+    if(account.value) {
+        router.push('/dashboard')
+    }
+    else {
+        authDialogOpened.value = true
+    }
+}
 </script>
 
 <template>
@@ -31,7 +47,7 @@ const mounted = useMounted()
             </p>
 
             <div class="flex gap-5 flex-wrap">
-                <OutlinedButton>
+                <OutlinedButton @click="goToAuthOrDashboard">
                     Start using
                 </OutlinedButton>
 

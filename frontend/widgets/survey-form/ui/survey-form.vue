@@ -30,7 +30,7 @@ const { form, setError } = useForm<{
             </ToggleInput>
             
             <CreateQuestionMenu
-                @create-question="question =>form.data.questions.push(question)"
+                @create-question="question => form.data.questions.push(question)"
             />
         </div>
 

@@ -4,6 +4,7 @@ import { useNotificationsStore } from '~/shared/model/notifications-store'
 import { useForm } from '~/shared/model/form'
 import { logIn } from '~/features/auth-dialog/api/log-in'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
+import { useAuthDialogOpenedStore } from '~/features/auth-dialog/model/opened'
 import { signUp } from '~/features/auth-dialog/api/sign-up'
 
 const router = useRouter()
@@ -11,7 +12,7 @@ const token = useTokenCookie()
 const { showNotification } = useNotificationsStore()
 const { account } = storeToRefs(useCurrentAccountStore())
 
-const opened = ref(false)
+const { authDialogOpened } = storeToRefs(useAuthDialogOpenedStore())
 
 const { form, setError } = useForm({
     name: '',
@@ -33,7 +34,7 @@ async function sendLogInRequest() {
         account.value = sessionData.account
 
         showNotification({ message: 'Logged in', type: 'success' })
-        opened.value = false
+        authDialogOpened.value = false
         router.push('/dashboard')
     }
 }
@@ -53,14 +54,14 @@ async function sendSignUpRequest() {
         account.value = sessionData.account
 
         showNotification({ message: 'Account created', type: 'success' })
-        opened.value = false
+        authDialogOpened.value = false
         router.push('/dashboard')
     }
 }
 </script>
 
 <template>
-    <DialogWindow class="p-3.5 w-[44%] min-w-6 sm:p-3" v-model:opened="opened">
+    <DialogWindow class="p-3.5 w-[44%] min-w-6 sm:p-3" v-model:opened="authDialogOpened">
         <template #triggerButton>
             <button
                 class="font-medium text-lg lg:text-base transition-colors
