@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { Question } from '~/entities/question/model/question'
-import { fetchApi } from '~/shared/api/fetch-api';
 import { useForm } from '~/shared/model/form'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
+import type { SurveyFormData } from '~/widgets/survey-form/model/survey-form-data'
+
+const emit = defineEmits<{
+    (event: 'save-survey', data: SurveyFormData): void
+}>()
 
 const { showNotification } = useNotificationsStore()
-const { form, setError } = useForm<{
-    title: string
-    anonymous: boolean
-    questions: (Question & { id: number })[]
-}>({
+const { form, setError } = useForm<SurveyFormData>({
     title: '',
     anonymous: false,
     questions: []
@@ -35,7 +35,7 @@ function updateQuestion(questionId: number, newValue: Question) {
     }
 }
 
-async function createSurvey() {
+async function saveSurvey() {
     if(form.value.data.title.length < 3) {
         setError({
             field: 'title',
@@ -56,11 +56,7 @@ async function createSurvey() {
         return
     }
 
-    const response = await fetchApi('/current-account/surveys', {
-        method: 'POST',
-        body: form.value.data,
-        notificationOnError: true
-    })
+    emit('save-survey', form.value.data)
 }
 </script>
 
@@ -96,8 +92,8 @@ async function createSurvey() {
             @remove-question="form.data.questions.splice(index, 1)"
         />
 
-        <SolidButton class="text-lg" @click="createSurvey">
-            Create survey
+        <SolidButton class="text-lg" @click="saveSurvey">
+            Save survey
         </SolidButton>
     </form>
 </template>

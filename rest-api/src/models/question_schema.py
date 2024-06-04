@@ -21,5 +21,6 @@ class QuestionValidationSchema(Schema):
     type = fields.Str(required=True, validate=validate.OneOf(QUESTION_TYPES))
 
     options = fields.List(
-        fields.Str(validate=validate.Length(min=1, max=150))
+        fields.Str(validate=validate.Length(min=1, max=150)),
+        allow_none=True
     )
