@@ -3,12 +3,13 @@ import { OPTIONS_QUESTION_TYPES, type Question } from '~/entities/question/model
 
 const props = withDefaults(defineProps<{
     question: Question
-    orderNumber?: number
+    orderNumber: number
     tag?: string
 }>(), { tag: 'li' })
 
 const emit = defineEmits<{
-    (event: 'update:question', newValue: Question): void
+    (event: 'update:question', newValue: Question): void,
+    (event: 'remove-question'): void
 }>()
 
 const answer = ref('')
@@ -29,10 +30,17 @@ function addOption() {
 <template>
     <component :is="tag" class="max-w-3xl">
         <div
-            class="text-amethyst mb-0.5"
-            v-if="orderNumber"
+            class="text-amethyst mb-0.5 flex items-center gap-x-4"
         >
             Question {{ orderNumber }}
+            <button
+                type="button"
+                class="ml-2 p-2 rounded-full bg-neutral-900
+                    hover:scale-110 transition-transform"
+                @click="emit('remove-question')"
+            >
+                <CrossIcon class="w-3" paths-class="stroke-neutral-600" />
+            </button>
         </div>
 
         <TextField
@@ -56,7 +64,6 @@ function addOption() {
                 ) || []
             })"
             disabled
-            class="mb-7"
         />
 
         <div

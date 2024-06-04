@@ -5,12 +5,32 @@ import { useForm } from '~/shared/model/form'
 const { form, setError } = useForm<{
     title: string
     anonymous: boolean
-    questions: Question[]
+    questions: (Question & { id: number })[]
 }>({
     title: '',
     anonymous: false,
     questions: []
 })
+
+let lastQuestionId = 0
+function addQuestion(question: Question) {
+    form.value.data.questions.push({
+        ...question,
+        id: lastQuestionId
+    })
+
+    lastQuestionId++
+}
+
+function updateQuestion(questionId: number, newValue: Question) {
+    const index = form.value.data.questions
+        .findIndex(question => question.id === questionId)
+    
+    form.value.data.questions[index] = {
+        id: questionId,
+        ...newValue
+    }
+}
 </script>
 
 <template>
@@ -30,17 +50,19 @@ const { form, setError } = useForm<{
             </ToggleInput>
             
             <CreateQuestionMenu
-                @create-question="question => form.data.questions.push(question)"
+                @create-question="addQuestion"
             />
         </div>
 
-        <ul>
-            <QuestionCard
-                v-for="question, index in form.data.questions"
-                v-model:question="form.data.questions[index]"
-                :order-number="index + 1"
-                class="mb-14 last-of-type:mb-0"
-            />
-        </ul>
+        <QuestionCard
+            v-for="question, index in form.data.questions"
+            :key="index"
+            :question="question"
+            :order-number="index + 1"
+            class="mb-16 last-of-type:mb-0"
+            tag="fieldset"
+            @update:question="newValue => updateQuestion(question.id, newValue)"
+            @remove-question="form.data.questions.splice(index, 1)"
+        />
     </form>
 </template>
