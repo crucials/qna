@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Question } from '~/entities/question/model/question'
+import { OPTIONS_QUESTION_TYPES, type Question } from '~/entities/question/model/question'
 
 const props = withDefaults(defineProps<{
     question: Question
@@ -46,50 +46,37 @@ function addOption() {
             class="mb-6 text-lg sm:text-base"
         />
 
-        <TextField
-            v-if="question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'"
-            v-model="answer"
+        <QuestionAnswerInput
+            :question="question"
+            removable-options
+            @remove-option="option => emit('update:question', {
+                ...question,
+                options: question.options?.filter(
+                    someOption => someOption !== option
+                ) || []
+            })"
             disabled
-            :multiline="question.type === 'MULTILINE_TEXT'"
-            rows="6"
-            placeholder="Answer would be typed here"
             class="mb-7"
         />
 
         <div
-            v-if="question.type === 'ONE_OPTION' && question.options"
-            class="mb-7"
+            class="flex gap-x-5 mb-6"
+            v-if="OPTIONS_QUESTION_TYPES.includes(question.type)
+                && question.options"
         >
-            <RadioButtons
-                v-model="answer"
-                :options="question.options"
-                :name="question.text"
-                removable-options
-                @remove-option="option => emit('update:question', {
-                    ...question,
-                    options: question.options?.filter(
-                        someOption => someOption !== option
-                    ) || []
-                })"
-                disabled
-                class="mb-6"
+            <TextField
+                v-model="newOption"
+                placeholder="Option name"
+                class="flex-grow"
             />
 
-            <div class="flex gap-x-5">
-                <TextField
-                    v-model="newOption"
-                    placeholder="Option name"
-                    class="flex-grow"
-                />
-
-                <SolidButton
-                    :disabled="question.options.includes(newOption)
-                        || newOption.trim().length === 0"
-                    @click="addOption"
-                >
-                    Add option
-                </SolidButton>
-            </div>
+            <SolidButton
+                :disabled="question.options.includes(newOption)
+                    || newOption.trim().length === 0"
+                @click="addOption"
+            >
+                Add option
+            </SolidButton>
         </div>
 
         <ToggleInput
