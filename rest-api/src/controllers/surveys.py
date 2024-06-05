@@ -1,22 +1,38 @@
 import flask
 from marshmallow import RAISE
+from werkzeug.exceptions import NotFound
 
 from auth_middlewares import restrict_unauthorized_access
-from models.account_dto import AccountDto
+from models.account_dto import Account, AccountDto
+from models.survey import SurveyValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from services.surveys import surveys_service
 from utils.get_account_from_headers import get_account_from_headers
-from models.survey_schema import SurveyValidationSchema
+from services.surveys import surveys_service
 
 
 surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
                                                url_prefix='/surveys')
 
 
+@surveys_controller_blueprint.get('/<string:id>')
+@api_response()
+def get_survey_detailed_data(id: str):
+    print(id)
+
+    survey_data = surveys_service.get_survey_with_questions(id)
+
+    if survey_data is None:
+        raise NotFound('survey with specified id not found')
+
+    return convert_bson_to_json_dict(survey_data)
+
+
 @surveys_controller_blueprint.post('/')
 @api_response()
 def create_survey():
+    restrict_unauthorized_access()
+
     account = get_account_from_headers(flask.request.headers)
     form = SurveyValidationSchema().loads(flask.request.get_data(as_text=True),
                                         many=False,

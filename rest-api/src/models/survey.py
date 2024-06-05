@@ -1,6 +1,14 @@
+from typing import TypedDict
 from marshmallow import Schema, fields, validate
 
-from models.question_schema import QuestionValidationSchema
+from models.question import Question, QuestionValidationSchema
+
+
+class Survey(TypedDict):
+    _id: str
+    title: str
+    anonymous: bool
+    questions: list[Question]
 
 
 class SurveyValidationSchema(Schema):

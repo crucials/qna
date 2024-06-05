@@ -1,4 +1,13 @@
 from dataclasses import dataclass
+from typing import TypedDict
+
+from models.survey import Survey
+
+
+class Account(TypedDict):
+    _id: str
+    name: str
+    surveys: list[Survey]
 
 
 @dataclass(kw_only=True)

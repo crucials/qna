@@ -18,8 +18,8 @@ def api_response(json_content=True):
 
     def decorator(function):
         @wraps(function)
-        def get_api_response():
-            result = function()
+        def get_api_response(**kwargs):
+            result = function(**kwargs)
 
             if isinstance(result, flask.Response) and json_content:
                 result.set_data(json.dumps({
