@@ -1,7 +1,6 @@
 import type { Question } from '~/entities/question/model/question'
+import type { Survey } from '~/shared/model/survey'
 
-export interface SurveyFormData {
-    title: string
-    anonymous: boolean
+export type SurveyFormData = Omit<Survey, 'questions'> & {
     questions: (Question & { id: number })[]
 }

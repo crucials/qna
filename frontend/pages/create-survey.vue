@@ -1,12 +1,27 @@
 <script setup lang="ts">
 import { fetchApi } from '~/shared/api/fetch-api'
 import authorizedOnlyMiddleware from '~/shared/model/authorized-only-middleware'
-import type { Account } from '~/shared/model/current-account-store'
+import { useCurrentAccountStore, type Account } from '~/shared/model/current-account-store'
+import type { Survey } from '~/shared/model/survey'
 import type { SurveyFormData } from '~/widgets/survey-form/model/survey-form-data'
 
 definePageMeta({
     path: '/surveys/create',
     middleware: authorizedOnlyMiddleware
+})
+
+const { account } = storeToRefs(useCurrentAccountStore())
+
+const newSurveyDialogData = reactive<{
+    opened: boolean
+    survey: Survey | null
+}>({
+    opened: true,
+    survey: {
+        _id: '6emxoe7em30_4kwemtnu',
+        anonymous: false,
+        title: '123'
+    }
 })
 
 async function createSurvey(data: SurveyFormData) {
@@ -15,7 +30,7 @@ async function createSurvey(data: SurveyFormData) {
         id: undefined
     }))
 
-    const response = await fetchApi<Account>('/current-account/surveys', {
+    const response = await fetchApi<Account>('/surveys', {
         method: 'POST',
         body: {
             ...data,
@@ -23,6 +38,13 @@ async function createSurvey(data: SurveyFormData) {
         },
         notificationOnError: true
     })
+
+    const newSurvey = response.data.value?.data?.surveys.at(-1)
+    if(response.data.value && newSurvey) {
+        account.value = response.data.value.data
+        newSurveyDialogData.survey = newSurvey
+        newSurveyDialogData.opened = true
+    }
 }
 </script>
 
@@ -32,4 +54,9 @@ async function createSurvey(data: SurveyFormData) {
     </h1>
 
     <SurveyForm @save-survey="createSurvey" />
+
+    <NewSurveyDialog
+        :survey="newSurveyDialogData.survey"
+        v-model:opened="newSurveyDialogData.opened"
+    />
 </template>
