@@ -1,7 +1,15 @@
-from bson import ObjectId, is_valid
+from bson import ObjectId
 from pymongo import ReturnDocument
 
-from mongo_database import accounts_collection, questions_collection
+from mongo_database import accounts_collection, questions_collection, responses_collection
+
+
+class SurveyNotFoundError(Exception):
+    pass
+
+
+class RequiredResponseDataMissingError(Exception):
+    pass
 
 
 class SurveysService:
@@ -41,6 +49,33 @@ class SurveysService:
         }))
 
         return survey
- 
+    
+    def create_survey_response(self, survey_id: str, response):
+        survey = self.get_survey_with_questions(survey_id)
+
+        if survey is None:
+            raise SurveyNotFoundError()
+        
+        if response.get('name') is None and not survey['anonymous']:
+            raise RequiredResponseDataMissingError(
+                'the \'name\' field must be specified'
+            )
+        
+        for question in survey['questions']:
+            answers = [answer for answer in response['answers']
+                       if answer['question_id'] == question['_id'].__str__()]
+            
+            if len(answers) == 0 and not question['optional']:
+                raise RequiredResponseDataMissingError(
+                    'some required options are missing'
+                )
+            
+        response['survey_id'] = ObjectId(survey_id)
+            
+        responses_collection.insert_one(response)
+
+    def get_survey_responses(self, survey_id: str):
+        return list(responses_collection.find({'survey_id': ObjectId(survey_id)}))
+
 
 surveys_service = SurveysService()
