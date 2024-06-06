@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { getSurveyWithQuestions } from '~/pages/survey/api/survey-with-questions'
+import type { ApiError } from '~/shared/model/api-response';
+import type { SurveyResponseFormData } from '~/widgets/survey-response-form/model/form-data';
 
 definePageMeta({
-    path: '/surveys/:id',
+    path: '/:id',
 })
 
 const id = useRoute().params.id.toString()
@@ -20,6 +22,17 @@ else if(error.value) {
         statusCode: 500,
         message: 'Failed to get survey data'
     })
+}
+
+useHead({
+    title: surveyResponse.value?.data?.title
+})
+
+async function createSurveyResponse(
+    response: SurveyResponseFormData,
+    setError: (error: ApiError) => void
+) {
+    
 }
 </script>
 

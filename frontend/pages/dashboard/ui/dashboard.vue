@@ -8,6 +8,10 @@ definePageMeta({
     middleware: authorizedOnlyMiddleware,
 })
 
+useHead({
+    title: 'qna dashboard'
+})
+
 const { account } = storeToRefs(useCurrentAccountStore())
 </script>
 

@@ -10,18 +10,18 @@ definePageMeta({
     middleware: authorizedOnlyMiddleware
 })
 
+useHead({
+    title: 'Create survey'
+})
+
 const { account } = storeToRefs(useCurrentAccountStore())
 
 const newSurveyDialogData = reactive<{
     opened: boolean
     survey: Survey | null
 }>({
-    opened: true,
-    survey: {
-        _id: '6emxoe7em30_4kwemtnu',
-        anonymous: false,
-        title: '123'
-    }
+    opened: false,
+    survey: null
 })
 
 async function createSurvey(data: SurveyFormData) {
