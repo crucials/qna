@@ -58,9 +58,23 @@ function addOption() {
             class="mb-6 text-lg sm:text-base"
         />
 
-        <h3 class="mb-6 text-xl sm:text-lg">
+        <h3
+            v-else
+            class="text-xl sm:text-lg"
+            :class="{
+                'mb-5': !question.optional,
+                'mb-1': question.optional
+            }"
+        >
             {{ question.text }}
         </h3>
+
+        <div
+            v-if="!surveyCreationMode && question.optional" 
+            class="text-base m:text-sm text-neutral-500 mb-5"
+        >
+            This question is optional
+        </div>
 
         <QuestionAnswerInput
             :question="question"
