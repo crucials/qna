@@ -5,14 +5,15 @@ const props = withDefaults(defineProps<{
     question: Question
     orderNumber: number
     tag?: string
-}>(), { tag: 'li' })
+    surveyCreationMode?: boolean
+    
+}>(), { tag: 'fieldset' })
 
 const emit = defineEmits<{
     (event: 'update:question', newValue: Question): void,
     (event: 'remove-question'): void
 }>()
 
-const answer = ref('')
 const newOption = ref('')
 
 function addOption() {
@@ -33,6 +34,7 @@ function addOption() {
             class="text-amethyst mb-2 flex items-center gap-x-4"
         >
             <button
+                v-if="surveyCreationMode"
                 type="button"
                 class="ml-2 p-1.5 rounded-full bg-neutral-900
                     hover:scale-110 transition-transform"
@@ -45,32 +47,37 @@ function addOption() {
         </div>
 
         <TextField
+            v-if="surveyCreationMode"
             :model-value="question.text"
             @update:model-value="newValue => emit('update:question', {
                 ...question,
                 text: newValue
             })"
             underlined
-            placeholder="Enter the question title"
+            placeholder="Enter the question text"
             class="mb-6 text-lg sm:text-base"
         />
 
+        <h3 class="mb-6 text-xl sm:text-lg">
+            {{ question.text }}
+        </h3>
+
         <QuestionAnswerInput
             :question="question"
-            removable-options
+            :survey-creation-mode="surveyCreationMode"
             @remove-option="option => emit('update:question', {
                 ...question,
                 options: question.options?.filter(
                     someOption => someOption !== option
                 ) || []
             })"
-            disabled
         />
 
         <div
-            class="flex gap-x-5 mb-6"
-            v-if="OPTIONS_QUESTION_TYPES.includes(question.type)
+            v-if="surveyCreationMode
+                && OPTIONS_QUESTION_TYPES.includes(question.type)
                 && question.options"
+            class="flex gap-x-5 mb-6"
         >
             <TextField
                 v-model="newOption"
@@ -88,6 +95,7 @@ function addOption() {
         </div>
 
         <ToggleInput
+            v-if="surveyCreationMode"
             :model-value="question.optional"
             @update:model-value="newValue => emit('update:question', {
                 ...question,

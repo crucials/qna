@@ -87,7 +87,7 @@ async function saveSurvey() {
             :question="question"
             :order-number="index + 1"
             class="mb-16"
-            tag="fieldset"
+            survey-creation-mode
             @update:question="newValue => updateQuestion(question.id, newValue)"
             @remove-question="form.data.questions.splice(index, 1)"
         />

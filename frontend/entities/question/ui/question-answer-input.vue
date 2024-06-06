@@ -1,29 +1,43 @@
 <script setup lang="ts">
 import type { Question } from '~/entities/question/model/question'
+import { useAnswersStore } from '~/shared/model/answers-store'
 
-defineProps<{
+const props = defineProps<{
     question: Question
-    modelValue?: string
-    removableOptions?: boolean
-    disabled?: boolean
+    surveyCreationMode?: boolean
 }>()
 
 const emit = defineEmits<{
     (event: 'remove-option', option: string): void
 }>()
 
-const answer = ref('')
+const { answers } = storeToRefs(useAnswersStore())
+
+const answerIndex = computed(() => {
+    return answers.value.findIndex(someAnswer =>
+        someAnswer.questionId === props.question._id)
+})
+
+function updateAnswer(newValue: string) {
+    const answer = answers.value[answerIndex.value]
+
+    if(answer) {
+        answer.answer = newValue
+    }
+}
 </script>
 
 <template>
     <TextField
         v-if="question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'"
-        v-model="answer"
-        :disabled="disabled"
+        :model-value="answers[answerIndex]?.answer || null"
+        @update:model-value="updateAnswer"
+        :disabled="surveyCreationMode"
         :multiline="question.type === 'MULTILINE_TEXT'"
         rows="6"
-        placeholder="Answer would be typed here"
-        class="mb-7"
+        :placeholder="surveyCreationMode ? 'Answer would be typed here'
+            : 'Enter the answer here'"
+        class="mb-7 max-w-xl"
     />
 
     <div
@@ -31,13 +45,13 @@ const answer = ref('')
         class="mb-7"
     >
         <RadioButtons
-            v-model="answer"
+            :model-value="answers[answerIndex]?.answer || null"
+            @update:model-value="updateAnswer"
             :options="question.options"
             :name="question.text"
-            :removable-options="removableOptions"
+            :removable-options="surveyCreationMode"
             @remove-option="option => emit('remove-option', option)"
-            disabled
-            class="mb-6"
+            :disabled="surveyCreationMode"
         />
     </div>
 </template>

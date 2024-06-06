@@ -4,7 +4,7 @@ const UNDERLINED_FIELD_STYLES = 'border-t-transparent border-r-transparent borde
     'focus-visible:rounded-lg focus-visible:border-transparent'
 
 const props = withDefaults(defineProps<{
-    modelValue: string
+    modelValue: string | null
     fieldType?: 'text' | 'password' | 'email' | 'tel' | 'date'
     error?: boolean
     underlined?: boolean

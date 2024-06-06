@@ -32,9 +32,9 @@ const emit = defineEmits<{
             />
             
             <span
-                class="inline-block w-5 h-5 rounded-full border border-neutral-700
-                    transition-colors duration-300"
+                class="inline-block w-5 h-5 rounded-full transition-colors duration-300"
                 :class="{
+                    'border-neutral-700 border': modelValue !== option,
                     'border-amethyst border-[6px]': modelValue === option,
                     'opacity-70': disabled
                 }"
