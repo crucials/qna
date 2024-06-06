@@ -19,6 +19,8 @@ const emit = defineEmits<{
     ): void
 }>()
 
+const mounted = useMounted()
+
 const { answers } = storeToRefs(useAnswersStore())
 answers.value = props.survey.questions.map(question => ({
     questionId: question._id || '',
@@ -48,7 +50,9 @@ function submitResponse() {
         <div class="relative bg-neutral-950 rounded-lg p-7 max-w-6xl min-h-4">
             <!-- question marks background pattern -->
             <svg
-                class="absolute right-[3%] top-1/4"
+                class="absolute right-[3%] top-1/4 scale-0
+                    transition-transform duration-500"
+                :class="{ 'scale-100': mounted }"
                 width="283"
                 height="280"
                 viewBox="0 0 283 280"
