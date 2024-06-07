@@ -21,6 +21,8 @@ class SurveysService:
         for question in questions:
             question['survey_id'] = survey['_id']
 
+        survey['page_visit_count'] = 0
+
         questions_collection.insert_many(questions)
 
         return accounts_collection.find_one_and_update({
@@ -48,6 +50,11 @@ class SurveysService:
         survey['questions'] = list(questions_collection.find({
             'survey_id': survey['_id']
         }))
+
+        accounts_collection.update_one(
+            {'surveys._id': ObjectId(id)},
+            {'$inc': {'surveys.$.page_visit_count': 1}}
+        )
 
         return survey
     
