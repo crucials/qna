@@ -23,7 +23,7 @@ function createQuestion(type: QuestionType) {
     <DropdownMenu
         button-text="Add question"
         class="ml-auto lg:ml-0"
-        dropdown-list-class="w-80"
+        dropdown-list-class="w-80 lg:right-auto lg:left-0 lg:w-60"
     >
         <DropdownOption @click="createQuestion('SHORT_TEXT')">
             <svg class="w-6" viewBox="0 0 23 9" fill="none" xmlns="http://www.w3.org/2000/svg">
