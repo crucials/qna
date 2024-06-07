@@ -11,11 +11,18 @@ const { account } = storeToRefs(useCurrentAccountStore())
 </script>
 
 <template>
-    <h1 class="font-bold text-4xl mb-10 sm:text-3xl">
-        Your surveys
-    </h1>
+    <div v-if="account">
+        <h1 class="font-bold text-4xl mb-10 sm:text-3xl">
+            Your surveys
+        </h1>
 
-    <div v-for="survey in account?.surveys">
-        {{ survey._id }}
+        <ul class="flex gap-6 flex-wrap">
+            <SurveyCard
+                v-for="survey in account.surveys"
+                :key="survey._id"
+                :survey="survey"
+                class="w-1/5"
+            />
+        </ul>
     </div>
 </template>
