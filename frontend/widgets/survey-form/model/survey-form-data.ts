@@ -1,4 +1,4 @@
-import type { Question } from '~/entities/question/model/question'
+import type { Question } from '~/shared/model/question'
 import type { Survey } from '~/shared/model/survey'
 
 export type SurveyFormData = Omit<Survey, 'questions'> & {

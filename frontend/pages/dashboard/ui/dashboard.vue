@@ -69,7 +69,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
         >
             <li class="aspect-square m:aspect-auto rounded-lg">
                 <NuxtLink
-                    to="/surveys/create"
+                    to="/dashboard/surveys/create"
                     class="block border border-transparent w-full h-full
                         bg-black rounded-lg p-8
                         transition-colors duration-300 hover:border-white"
@@ -87,7 +87,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
 
             <li class="aspect-square m:aspect-auto rounded-lg">
                 <NuxtLink
-                    to="/"
+                    to="/dashboard/surveys"
                     class="block border border-transparent w-full h-full
                         bg-black rounded-lg p-8
                         transition-colors duration-300 hover:border-white"

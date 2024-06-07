@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Question } from '~/entities/question/model/question'
+import type { Question } from '~/shared/model/question'
 import { useForm } from '~/shared/model/form'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
 import type { SurveyFormData } from '~/widgets/survey-form/model/survey-form-data'

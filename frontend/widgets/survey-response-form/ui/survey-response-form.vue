@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { SurveyWithQuestions } from '~/pages/survey/api/survey-with-questions'
 import { useAnswersStore } from '~/shared/model/answers-store'
 import type { ApiError } from '~/shared/model/api-response'
 import { useForm } from '~/shared/model/form'
+import type { SurveyWithQuestions } from '~/shared/model/survey';
 import type {
     SurveyResponseFormData
 } from '~/widgets/survey-response-form/model/form-data'
@@ -54,6 +54,7 @@ function submitResponse() {
 <template>
     <form>
         <TextField
+            v-if="!survey.anonymous"
             v-model="form.data.name"
             placeholder="Your name"
             underlined

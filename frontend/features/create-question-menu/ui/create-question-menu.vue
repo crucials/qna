@@ -3,7 +3,7 @@ import {
     OPTIONS_QUESTION_TYPES,
     type Question,
     type QuestionType
-} from '~/entities/question/model/question'
+} from '~/shared/model/question'
 
 const emit = defineEmits<{
     (event: 'create-question', question: Question): void

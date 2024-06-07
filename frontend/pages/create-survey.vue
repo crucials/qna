@@ -6,7 +6,7 @@ import type { Survey } from '~/shared/model/survey'
 import type { SurveyFormData } from '~/widgets/survey-form/model/survey-form-data'
 
 definePageMeta({
-    path: '/surveys/create',
+    path: '/dashboard/surveys/create',
     middleware: authorizedOnlyMiddleware
 })
 

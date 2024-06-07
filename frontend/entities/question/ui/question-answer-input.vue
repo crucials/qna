@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Question } from '~/entities/question/model/question'
+import type { Question } from '~/shared/model/question'
 import { useAnswersStore } from '~/shared/model/answers-store'
 
 const props = defineProps<{

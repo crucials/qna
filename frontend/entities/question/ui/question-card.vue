@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { OPTIONS_QUESTION_TYPES, type Question } from '~/entities/question/model/question'
+import { OPTIONS_QUESTION_TYPES, type Question } from '~/shared/model/question'
 
 const props = withDefaults(defineProps<{
     question: Question
