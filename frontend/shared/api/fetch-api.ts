@@ -11,22 +11,42 @@ interface ApiRequestOptions {
 export async function fetchApi<TResponseData = null>(
     path: string, options?: ApiRequestOptions
 ) {
+    type TypedApiResponse = ApiResponse<TResponseData>
+
     const config = useRuntimeConfig()
     const token = useTokenCookie()
     const { showNotification } = useNotificationsStore()
 
-    const response = await useFetch<ApiResponse<TResponseData>>(
-        config.public.apiBaseUrl + path,
-        {
+    let response: {
+        data: Ref<TypedApiResponse | null>
+        error: Ref<{
+            data?: TypedApiResponse
+            statusCode?: number
+            message?: string
+        } | null>
+    }
+
+    if(process.server) {
+        response = await useFetch<ApiResponse<TResponseData>>(
+            config.public.apiBaseUrl + path,
+            {
+                headers: { 'Authorization': 'Bearer ' + token.value },
+                method: options?.method,
+                deep: false,
+                body: options?.body
+            }
+        )
+    }
+    else {
+        response = await fetchOnClient(config.public.apiBaseUrl + path, {
             headers: { 'Authorization': 'Bearer ' + token.value },
             method: options?.method,
-            deep: false,
-            body: options?.body
-        }
-    )
+            body: JSON.stringify(options?.body)
+        })
+    }
 
     if(response.error.value && options?.notificationOnError === true) {
-        if(response.error.value.data) {
+        if(response.error.value.data?.error) {
             showNotification({
                 type: 'error',
                 message: 'Error: ' + response.error.value.data.error.explanation
@@ -42,4 +62,34 @@ export async function fetchApi<TResponseData = null>(
     }
 
     return response
+}
+
+async function fetchOnClient(url: string, fetchOptions: RequestInit) {
+    try {
+        const clientFetchResponse = await fetch(url, fetchOptions)
+
+        if(clientFetchResponse.ok) {
+            return {
+                data: ref(await clientFetchResponse.json()),
+                error: ref(null)
+            }
+        }
+        else {
+            return {
+                data: ref(null),
+                error: ref({
+                    data: await clientFetchResponse.json(),
+                    statusCode: clientFetchResponse.status
+                })
+            }
+        }
+    }
+    catch(error) {
+        return {
+            data: ref(null),
+            error: ref({
+                message: `${error}`
+            })
+        }
+    }
 }
