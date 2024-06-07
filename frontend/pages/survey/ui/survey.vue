@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { incrementSurveyVisitCounter } from '~/pages/survey/api/increment-survey-visit-counter'
 import { getSurveyWithQuestions } from '~/pages/survey/api/survey-with-questions'
-import { fetchApi } from '~/shared/api/fetch-api';
-import type { ApiError } from '~/shared/model/api-response';
-import type { SurveyResponseFormData } from '~/widgets/survey-response-form/model/form-data';
+import { fetchApi } from '~/shared/api/fetch-api'
+import type { ApiError } from '~/shared/model/api-response'
+import type {
+    SurveyResponseFormData
+} from '~/widgets/survey-response-form/model/form-data'
 
 definePageMeta({
     path: '/:id',
@@ -24,6 +27,8 @@ else if(error.value) {
         message: 'Failed to get survey data'
     })
 }
+
+incrementSurveyVisitCounter(id)
 
 useHead({
     title: surveyResponse.value?.data?.title

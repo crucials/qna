@@ -1,5 +1,4 @@
 from bson import ObjectId
-from marshmallow import ValidationError
 from pymongo import ReturnDocument
 
 from mongo_database import accounts_collection, questions_collection, responses_collection
@@ -51,12 +50,16 @@ class SurveysService:
             'survey_id': survey['_id']
         }))
 
+        return survey
+    
+    def increment_page_visit_count(self, survey_id: str):
+        if not ObjectId.is_valid(survey_id):
+            return
+        
         accounts_collection.update_one(
-            {'surveys._id': ObjectId(id)},
+            {'surveys._id': ObjectId(survey_id)},
             {'$inc': {'surveys.$.page_visit_count': 1}}
         )
-
-        return survey
     
     def create_survey_response(self, survey_id: str, response):
         survey = self.get_survey_with_questions(survey_id)

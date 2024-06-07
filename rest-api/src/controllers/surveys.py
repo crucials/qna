@@ -1,3 +1,4 @@
+from threading import Thread
 import flask
 from marshmallow import RAISE
 from werkzeug.exceptions import NotFound, BadRequest
@@ -26,6 +27,13 @@ def get_survey_detailed_data(id: str):
         raise NotFound('survey with specified id not found')
 
     return convert_bson_to_json_dict(survey_data)
+
+
+@surveys_controller_blueprint.put('/<string:id>/page-visits')
+@api_response()
+def increment_survey_visit_counter(id: str):
+    surveys_service.increment_page_visit_count(id)
+    return {}
 
 
 @surveys_controller_blueprint.post('/')
