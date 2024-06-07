@@ -22,7 +22,7 @@ function updateAnswer(newValue: string) {
     const answer = answers.value[answerIndex.value]
 
     if(answer) {
-        answer.answer = newValue
+        answer.value = newValue
     }
 }
 </script>
@@ -30,7 +30,7 @@ function updateAnswer(newValue: string) {
 <template>
     <TextField
         v-if="question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'"
-        :model-value="answers[answerIndex]?.answer || null"
+        :model-value="answers[answerIndex]?.value || null"
         @update:model-value="updateAnswer"
         :disabled="surveyCreationMode"
         :multiline="question.type === 'MULTILINE_TEXT'"
@@ -45,7 +45,7 @@ function updateAnswer(newValue: string) {
         class="mb-7"
     >
         <RadioButtons
-            :model-value="answers[answerIndex]?.answer || null"
+            :model-value="answers[answerIndex]?.value || null"
             @update:model-value="updateAnswer"
             :options="question.options"
             :name="question.text"

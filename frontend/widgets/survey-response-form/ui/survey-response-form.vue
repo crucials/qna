@@ -15,6 +15,7 @@ const emit = defineEmits<{
     (
         event: 'submit-response',
         response: SurveyResponseFormData,
+        secondsSpent: number,
         setError: (error: ApiError) => void
     ): void
 }>()
@@ -24,7 +25,7 @@ const mounted = useMounted()
 const { answers } = storeToRefs(useAnswersStore())
 answers.value = props.survey.questions.map(question => ({
     questionId: question._id || '',
-    answer: null
+    value: null
 }))
 
 const { form, setError } = useForm<SurveyResponseFormData>({
@@ -32,9 +33,21 @@ const { form, setError } = useForm<SurveyResponseFormData>({
     answers: [],
 })
 
+const secondsSpent = ref(0)
+let secondCountingIntervalId: number | undefined = undefined
+
+onMounted(() => {
+    window.setInterval(() => {
+        secondsSpent.value++
+    }, 1000)
+})
+onBeforeUnmount(() => {
+    window.clearInterval(secondCountingIntervalId)
+})
+
 function submitResponse() {
     form.value.data.answers = answers.value
-    emit('submit-response', form.value.data, setError)
+    emit('submit-response', form.value.data, secondsSpent.value, setError)
 }
 </script>
 

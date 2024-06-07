@@ -1,6 +1,6 @@
 export interface Answer {
     questionId: string
-    answer: string | null
+    value: string | null
 }
 
 export const useAnswersStore = defineStore('answers', () => {

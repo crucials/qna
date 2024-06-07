@@ -1,4 +1,5 @@
 from bson import ObjectId
+from marshmallow import ValidationError
 from pymongo import ReturnDocument
 
 from mongo_database import accounts_collection, questions_collection, responses_collection
@@ -58,16 +59,17 @@ class SurveysService:
         
         if response.get('name') is None and not survey['anonymous']:
             raise RequiredResponseDataMissingError(
-                'the \'name\' field must be specified'
+                'the name field must be specified'
             )
         
         for question in survey['questions']:
             answers = [answer for answer in response['answers']
-                       if answer['question_id'] == question['_id'].__str__()]
+                       if answer['question_id'] == question['_id'].__str__()
+                       and answer['value'] is not None]
             
             if len(answers) == 0 and not question['optional']:
                 raise RequiredResponseDataMissingError(
-                    'some required options are missing'
+                    'some required questions\'s answers are missing'
                 )
             
         response['survey_id'] = ObjectId(survey_id)

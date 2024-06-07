@@ -8,7 +8,6 @@ import { computed, ref } from 'vue'
 
 const props = withDefaults(defineProps<{
     opened?: boolean
-    heading?: string
     triggerButtonContainerClass?: string
 }>(), { opened: undefined })
 
@@ -68,10 +67,6 @@ onKeyStroke('Escape', () => {
             sm:min-w-2.5 sm:w-11/12 sm:p-4"
         :open="dialogOpened"
     >
-        <h3 v-if="heading" class="text-2xl font-bold tracking-wide mb-6">
-            {{ heading }}
-        </h3>
-
         <slot></slot>
 
         <!-- <button class="absolute top-5 right-4 p-2 rounded-full hover:bg-neutral-800" @click="changeOpenedState(false)">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getSurveyWithQuestions } from '~/pages/survey/api/survey-with-questions'
+import { fetchApi } from '~/shared/api/fetch-api';
 import type { ApiError } from '~/shared/model/api-response';
 import type { SurveyResponseFormData } from '~/widgets/survey-response-form/model/form-data';
 
@@ -28,11 +29,29 @@ useHead({
     title: surveyResponse.value?.data?.title
 })
 
+const responseSavedDialogOpened = ref(false)
+
 async function createSurveyResponse(
-    response: SurveyResponseFormData,
-    setError: (error: ApiError) => void
+    surveyResponse: SurveyResponseFormData,
+    secondsSpent: number,
+    setError: (error: ApiError) => void,
 ) {
-    
+    const apiResponse = await fetchApi(`/surveys/${id}/responses`, {
+        method: 'POST',
+        body: {
+            name: surveyResponse.name,
+            seconds_spent: secondsSpent,
+            answers: surveyResponse.answers.map(answer => ({
+                question_id: answer.questionId,
+                value: answer.value
+            }))
+        },
+        notificationOnError: true
+    })
+
+    if(!apiResponse.error.value) {
+        responseSavedDialogOpened.value = true
+    }
 }
 </script>
 
@@ -44,6 +63,9 @@ async function createSurveyResponse(
 
         <SurveyResponseForm
             :survey="surveyResponse.data"
+            @submit-response="createSurveyResponse"
         />
+
+        <ResponseSavedDialog v-model:opened="responseSavedDialogOpened" />
     </div>
 </template>
