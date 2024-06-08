@@ -12,6 +12,7 @@ from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
 from services.surveys import (RequiredResponseDataMissingError,
                               SurveyNotFoundError, surveys_service)
+from services.survey_stats import survey_stats_service, StatsNotFoundError
 
 
 surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
@@ -32,7 +33,11 @@ def get_survey_detailed_data(id: str):
 @surveys_controller_blueprint.put('/<string:id>/page-visits')
 @api_response()
 def increment_survey_visit_counter(id: str):
-    surveys_service.increment_page_visit_count(id)
+    try:
+        survey_stats_service.increment_survey_visits_count(id)
+    except (SurveyNotFoundError, StatsNotFoundError):
+        raise NotFound('survey or its statistics not found')
+    
     return {}
 
 

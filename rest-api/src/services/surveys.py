@@ -1,11 +1,9 @@
 from bson import ObjectId
 from pymongo import ReturnDocument
 
+from errors.survey_not_found_error import SurveyNotFoundError
 from mongo_database import accounts_collection, questions_collection, responses_collection
-
-
-class SurveyNotFoundError(Exception):
-    pass
+from services.survey_stats import survey_stats_service
 
 
 class RequiredResponseDataMissingError(Exception):
@@ -20,9 +18,9 @@ class SurveysService:
         for question in questions:
             question['survey_id'] = survey['_id']
 
-        survey['page_visit_count'] = 0
-
         questions_collection.insert_many(questions)
+
+        survey_stats_service.create_initial_survey_stats(survey['_id'])
 
         return accounts_collection.find_one_and_update({
             '_id': account_id
@@ -51,15 +49,6 @@ class SurveysService:
         }))
 
         return survey
-    
-    def increment_page_visit_count(self, survey_id: str):
-        if not ObjectId.is_valid(survey_id):
-            return
-        
-        accounts_collection.update_one(
-            {'surveys._id': ObjectId(survey_id)},
-            {'$inc': {'surveys.$.page_visit_count': 1}}
-        )
     
     def create_survey_response(self, survey_id: str, response):
         survey = self.get_survey_with_questions(survey_id)

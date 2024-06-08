@@ -20,3 +20,5 @@ accounts_collection.create_index(
 questions_collection = main_database.get_collection('questions')
 
 responses_collection = main_database.get_collection('responses')
+
+survey_stats_collection = main_database.get_collection('survey_stats')
