@@ -1,5 +1,5 @@
 export interface SurveyStats {
-    survey_name: string
+    survey_title: string
     weekly_page_visits: {
         date: Date
         count: number

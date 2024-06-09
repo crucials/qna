@@ -7,8 +7,7 @@ from auth_middlewares import restrict_unauthorized_access
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from services.surveys import surveys_service
-from services.survey_stats import survey_stats_service, StatsNotFoundError
-from utils.find_item import find_item
+from services.surveys.stats import survey_stats_service, StatsNotFoundError
 from utils.get_account_from_headers import get_account_from_headers
 
 

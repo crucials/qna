@@ -25,7 +25,7 @@ class SurveyStatsService:
     def get_survey_stats(self, survey_id: str, include_responses_stats: bool = False):
         def has_optional_question_answer(response):
             return len([answer for answer in response['answers']
-                        if answer['optional']
+                        if answer['question']['optional']
                         and answer['value'] is not None]) > 0
 
         if not ObjectId.is_valid(survey_id):

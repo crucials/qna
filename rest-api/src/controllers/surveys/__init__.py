@@ -5,14 +5,15 @@ from werkzeug.exceptions import NotFound, BadRequest, Forbidden
 
 from controllers.surveys.stats import survey_stats_controller_blueprint
 from auth_middlewares import restrict_unauthorized_access
+from errors.survey_not_found_error import SurveyNotFoundError
 from models.account_dto import Account, AccountDto
 from models.survey import SurveyValidationSchema
 from models.survey_response import SurveyResponseValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
-from services.surveys import (InvalidResponseDataError,
-                              SurveyNotFoundError, surveys_service)
+from services.surveys import (InvalidResponseDataError, surveys_service)
+from services.surveys.responses import survey_responses_service
 
 
 surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
@@ -58,7 +59,7 @@ def create_survey_response(id: str):
     )
 
     try:
-        surveys_service.create_survey_response(id, survey_response)
+        survey_responses_service.create_survey_response(id, survey_response)
         return {}
     except InvalidResponseDataError as error:
         raise BadRequest(error.__str__())
@@ -79,4 +80,4 @@ def get_survey_responses(id: str):
         raise Forbidden('you can\'t access responses of this survey')
 
     return [convert_bson_to_json_dict(response) for response
-            in surveys_service.get_survey_responses(id)]
+            in survey_responses_service.get_survey_responses(id)]
