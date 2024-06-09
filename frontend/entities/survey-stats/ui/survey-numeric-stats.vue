@@ -9,7 +9,13 @@ const props = defineProps<{
 const { readyToAnimate } = useAppearAnimation()
 
 const sentResponsesPercentage = computed(() => {
-    return props.stats.responses_count / props.stats.total_visits_count * 100
+    if(props.stats.total_visits_count === 0) {
+        return 0
+    }
+    
+    return Math.min(
+        props.stats.responses_count / props.stats.total_visits_count * 100, 100
+    )
 })
 </script>
 
