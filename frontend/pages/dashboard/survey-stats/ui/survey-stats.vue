@@ -36,7 +36,7 @@ else if(error.value?.statusCode === 403) {
                         class="p-px rounded-xl bg-silver col-span-2 row-span-2"
                     >
                         <article class="bg-neutral-950 rounded-xl p-6 h-full">
-                            chart
+                            <SurveyVisitsChart :stats="stats.data" />
                         </article>
                     </div>
                 </template>

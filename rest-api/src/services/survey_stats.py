@@ -61,7 +61,7 @@ class SurveyStatsService:
 
     def increment_survey_visits_count(self, survey_id: str):
         today_date = datetime.datetime.now()
-        # today_date = datetime.datetime.now() + datetime.timedelta(days=9)
+        # today_date = datetime.datetime.now() + datetime.timedelta(days=7)
 
         stats = self.get_survey_stats(survey_id)
 
