@@ -6,6 +6,7 @@ export type AnswerWithQuestion = Answer & { question: Question }
 
 export interface SurveyResponse {
     _id: string
+    name: string | null
     answers: AnswerWithQuestion[]
     seconds_spent: number
 }
