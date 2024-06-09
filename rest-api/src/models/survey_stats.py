@@ -10,4 +10,5 @@ class PageVisitsRecord(TypedDict):
 class SurveyStats(TypedDict):
     _id: str
     survey_id: str
-    page_visits: list[PageVisitsRecord]
+    total_visits_count: int
+    weekly_page_visits: list[PageVisitsRecord]

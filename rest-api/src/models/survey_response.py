@@ -11,5 +11,5 @@ class SurveyResponseValidationSchema(Schema):
 
 
 class AnswerValidationSchema(Schema):
-    value = fields.Str(required=True, allow_none=True)
+    value = fields.Str(required=True, allow_none=True, validate=validate.Length(min=1))
     question_id = fields.Str(required=True)

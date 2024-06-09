@@ -24,7 +24,7 @@ defineProps<{
                     <path d="M9.54102 4.41667C9.54102 2.52969 11.0707 1 12.9577 1H16.3743C18.2614 1 19.791 2.52969 19.791 4.41667V7.83333H9.54102V4.41667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-        </div>
+        </div>  
 
         <div class="flex gap-4 flex-wrap">
             <NuxtLink :to="`/dashboard/surveys/${survey._id}`">

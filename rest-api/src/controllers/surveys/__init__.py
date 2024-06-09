@@ -1,8 +1,9 @@
-from threading import Thread
+from bson import ObjectId
 import flask
 from marshmallow import RAISE
-from werkzeug.exceptions import NotFound, BadRequest
+from werkzeug.exceptions import NotFound, BadRequest, Forbidden
 
+from controllers.surveys.stats import survey_stats_controller_blueprint
 from auth_middlewares import restrict_unauthorized_access
 from models.account_dto import Account, AccountDto
 from models.survey import SurveyValidationSchema
@@ -10,13 +11,14 @@ from models.survey_response import SurveyResponseValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
-from services.surveys import (RequiredResponseDataMissingError,
+from services.surveys import (InvalidResponseDataError,
                               SurveyNotFoundError, surveys_service)
-from services.survey_stats import survey_stats_service, StatsNotFoundError
 
 
 surveys_controller_blueprint = flask.Blueprint('surveys', __name__,
                                                url_prefix='/surveys')
+
+surveys_controller_blueprint.register_blueprint(survey_stats_controller_blueprint)
 
 
 @surveys_controller_blueprint.get('/<string:id>')
@@ -28,17 +30,6 @@ def get_survey_detailed_data(id: str):
         raise NotFound('survey with specified id not found')
 
     return convert_bson_to_json_dict(survey_data)
-
-
-@surveys_controller_blueprint.put('/<string:id>/page-visits')
-@api_response()
-def increment_survey_visit_counter(id: str):
-    try:
-        survey_stats_service.increment_survey_visits_count(id)
-    except (SurveyNotFoundError, StatsNotFoundError):
-        raise NotFound('survey or its statistics not found')
-    
-    return {}
 
 
 @surveys_controller_blueprint.post('/')
@@ -69,7 +60,7 @@ def create_survey_response(id: str):
     try:
         surveys_service.create_survey_response(id, survey_response)
         return {}
-    except RequiredResponseDataMissingError as error:
+    except InvalidResponseDataError as error:
         raise BadRequest(error.__str__())
     except SurveyNotFoundError:
         raise NotFound('survey not found')
@@ -78,5 +69,14 @@ def create_survey_response(id: str):
 @surveys_controller_blueprint.get('/<string:id>/responses')
 @api_response()
 def get_survey_responses(id: str):
+    restrict_unauthorized_access()
+    account = get_account_from_headers(flask.request.headers)
+
+    if not ObjectId.is_valid(id):
+        raise NotFound('survey not found')
+
+    if not surveys_service.is_survey_owner(account, id):
+        raise Forbidden('you can\'t access responses of this survey')
+
     return [convert_bson_to_json_dict(response) for response
             in surveys_service.get_survey_responses(id)]

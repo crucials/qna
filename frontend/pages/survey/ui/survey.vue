@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { incrementSurveyVisitCounter } from '~/pages/survey/api/increment-survey-visit-counter'
-import { getSurveyWithQuestions } from '~/pages/survey/api/survey-with-questions'
+import { getSurveyWithQuestions } from '~/pages/survey/api/get-survey-with-questions'
 import { fetchApi } from '~/shared/api/fetch-api'
 import type { ApiError } from '~/shared/model/api-response'
 import type {
