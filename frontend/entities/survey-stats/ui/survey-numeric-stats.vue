@@ -15,7 +15,7 @@ const sentResponsesPercentage = computed(() => {
 
 <template>
     <div
-        class="p-px rounded-xl bg-silver
+        class="p-px rounded-xl bg-silver lg:col-span-2 sm:col-span-full
             transition-transform duration-300 scale-0"
         :class="{ 'scale-100': readyToAnimate }"
     >
@@ -28,14 +28,14 @@ const sentResponsesPercentage = computed(() => {
                 </b>
             </header>
 
-            <p class="text-lg m:text-base">
+            <p class="text-lg lg:text-base">
                 times someone visited this survey
             </p>
         </article>
     </div>
 
     <div
-        class="p-px rounded-xl bg-silver
+        class="p-px rounded-xl bg-silver lg:col-span-2 sm:col-span-full
             transition-transform duration-300 scale-0 delay-100"
         :class="{ 'scale-100': readyToAnimate }"
     >
@@ -59,7 +59,7 @@ const sentResponsesPercentage = computed(() => {
                 </b>
             </header>
 
-            <p class="text-lg m:text-base">
+            <p class="text-lg lg:text-base">
                 times someone submit a response
             </p>
         </article>
@@ -68,7 +68,7 @@ const sentResponsesPercentage = computed(() => {
     <slot name="chart"></slot>
 
     <div
-        class="p-px rounded-xl bg-silver
+        class="p-px rounded-xl bg-silver sm:col-span-full
             transition-transform duration-300 scale-0 delay-200 col-span-2"
         :class="{ 'scale-100': readyToAnimate }"
     >
@@ -89,7 +89,7 @@ const sentResponsesPercentage = computed(() => {
                 </b>
             </header>
 
-            <p class="text-lg m:text-base">
+            <p class="text-lg lg:text-base">
                 of users answered at least on one optional question
             </p>
         </article>
