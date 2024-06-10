@@ -1,10 +1,10 @@
-import type { AnswerWithQuestion } from '~/entities/answers-dialog/model/answer-with-question'
 import { fetchApi } from '~/shared/api/fetch-api'
+import type { Answer } from '~/shared/model/answers-store'
 
 export interface SurveyResponse {
     _id: string
     name: string | null
-    answers: AnswerWithQuestion[]
+    answers: Answer[]
     seconds_spent: number
 }
 

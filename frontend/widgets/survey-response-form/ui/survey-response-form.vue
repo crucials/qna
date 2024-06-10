@@ -24,7 +24,7 @@ const mounted = useMounted()
 
 const { answers } = storeToRefs(useAnswersStore())
 answers.value = props.survey.questions.map(question => ({
-    questionId: question._id || '',
+    question_id: question._id || '',
     value: null
 }))
 
