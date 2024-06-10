@@ -1,19 +1,36 @@
 <script setup lang="ts">
+import { useAnswersStore } from '~/shared/model/answers-store'
 import {
-    getSurveyResponses
+    getSurveyResponses,
+    type SurveyResponse
 } from '~/widgets/survey-responses-section/api/get-survey-responses'
 
 const props = defineProps<{
     surveyId: string
 }>()
 
-const { data: responses, error } = await getSurveyResponses(props.surveyId)
+const { data: responses } = await getSurveyResponses(props.surveyId)
+
+const { answers } = storeToRefs(useAnswersStore())
+
+const answersDialogData = ref({
+    senderName: '',
+    opened: false
+})
 
 function formatTime(seconds: number) {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, '0')
     const secondsRemain = String(seconds % 60).padStart(2, '0')
 
     return `${minutes}:${secondsRemain}`
+}
+
+function seeAnswers(response: SurveyResponse) {
+    answers.value = response.answers
+    answersDialogData.value = {
+        senderName: response.name || '',
+        opened: true
+    }
 }
 </script>
 
@@ -54,12 +71,12 @@ function formatTime(seconds: number) {
                     </TableCell>
 
                     <TableCell>
-                        <NuxtLink
-                            :to="`/dashboard/surveys/${surveyId}/responses`"
-                            class="hover:underline hover:text-amethyst"
+                        <button
+                            class="hover:underline hover:text-amethyst ml-auto"
+                            @click="seeAnswers(response)"
                         >
                             See answers
-                        </NuxtLink>
+                        </button>
                     </TableCell>
                 </tr>
             </template>
@@ -82,13 +99,19 @@ function formatTime(seconds: number) {
                     {{ formatTime(response.seconds_spent) }}
                 </div>
 
-                <NuxtLink
-                    :to="`/dashboard/surveys/${surveyId}/responses`"
+                <button
                     class="hover:underline hover:text-amethyst ml-auto"
+                    @click="seeAnswers(response)"
                 >
                     See answers
-                </NuxtLink>
+                </button>
             </li>
         </ul>
+
+        <AnswersDialog
+            v-model:opened="answersDialogData.opened"
+            :answers="answers"
+            :sender-name="answersDialogData.senderName"
+        />
     </section>    
 </template>

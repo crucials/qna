@@ -1,5 +1,8 @@
+import type { Question } from '~/shared/model/question'
+
 export interface Answer {
-    questionId: string
+    question?: Question
+    question_id: string
     value: string | null
 }
 

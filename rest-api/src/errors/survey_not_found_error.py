@@ -1,2 +1,0 @@
-class SurveyNotFoundError(Exception):
-    pass

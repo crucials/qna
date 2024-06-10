@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound, BadRequest, Forbidden
 
 from controllers.surveys.stats import survey_stats_controller_blueprint
 from auth_middlewares import restrict_unauthorized_access
-from errors.survey_not_found_error import SurveyNotFoundError
+from errors.resource_not_found_error import ResourceNotFoundError
 from models.account_dto import Account, AccountDto
 from models.survey import SurveyValidationSchema
 from models.survey_response import SurveyResponseValidationSchema
@@ -63,7 +63,7 @@ def create_survey_response(id: str):
         return {}
     except InvalidResponseDataError as error:
         raise BadRequest(error.__str__())
-    except SurveyNotFoundError:
+    except ResourceNotFoundError:
         raise NotFound('survey not found')
     
 

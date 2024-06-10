@@ -1,7 +1,7 @@
 import datetime
 
 from bson import ObjectId
-from errors.survey_not_found_error import SurveyNotFoundError
+from errors.resource_not_found_error import ResourceNotFoundError
 from models.survey_stats import PageVisitsRecord
 from mongo_database import survey_stats_collection, responses_collection
 
@@ -13,7 +13,7 @@ class StatsNotFoundError(Exception):
 class SurveyStatsService:
     def create_initial_survey_stats(self, survey_id: str, survey_title: str):
         if not ObjectId.is_valid(survey_id):
-            raise SurveyNotFoundError()
+            raise ResourceNotFoundError()
 
         survey_stats_collection.insert_one({
             'survey_id': ObjectId(survey_id),

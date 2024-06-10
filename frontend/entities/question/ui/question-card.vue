@@ -6,7 +6,6 @@ const props = withDefaults(defineProps<{
     orderNumber: number
     tag?: string
     surveyCreationMode?: boolean
-    
 }>(), { tag: 'fieldset' })
 
 const emit = defineEmits<{

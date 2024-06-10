@@ -15,7 +15,7 @@ const { answers } = storeToRefs(useAnswersStore())
 
 const answerIndex = computed(() => {
     return answers.value.findIndex(someAnswer =>
-        someAnswer.questionId === props.question._id)
+        someAnswer.question_id === props.question._id)
 })
 
 function updateAnswer(newValue: string) {

@@ -47,7 +47,7 @@ async function createSurveyResponse(
             name: surveyResponse.name,
             seconds_spent: secondsSpent,
             answers: surveyResponse.answers.map(answer => ({
-                question_id: answer.questionId,
+                question_id: answer.question_id,
                 value: answer.value
             }))
         },

@@ -1,8 +1,5 @@
+import type { AnswerWithQuestion } from '~/entities/answers-dialog/model/answer-with-question'
 import { fetchApi } from '~/shared/api/fetch-api'
-import type { Answer } from '~/shared/model/answers-store'
-import type { Question } from '~/shared/model/question'
-
-export type AnswerWithQuestion = Answer & { question: Question }
 
 export interface SurveyResponse {
     _id: string
