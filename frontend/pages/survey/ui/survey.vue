@@ -18,7 +18,7 @@ const { data: surveyResponse, error } = await getSurveyWithQuestions(id)
 if(error.value?.statusCode === 404) {
     throw createError({
         statusCode: 404,
-        message: 'Requested survey not found'
+        message: 'Requested page not found'
     })
 }
 else if(error.value) {

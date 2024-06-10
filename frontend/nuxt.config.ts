@@ -22,9 +22,9 @@ export default defineNuxtConfig({
     },
 
     dir: {
-        'middleware': 'app/*'
+        'middleware': 'app/*',
     },
-    
+
     components: [
         {
             path: '~/shared',
@@ -45,6 +45,11 @@ export default defineNuxtConfig({
             path: '~/features',
             pathPrefix: false,
         },
+
+        {
+            path: '~/app',
+            pathPrefix: false,
+        }
     ],
 
     app: {
