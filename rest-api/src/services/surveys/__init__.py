@@ -30,7 +30,7 @@ class SurveysService:
                 'surveys': survey
             }
         }, return_document=ReturnDocument.AFTER)
-    
+
     def get_survey_with_questions(self, id: str):
         if not ObjectId.is_valid(id):
             return None
@@ -42,21 +42,21 @@ class SurveysService:
 
         if account_with_requested_survey is None:
             return None
-        
-        survey =  account_with_requested_survey['surveys'][0]
+
+        survey = account_with_requested_survey['surveys'][0]
 
         survey['questions'] = list(questions_collection.find({
             'survey_id': survey['_id']
         }))
 
         return survey
-    
+
     def is_survey_owner(self, account: Account, survey_id: str):
         found_survey_on_account = find_item(
             account['surveys'],
             lambda survey: survey['_id'] == ObjectId(survey_id)
         )
-        
+
         if found_survey_on_account is None:
             return False
         else:

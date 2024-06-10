@@ -1,4 +1,3 @@
-import time
 from bson import ObjectId
 import flask
 from werkzeug.exceptions import NotFound, Forbidden
@@ -22,7 +21,7 @@ def increment_survey_visit_counter(id: str):
         survey_stats_service.increment_survey_visits_count(id)
     except StatsNotFoundError:
         raise NotFound('survey or its statistics not found')
-    
+
     return {}
 
 
@@ -42,5 +41,5 @@ def get_survey_stats(id: str):
 
     if stats is None:
         raise NotFound('statistics not found')
-    
+
     return convert_bson_to_json_dict(stats)

@@ -17,5 +17,5 @@ def get_specific_response(id: str):
 
     if survey_response is None:
         raise NotFound('response not found')
-    
+
     return convert_bson_to_json_dict(survey_response)

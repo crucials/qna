@@ -6,7 +6,7 @@ from werkzeug.exceptions import NotFound, BadRequest, Forbidden
 from controllers.surveys.stats import survey_stats_controller_blueprint
 from auth_middlewares import restrict_unauthorized_access
 from errors.resource_not_found_error import ResourceNotFoundError
-from models.account_dto import Account, AccountDto
+from models.account_dto import AccountDto
 from models.survey import SurveyValidationSchema
 from models.survey_response import SurveyResponseValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
@@ -40,8 +40,8 @@ def create_survey():
 
     account = get_account_from_headers(flask.request.headers)
     form = SurveyValidationSchema().loads(flask.request.get_data(as_text=True),
-                                        many=False,
-                                        unknown=RAISE)
+                                          many=False,
+                                          unknown=RAISE)
 
     updated_account_dto = AccountDto.create_from_account_document(
         surveys_service.create_survey(account['_id'], form)
@@ -65,7 +65,7 @@ def create_survey_response(id: str):
         raise BadRequest(error.__str__())
     except ResourceNotFoundError:
         raise NotFound('survey not found')
-    
+
 
 @surveys_controller_blueprint.get('/<string:id>/responses')
 @api_response()

@@ -30,13 +30,13 @@ class SurveyStatsService:
 
         if not ObjectId.is_valid(survey_id):
             return None
-        
+
         survey_object_id = ObjectId(survey_id)
-        
+
         stats = survey_stats_collection.find_one({
             'survey_id': survey_object_id
         })
-        
+
         if not include_responses_stats or stats is None:
             return stats
 
@@ -56,7 +56,7 @@ class SurveyStatsService:
                 responses_with_optional_questions_count / stats['responses_count']
                 * 100
             )
-            
+
         return stats
 
     def increment_survey_visits_count(self, survey_id: str):
@@ -67,14 +67,14 @@ class SurveyStatsService:
 
         if stats is None:
             raise StatsNotFoundError()
-        
+
         weekly_visits: list[PageVisitsRecord] = stats['weekly_page_visits']
         dates = [record['date'] for record in weekly_visits]
 
         visits_dates_indices = [index for index, date
-                                     in enumerate(dates)
-                                     if date.day == today_date.day]
-        
+                                in enumerate(dates)
+                                if date.day == today_date.day]
+
         if len(visits_dates_indices) > 0:
             weekly_visits[visits_dates_indices[0]]['count'] += 1
         else:

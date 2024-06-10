@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Literal, TypedDict, get_args
 
 from marshmallow import Schema, fields, validate
