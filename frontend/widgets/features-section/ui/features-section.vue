@@ -17,7 +17,7 @@
                 xl:w-11/12 m:grid-cols-1 xs:pt-0"
         >
             <FeatureCard
-                class="-translate-x-8 -translate-y-8 xs:transform-none"
+                class="-translate-x-8 -translate-y-8 xs:translate-x-0 xs:translate-y-0"
                 title="Attractive UI"
                 description="Make users more interested in your survey with modern
                     UI an UX design."
@@ -56,7 +56,7 @@
             </FeatureCard>
 
             <FeatureCard
-                class="translate-x-8 translate-y-8 xs:transform-none"
+                class="translate-x-8 translate-y-8 xs:translate-x-0 xs:translate-y-0"
                 title="Attractive UI"
                 description="Make users more interested in your survey with modern
                     UI an UX design."
