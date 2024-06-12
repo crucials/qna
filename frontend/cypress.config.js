@@ -16,7 +16,7 @@ export default defineConfig({
         baseUrl: process.env.FRONTEND_URL,
         specPattern: [
             'cypress/e2e/auth.cy.ts',
-            'cypress/e2e/create-survey.cy.ts',
+            'cypress/e2e/surveys.cy.ts',
             'cypress/e2e/delete-account.cy.ts'
         ],
     },
