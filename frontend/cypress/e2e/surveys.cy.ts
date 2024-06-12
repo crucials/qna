@@ -5,8 +5,16 @@ let newSurveyUrl: string | undefined = undefined
 describe('surveys', () => {
     it('create survey', () => {
         logIn(Cypress.env('NEW_ACCOUNT_NAME'), Cypress.env('NEW_ACCOUNT_PASSWORD'))
+
         cy.visit('/dashboard/surveys/create')
-        cy.get('input[placeholder="Enter the survey title"]').type('test survey')
+
+        cy.intercept(Cypress.env('FRONTEND_URL') + '/_nuxt/*/**').as('hydration')
+        cy.wait('@hydration')
+
+        cy.get('input[placeholder="Enter the survey title"]').type('test survey', {
+            delay: 300,
+            release: false
+        })
 
         // opening create question menu and choosing short text question
         cy.get('form button[aria-haspopup="listbox"]').click()
