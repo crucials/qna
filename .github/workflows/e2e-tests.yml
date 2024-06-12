@@ -2,7 +2,7 @@ name: End-to-end tests
 on: push
 env:
   API_BASE_URL: 'https://qna-fwmh.onrender.com'
-  FRONTEND_URL: 'http://localhost:3000'
+  FRONTEND_URL: 'https://try-qna.vercel.app'
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
@@ -14,9 +14,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: npm run build
-          start: node ./.output/server/index.mjs
-          wait-on: 'http://localhost:3000'
           working-directory: frontend
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
