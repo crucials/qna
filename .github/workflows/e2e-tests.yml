@@ -1,10 +1,11 @@
 name: End-to-end tests
-on: push
+on: [ deployment_status ]
 env:
   API_BASE_URL: 'https://qna-fwmh.onrender.com'
   FRONTEND_URL: 'https://try-qna.vercel.app'
 jobs:
   cypress-run:
+    if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
