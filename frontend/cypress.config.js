@@ -9,6 +9,11 @@ export default defineConfig({
         NEW_ACCOUNT_NAME: `account_${crypto.randomUUID().slice(0, 6)}`,
         NEW_ACCOUNT_PASSWORD: '123456'
     },
+
+    requestTimeout: 2000,
+    defaultCommandTimeout: 5000,
+    retries: 3,
+
     e2e: {
         setupNodeEvents(on, config) {
             // implement node event listeners here

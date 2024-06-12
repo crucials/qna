@@ -12,8 +12,4 @@ describe('auth', () => {
             cy.location('pathname').should('eq', '/dashboard')
         })
     })
-
-    it('s', () => {
-        cy.visit('/dashboard')
-    })
 })
