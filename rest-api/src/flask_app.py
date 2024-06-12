@@ -2,12 +2,15 @@ import os
 
 from dotenv import load_dotenv
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from marshmallow import ValidationError
 from flask import Flask
 from werkzeug.exceptions import HTTPException
 
 from auth_middlewares import authorize_request
 from controllers import controllers_blueprints
+from limiter import limiter
 from utils.create_validation_error_response import create_validation_error_response
 
 
@@ -15,10 +18,14 @@ app = None
 
 
 def create_flask_app():
+    global app
+
     load_dotenv()
 
     app = Flask(__name__)
     app.url_map.strict_slashes = False
+
+    limiter.init_app(app)
 
     CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'))
 

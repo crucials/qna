@@ -8,6 +8,7 @@ from utils.decorators.api_response import api_response
 from services.surveys import surveys_service
 from services.surveys.stats import survey_stats_service, StatsNotFoundError
 from utils.get_account_from_headers import get_account_from_headers
+from limiter import limiter
 
 
 survey_stats_controller_blueprint = flask.Blueprint('survey-stats', __name__,
@@ -15,6 +16,7 @@ survey_stats_controller_blueprint = flask.Blueprint('survey-stats', __name__,
 
 
 @survey_stats_controller_blueprint.put('/page-visits')
+@limiter.limit('1/10seconds')
 @api_response()
 def increment_survey_visit_counter(id: str):
     try:
