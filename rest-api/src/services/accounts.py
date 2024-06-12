@@ -18,7 +18,7 @@ class AccountsService:
         questions_collection.delete_many({
             'survey_id': {'$in': deleted_surveys_ids}
         })
-        
+
         responses_collection.delete_many({
             'survey_id': {'$in': deleted_surveys_ids}
         })
