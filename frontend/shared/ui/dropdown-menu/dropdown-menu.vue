@@ -22,7 +22,7 @@ onClickOutside(dropdownWrapper, () => opened.value = false)
                 role="listbox"
                 id="dropdownList"
                 class="transition-all duration-300
-                    absolute top-[calc(100%+10px)] right-0
+                    absolute top-[calc(100%+10px)] right-0 z-20
                     flex flex-col gap-y-3
                     p-4 rounded-md bg-black/80 border border-neutral-600"
                 :class="dropdownListClass"
