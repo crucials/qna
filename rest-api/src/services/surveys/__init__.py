@@ -1,8 +1,10 @@
 from bson import ObjectId
 from pymongo import ReturnDocument
 
+from errors.resource_not_found_error import ResourceNotFoundError
 from models.account_dto import Account
-from mongo_database import accounts_collection, questions_collection
+from mongo_database import (accounts_collection, questions_collection,
+                            responses_collection, survey_stats_collection)
 from services.surveys.stats import survey_stats_service
 from utils.find_item import find_item
 
@@ -50,6 +52,40 @@ class SurveysService:
         }))
 
         return survey
+    
+    def delete_survey(self, id: str):
+        if not ObjectId.is_valid(id):
+            raise ResourceNotFoundError()
+        
+        survey_object_id = ObjectId(id)
+        print(survey_object_id)
+        
+        account_update_result = accounts_collection.update_many(
+            {},
+            {
+                '$pull': {
+                    'surveys': {'_id': survey_object_id}
+                }
+            }
+        )
+
+        if account_update_result == 0:
+            raise ResourceNotFoundError()
+        
+        self.delete_data_related_to_surveys([survey_object_id])
+        
+    def delete_data_related_to_surveys(self, surveys_ids: list[ObjectId]):
+        questions_collection.delete_many({
+            'survey_id': {'$in': surveys_ids}
+        })
+
+        responses_collection.delete_many({
+            'survey_id': {'$in': surveys_ids}
+        })
+
+        survey_stats_collection.delete_many({
+            'survey_id': {'$in': surveys_ids}
+        })
 
     def is_survey_owner(self, account: Account, survey_id: str):
         found_survey_on_account = find_item(

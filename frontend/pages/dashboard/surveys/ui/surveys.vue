@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { deleteSurveyAndUpdate } from '~/features/delete-survey-button/model/delete-and-update';
 import authorizedOnlyMiddleware from '~/shared/model/authorized-only-middleware'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
@@ -22,6 +23,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
                 :key="survey._id"
                 :survey="survey"
                 class="w-1/5"
+                @delete="deleteSurveyAndUpdate(survey._id || '')"
             />
         </ul>
     </div>

@@ -4,6 +4,10 @@ import type { Survey } from '~/shared/model/survey'
 defineProps<{
     survey: Survey
 }>()
+
+const emit = defineEmits<{
+    (event: 'delete'): void
+}>()
 </script>
 
 <template>
@@ -15,7 +19,10 @@ defineProps<{
                 {{ survey.title }}
             </h3>
 
-            <button class="p-1.5 rounded-lg transition-colors hover:bg-amethyst/20">
+            <button
+                class="p-1.5 rounded-lg transition-colors hover:bg-amethyst/20"
+                @click="emit('delete')"
+            >
                 <svg class="w-5" viewBox="0 0 30 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M11.25 16.375V24.9167" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M18.082 16.375V24.9167" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

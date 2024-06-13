@@ -1,6 +1,7 @@
 from bson import ObjectId
-from mongo_database import (accounts_collection, questions_collection,
-                            responses_collection, survey_stats_collection)
+
+from mongo_database import accounts_collection
+from services.surveys import surveys_service
 
 
 class AccountsService:
@@ -15,17 +16,7 @@ class AccountsService:
         })
         deleted_surveys_ids = [survey['_id'] for survey in deleted_account['surveys']]
 
-        questions_collection.delete_many({
-            'survey_id': {'$in': deleted_surveys_ids}
-        })
-
-        responses_collection.delete_many({
-            'survey_id': {'$in': deleted_surveys_ids}
-        })
-
-        survey_stats_collection.delete_many({
-            'survey_id': {'$in': deleted_surveys_ids}
-        })
+        surveys_service.delete_data_related_to_surveys(deleted_surveys_ids)
 
 
 accounts_service = AccountsService()

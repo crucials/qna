@@ -49,6 +49,20 @@ def create_survey():
     return convert_bson_to_json_dict(vars(updated_account_dto))
 
 
+@surveys_controller_blueprint.delete('/<string:id>')
+@api_response()
+def delete_survey(id: str):
+    restrict_unauthorized_access()
+
+    account = get_account_from_headers(flask.request.headers)
+    if not surveys_service.is_survey_owner(account, id):
+        raise Forbidden('you can\'t delete this survey')
+
+    surveys_service.delete_survey(id)
+
+    return {}
+
+
 @surveys_controller_blueprint.post('/<string:id>/responses')
 @api_response()
 def create_survey_response(id: str):
