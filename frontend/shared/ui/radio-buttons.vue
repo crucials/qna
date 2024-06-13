@@ -31,14 +31,17 @@ const emit = defineEmits<{
                 :disabled="disabled"
             />
             
-            <span
+            <button
+                tabindex="0"
+                type="button"
                 class="inline-block w-5 h-5 rounded-full transition-colors duration-300"
                 :class="{
                     'border-neutral-700 border': modelValue !== option,
                     'border-amethyst border-[6px]': modelValue === option,
                     'opacity-70': disabled
                 }"
-            ></span>
+                @click="emit('update:modelValue', option)"
+            ></button>
 
             <span class="inline-block">
                 {{ option }}

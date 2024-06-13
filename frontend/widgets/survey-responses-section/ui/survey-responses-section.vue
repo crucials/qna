@@ -35,78 +35,84 @@ function seeAnswers(response: SurveyResponse) {
 </script>
 
 <template>
-    <section v-if="responses">
+    <section v-if="responses?.data">
         <h2 class="text-3xl font-bold mb-10">
             Responses
         </h2>
 
-        <TableBase class="max-w-3xl sm:hidden">
-            <template #head>
-                <tr>
-                    <TableCell header>
-                        <UserIcon />
-                        Name
-                    </TableCell>
+        <div v-if="responses.data.length > 0">
+            <TableBase class="max-w-3xl sm:hidden">
+                <template #head>
+                    <tr>
+                        <TableCell header>
+                            <UserIcon />
+                            Name
+                        </TableCell>
 
-                    <TableCell header>
-                        <ClockIcon />
-                        Time (minutes:seconds)
-                    </TableCell>
+                        <TableCell header>
+                            <ClockIcon />
+                            Time (minutes:seconds)
+                        </TableCell>
 
-                    <TableCell></TableCell>
-                </tr>
-            </template>
+                        <TableCell></TableCell>
+                    </tr>
+                </template>
 
-            <template #body>
-                <tr
+                <template #body>
+                    <tr
+                        v-for="response, index in responses.data"
+                        class="transition-colors hover:bg-neutral-900"
+                    >
+                        <TableCell>
+                            {{ response.name || `User ${index}` }}
+                        </TableCell>
+
+                        <TableCell>
+                            {{ formatTime(response.seconds_spent) }}
+                        </TableCell>
+
+                        <TableCell>
+                            <button
+                                class="hover:underline hover:text-amethyst ml-auto"
+                                @click="seeAnswers(response)"
+                            >
+                                See answers
+                            </button>
+                        </TableCell>
+                    </tr>
+                </template>
+            </TableBase>
+
+            <ul class="hidden sm:block">
+                <li
+                    class="bg-neutral-900 rounded-xl p-4
+                        flex items-center gap-x-8 flex-wrap gap-y-4
+                        mb-6 last:mb-0"
                     v-for="response, index in responses.data"
-                    class="transition-colors hover:bg-neutral-900"
                 >
-                    <TableCell>
+                    <div class="flex items-center gap-x-2">
+                        <UserIcon />
                         {{ response.name || `User ${index}` }}
-                    </TableCell>
+                    </div>
 
-                    <TableCell>
+                    <div class="flex items-center gap-x-2">
+                        <ClockIcon />
                         {{ formatTime(response.seconds_spent) }}
-                    </TableCell>
+                    </div>
 
-                    <TableCell>
-                        <button
-                            class="hover:underline hover:text-amethyst ml-auto"
-                            @click="seeAnswers(response)"
-                        >
-                            See answers
-                        </button>
-                    </TableCell>
-                </tr>
-            </template>
-        </TableBase>
+                    <button
+                        class="hover:underline hover:text-amethyst ml-auto"
+                        @click="seeAnswers(response)"
+                    >
+                        See answers
+                    </button>
+                </li>
+            </ul>
+        </div>
 
-        <ul class="hidden sm:block">
-            <li
-                class="bg-neutral-900 rounded-xl p-4
-                    flex items-center gap-x-8 flex-wrap gap-y-4
-                    mb-6 last:mb-0"
-                v-for="response, index in responses.data"
-            >
-                <div class="flex items-center gap-x-2">
-                    <UserIcon />
-                    {{ response.name || `User ${index}` }}
-                </div>
-
-                <div class="flex items-center gap-x-2">
-                    <ClockIcon />
-                    {{ formatTime(response.seconds_spent) }}
-                </div>
-
-                <button
-                    class="hover:underline hover:text-amethyst ml-auto"
-                    @click="seeAnswers(response)"
-                >
-                    See answers
-                </button>
-            </li>
-        </ul>
+        <p v-else class="text-neutral-500 text-lg m:text-base">
+            No responses have been sent for now
+        </p>
 
         <AnswersDialog
             v-model:opened="answersDialogData.opened"

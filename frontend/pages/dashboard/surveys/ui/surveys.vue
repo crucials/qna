@@ -17,7 +17,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
             Your surveys
         </h1>
 
-        <ul class="flex gap-6 flex-wrap">
+        <ul class="flex gap-6 flex-wrap" v-if="account.surveys.length > 0">
             <SurveyCard
                 v-for="survey in account.surveys"
                 :key="survey._id"
@@ -26,5 +26,15 @@ const { account } = storeToRefs(useCurrentAccountStore())
                 @delete="deleteSurveyAndUpdate(survey._id || '')"
             />
         </ul>
+
+        <p v-else class="text-lg m:text-base">
+            You have not created any surveys.
+            <NuxtLink
+                to="/dashboard/surveys/create"
+                class="text-amethyst-light hover:text-amethyst transition-colors"
+            >
+                Click here to create
+            </NuxtLink>
+        </p>
     </div>
 </template>
