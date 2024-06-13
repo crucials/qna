@@ -3,7 +3,7 @@ from typing import Literal, TypedDict, get_args
 from marshmallow import Schema, fields, validate
 
 
-QuestionType = Literal['SHORT_TEXT', 'MULTILINE_TEXT', 'ONE_OPTION', 'MULTIPLE_OPTION']
+QuestionType = Literal['SHORT_TEXT', 'MULTILINE_TEXT', 'SINGLE_CHOICE', 'MULTIPLE_OPTION']
 QUESTION_TYPES = get_args(QuestionType)
 
 

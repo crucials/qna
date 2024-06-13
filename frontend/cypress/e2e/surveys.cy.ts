@@ -26,7 +26,7 @@ describe('surveys', () => {
         // creating radio buttons question
         cy.get('form button[aria-haspopup="listbox"]').click()
         cy.get('form ul[role="listbox"]').should('be.visible')
-            .contains('One option').click()      
+            .contains('Single choice').click()      
         
         cy.get('input[placeholder="Enter the question text').eq(1).type('test question 2')
         cy.get('input[placeholder="Option name"]').type('option 1')

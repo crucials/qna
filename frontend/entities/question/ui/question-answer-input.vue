@@ -41,7 +41,7 @@ function updateAnswer(newValue: string) {
     />
 
     <div
-        v-if="question.type === 'ONE_OPTION' && question.options"
+        v-if="question.type === 'SINGLE_CHOICE' && question.options"
         class="mb-7"
     >
         <RadioButtons
