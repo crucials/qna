@@ -4,9 +4,25 @@
 
 survey management website with responsive modern interface and advanced functionality like statistics and form builder
 
-[View the app :eyes:](https://try-qna.vercel.app/)
+[:eye: view the app](https://try-qna.vercel.app/)
 
-## features
+## main features
 
 - survey analysis page with survey visits chart, responses stats and answers view
 - survey creation through convenient form builder
+- different types of questions to choose: short text, multi-line text, single choice
+- product landing page
+
+## tech info
+
+### frontend
+
+built with vue (nuxt), using **pinia** for global state and **github actions + cypress** for end-to-end testing. page visits chart made with chart.js
+
+### backend
+
+built as rest api with python and flask. most of the data are stored in **mongo db**, code formatted with flake8
+
+using json web tokens for auth and **redis** for ip-based rate limiting
+
+deployed with **docker**
