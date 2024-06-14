@@ -90,7 +90,7 @@ function addOption() {
             v-if="surveyCreationMode
                 && OPTIONS_QUESTION_TYPES.includes(question.type)
                 && question.options"
-            class="flex gap-x-5 mb-6"
+            class="flex gap-5 mb-6 flex-wrap"
         >
             <TextField
                 v-model="newOption"

@@ -11,7 +11,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <li class="bg-neutral-900 rounded-xl p-6 min-w-3 xs:min-w-2.5">
+    <li class="bg-neutral-900 rounded-xl p-6 min-w-3 xs:min-w-2.5 flex flex-col">
         <SurveyIcon class="mb-5" />
         
         <div class="flex gap-x-3.5 items-center mb-6">
@@ -33,15 +33,15 @@ const emit = defineEmits<{
             </button>
         </div>  
 
-        <div class="flex gap-4 flex-wrap">
+        <div class="flex gap-4 flex-wrap items-stretch mt-auto">
             <NuxtLink :to="`/dashboard/surveys/${survey._id}`">
-                <OutlinedButton>
+                <OutlinedButton class="h-full">
                     Analyze
                 </OutlinedButton>
             </NuxtLink>
 
             <NuxtLink :to="`/${survey._id}`">
-                <SolidButton>
+                <SolidButton class="h-full">
                     Open
                 </SolidButton>
             </NuxtLink>
