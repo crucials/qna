@@ -57,9 +57,8 @@
 
             <FeatureCard
                 class="translate-x-8 translate-y-8 xs:translate-x-0 xs:translate-y-0"
-                title="Attractive UI"
-                description="Make users more interested in your survey with modern
-                    UI an UX design."
+                title="Data is under your control"
+                description="Export, analyze or make it public."
             >
                 <template #icon>
                     <svg
