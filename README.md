@@ -23,7 +23,7 @@ built with vue (nuxt), using **pinia** for global state and **github actions + c
 
 ### backend
 
-built as rest api with python and flask. most of the data are stored in **mongo db**, code formatted with flake8
+built as rest api with python and flask. most of the data are stored in **mongo db**, code formatted with flake8 and has unit tests made with pytest
 
 using json web tokens for auth and **redis** for ip-based rate limiting
 
