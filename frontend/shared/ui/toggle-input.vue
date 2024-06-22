@@ -9,7 +9,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div class="flex items-center gap-x-3 hover:cursor-pointer w-fit">
+    <div class="flex items-center gap-x-3 w-fit">
         <span class="xs:text-sm">
             <slot></slot>
         </span>
