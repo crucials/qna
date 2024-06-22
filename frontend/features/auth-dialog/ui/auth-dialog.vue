@@ -58,6 +58,15 @@ async function sendSignUpRequest() {
         router.push('/dashboard')
     }
 }
+
+function logInWithTestingAccount() {
+    form.value.data = {
+        name: 'user',
+        password: '123456'
+    }
+
+    sendLogInRequest()
+}
 </script>
 
 <template>
@@ -99,7 +108,7 @@ async function sendSignUpRequest() {
                     :error="form.error?.field === 'password'"
                 />
 
-                <div class="flex gap-5 flex-wrap mt-2">
+                <div class="flex gap-5 flex-wrap mt-2 mb-2">
                     <SolidButton @click="sendLogInRequest" type="submit">
                         Log in
                     </SolidButton>
@@ -107,6 +116,17 @@ async function sendSignUpRequest() {
                     <OutlinedButton @click="sendSignUpRequest" type="submit">
                         Sign up
                     </OutlinedButton>
+                </div>
+
+                <div class="text-base">
+                    Just want to try the app?
+                    <button
+                        class="text-amethyst transition-colors
+                            hover:text-amethyst-light"
+                        @click="logInWithTestingAccount"
+                    >
+                        Click here
+                    </button>
                 </div>
             </form>
         </div>
