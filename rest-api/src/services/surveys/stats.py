@@ -93,6 +93,7 @@ class SurveyStatsService:
                 '$set': {'weekly_page_visits': weekly_visits},
                 '$inc': {'total_visits_count': 1}
             }
+        )
 
 
 survey_stats_service = SurveyStatsService()
