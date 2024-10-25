@@ -1,7 +1,7 @@
 name: End-to-end tests
 on: [ deployment_status ]
 env:
-  API_BASE_URL: 'https://qna-fwmh.onrender.com'
+  API_BASE_URL: 'https://qna.hopto.org'
   FRONTEND_URL: 'https://try-qna.vercel.app'
 jobs:
   cypress-run:
