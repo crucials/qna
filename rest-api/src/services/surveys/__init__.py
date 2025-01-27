@@ -35,12 +35,12 @@ class SurveysService:
             return_document=ReturnDocument.AFTER,
         )
 
-    def get_survey_with_questions(self, id: str):
-        if not ObjectId.is_valid(id):
+    def get_survey_with_questions(self, survey_id: str):
+        if not ObjectId.is_valid(survey_id):
             return None
 
         account_with_requested_survey = accounts_collection.find_one(
-            {"surveys._id": ObjectId(id)}, {"surveys.$": 1}
+            {"surveys._id": ObjectId(survey_id)}, {"surveys.$": 1}
         )
 
         if account_with_requested_survey is None:
@@ -54,11 +54,11 @@ class SurveysService:
 
         return survey
 
-    def delete_survey(self, id: str):
-        if not ObjectId.is_valid(id):
+    def delete_survey(self, survey_id: str):
+        if not ObjectId.is_valid(survey_id):
             raise ResourceNotFoundError()
 
-        survey_object_id = ObjectId(id)
+        survey_object_id = ObjectId(survey_id)
         print(survey_object_id)
 
         account_update_result = accounts_collection.update_many(

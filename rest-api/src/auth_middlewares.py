@@ -1,11 +1,11 @@
 import os
 
 import bson.json_util
+import bson
 import flask
 import jwt
 from werkzeug.datastructures import Headers
 from werkzeug.exceptions import Unauthorized
-import bson
 
 from services.accounts import accounts_service
 

@@ -3,6 +3,7 @@ from werkzeug.exceptions import BadRequest, InternalServerError, Conflict
 from marshmallow import EXCLUDE
 
 from models.account_dto import AccountDto
+from models.account_credentials_schema import AccountCredentialsValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from services.auth import (
@@ -10,7 +11,6 @@ from services.auth import (
     UsernameAlreadyExistsError,
     auth_service,
 )
-from models.account_credentials_schema import AccountCredentialsValidationSchema
 
 
 TOKEN_COOKIE_MAX_AGE = 2592000
@@ -36,8 +36,8 @@ def sign_up():
                 vars(AccountDto.create_from_account_document(session.account))
             ),
         }
-    except UsernameAlreadyExistsError:
-        raise Conflict("account with specified username already exists")
+    except UsernameAlreadyExistsError as error:
+        raise Conflict("account with specified username already exists") from error
 
 
 @auth_controller_blueprint.post("/log-in")
@@ -58,5 +58,5 @@ def log_in():
                 vars(AccountDto.create_from_account_document(session.account))
             ),
         }
-    except InvalidCredentialsError:
-        raise BadRequest("invalid username or password")
+    except InvalidCredentialsError as error:
+        raise BadRequest("invalid username or password") from error

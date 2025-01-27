@@ -37,10 +37,10 @@ class AuthService:
             }
 
             new_account = accounts_collection.insert_one(new_account_dict)
-        except DuplicateKeyError:
-            raise UsernameAlreadyExistsError()
+        except DuplicateKeyError as error:
+            raise UsernameAlreadyExistsError() from error
 
-        payload = {"account_id": new_account.inserted_id.__str__()}
+        payload = {"account_id": str(new_account.inserted_id)}
 
         return SessionData(
             jwt.encode(payload, os.environ.get("JWT_SECRET_KEY"), algorithm="HS256"),
@@ -63,7 +63,7 @@ class AuthService:
 
         return SessionData(
             jwt.encode(
-                {"account_id": account["_id"].__str__()},
+                {"account_id": str(account["_id"])},
                 os.environ.get("JWT_SECRET_KEY"),
             ),
             account,

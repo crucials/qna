@@ -6,18 +6,18 @@ from flask.testing import FlaskClient
 from flask_app import create_flask_app
 
 
-@pytest.fixture()
-def app():
+@pytest.fixture(name="app")
+def app_fixture():
     return create_flask_app()
 
 
-@pytest.fixture()
-def client(app):
+@pytest.fixture(name="client")
+def client_fixture(app):
     return app.test_client()
 
 
-@pytest.fixture()
-def runner(app):
+@pytest.fixture(name="runner")
+def runner_fixture(app):
     return app.test_cli_runner()
 
 
@@ -26,8 +26,6 @@ token = None
 
 
 def test_sign_up(client: FlaskClient):
-    global account_name
-
     response = client.post(
         "/auth/sign-up", json={"name": account_name, "password": "123456"}
     )
@@ -39,7 +37,6 @@ def test_sign_up(client: FlaskClient):
 
 
 def test_log_in(client: FlaskClient):
-    global account_name
     global token
 
     response = client.post(

@@ -23,10 +23,10 @@ surveys_controller_blueprint = flask.Blueprint(
 surveys_controller_blueprint.register_blueprint(survey_stats_controller_blueprint)
 
 
-@surveys_controller_blueprint.get("/<string:id>")
+@surveys_controller_blueprint.get("/<string:survey_id>")
 @api_response()
-def get_survey_detailed_data(id: str):
-    survey_data = surveys_service.get_survey_with_questions(id)
+def get_survey_detailed_data(survey_id: str):
+    survey_data = surveys_service.get_survey_with_questions(survey_id)
 
     if survey_data is None:
         raise NotFound("survey with specified id not found")
@@ -50,49 +50,49 @@ def create_survey():
     return convert_bson_to_json_dict(vars(updated_account_dto))
 
 
-@surveys_controller_blueprint.delete("/<string:id>")
+@surveys_controller_blueprint.delete("/<string:survey_id>")
 @api_response()
-def delete_survey(id: str):
+def delete_survey(survey_id: str):
     restrict_unauthorized_access()
 
     account = get_account_from_headers(flask.request.headers)
-    if not surveys_service.is_survey_owner(account, id):
+    if not surveys_service.is_survey_owner(account, survey_id):
         raise Forbidden("you can't delete this survey")
 
-    surveys_service.delete_survey(id)
+    surveys_service.delete_survey(survey_id)
 
     return {}
 
 
-@surveys_controller_blueprint.post("/<string:id>/responses")
+@surveys_controller_blueprint.post("/<string:survey_id>/responses")
 @api_response()
-def create_survey_response(id: str):
+def create_survey_response(survey_id: str):
     survey_response = SurveyResponseValidationSchema().loads(
         flask.request.get_data(as_text=True), many=False, unknown=RAISE
     )
 
     try:
-        survey_responses_service.create_survey_response(id, survey_response)
+        survey_responses_service.create_survey_response(survey_id, survey_response)
         return {}
-    except InvalidResponseDataError as error:
-        raise BadRequest(error.__str__())
-    except ResourceNotFoundError:
-        raise NotFound("survey not found")
+    except InvalidResponseDataError as invalid_response_error:
+        raise BadRequest(str(invalid_response_error)) from invalid_response_error
+    except ResourceNotFoundError as resource_not_found_error:
+        raise NotFound("survey not found") from resource_not_found_error
 
 
-@surveys_controller_blueprint.get("/<string:id>/responses")
+@surveys_controller_blueprint.get("/<string:survey_id>/responses")
 @api_response()
-def get_survey_responses(id: str):
+def get_survey_responses(survey_id: str):
     restrict_unauthorized_access()
     account = get_account_from_headers(flask.request.headers)
 
-    if not ObjectId.is_valid(id):
+    if not ObjectId.is_valid(survey_id):
         raise NotFound("survey not found")
 
-    if not surveys_service.is_survey_owner(account, id):
+    if not surveys_service.is_survey_owner(account, survey_id):
         raise Forbidden("you can't access responses of this survey")
 
     return [
         convert_bson_to_json_dict(response)
-        for response in survey_responses_service.get_survey_responses(id)
+        for response in survey_responses_service.get_survey_responses(survey_id)
     ]

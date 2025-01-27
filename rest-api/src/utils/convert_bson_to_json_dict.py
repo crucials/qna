@@ -22,7 +22,7 @@ def convert_bson_to_json_dict(bson_document: dict):
             if isinstance(value, dict) or isinstance(value, list):
                 stringify_object_ids(value)
             elif isinstance(value, ObjectId):
-                data[key] = value.__str__()
+                data[key] = str(value)
 
     stringify_object_ids(json_dict)
 
