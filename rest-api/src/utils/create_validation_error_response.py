@@ -3,9 +3,10 @@ from marshmallow import ValidationError
 from utils.get_first_dict_key import get_first_dict_key
 
 
-def create_validation_error_response(error: ValidationError):
-    DEFAULT_ERROR_MESSAGE = 'data you sent is invalid'
+DEFAULT_ERROR_MESSAGE = "data you sent is invalid"
 
+
+def create_validation_error_response(error: ValidationError):
     first_invalid_field = get_first_dict_key(error.messages_dict)
 
     first_message = DEFAULT_ERROR_MESSAGE
@@ -17,11 +18,11 @@ def create_validation_error_response(error: ValidationError):
             first_message = messages[0]
 
     return {
-        'error': {
-            'code': 400,
-            'field': first_invalid_field,
-            'explanation': first_message,
-            'detailed_explanation': error.messages_dict,
+        "error": {
+            "code": 400,
+            "field": first_invalid_field,
+            "explanation": first_message,
+            "detailed_explanation": error.messages_dict,
         },
-        'data': None,
+        "data": None,
     }, 400
