@@ -18,6 +18,7 @@ class AccountDto:
 
     @staticmethod
     def create_from_account_document(account: dict):
-        fields_to_omit = ['password']
-        return AccountDto(**{key: account[key] for key in account.keys()
-                             if key not in fields_to_omit})
+        fields_to_omit = ["password"]
+        return AccountDto(
+            **{key: account[key] for key in account.keys() if key not in fields_to_omit}
+        )

@@ -22,20 +22,21 @@ def api_response(json_content=True):
             result = function(**kwargs)
 
             if isinstance(result, flask.Response) and json_content:
-                result.set_data(json.dumps({
-                    'data': result.get_data(as_text=True),
-                    'error': None,
-                }))
-                result.headers.set('Content-Type', 'application/json')
+                result.set_data(
+                    json.dumps(
+                        {
+                            "data": result.get_data(as_text=True),
+                            "error": None,
+                        }
+                    )
+                )
+                result.headers.set("Content-Type", "application/json")
 
                 return result
             elif isinstance(result, flask.Response):
                 return result
 
-            return {
-                'data': result,
-                'error': None
-            }
+            return {"data": result, "error": None}
 
         return get_api_response
 

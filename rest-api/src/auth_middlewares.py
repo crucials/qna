@@ -18,24 +18,25 @@ def authorize_request():
     `Account` header as json for request handlers. if token is invalid, does nothing
     """
 
-    auth_header = flask.request.headers.get('Authorization')
+    auth_header = flask.request.headers.get("Authorization")
     if auth_header is None:
         return
 
-    auth_header_parts = auth_header.split(' ')
+    auth_header_parts = auth_header.split(" ")
 
     if len(auth_header_parts) != 2:
         return
 
-    if auth_header_parts[0] != 'Bearer':
+    if auth_header_parts[0] != "Bearer":
         return
 
     token = auth_header_parts[1]
 
     try:
-        payload = jwt.decode(token, key=os.environ.get('JWT_SECRET_KEY'),
-                             algorithms=['HS256'])
-        account_id = payload.get('account_id')
+        payload = jwt.decode(
+            token, key=os.environ.get("JWT_SECRET_KEY"), algorithms=["HS256"]
+        )
+        account_id = payload.get("account_id")
 
         if not account_id:
             return
@@ -46,7 +47,7 @@ def authorize_request():
             return
 
         updated_headers = Headers(flask.request.headers)
-        updated_headers.add('Account', bson.json_util.dumps(account))
+        updated_headers.add("Account", bson.json_util.dumps(account))
         flask.request.headers = updated_headers
     except Exception as error:
         print(error)
@@ -54,6 +55,6 @@ def authorize_request():
 
 
 def restrict_unauthorized_access():
-    options_method_used = flask.request.method == 'OPTIONS'
-    if flask.request.headers.get('Account') is None and not options_method_used:
-        raise Unauthorized('invalid authorization token was specified')
+    options_method_used = flask.request.method == "OPTIONS"
+    if flask.request.headers.get("Account") is None and not options_method_used:
+        raise Unauthorized("invalid authorization token was specified")

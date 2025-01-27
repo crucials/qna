@@ -8,13 +8,14 @@ from utils.decorators.api_response import api_response
 from utils.get_account_from_headers import get_account_from_headers
 
 
-current_account_controller_blueprint = flask.Blueprint('current-account', __name__,
-                                                       url_prefix='/current-account')
+current_account_controller_blueprint = flask.Blueprint(
+    "current-account", __name__, url_prefix="/current-account"
+)
 
 current_account_controller_blueprint.before_request(restrict_unauthorized_access)
 
 
-@current_account_controller_blueprint.get('/')
+@current_account_controller_blueprint.get("/")
 @api_response()
 def get_current_account():
     account = get_account_from_headers(flask.request.headers)
@@ -24,10 +25,10 @@ def get_current_account():
     )
 
 
-@current_account_controller_blueprint.delete('/')
+@current_account_controller_blueprint.delete("/")
 @api_response()
 def delete_account():
     account = get_account_from_headers(flask.request.headers)
-    accounts_service.delete_account_by_id(account['_id'])
+    accounts_service.delete_account_by_id(account["_id"])
 
     return {}

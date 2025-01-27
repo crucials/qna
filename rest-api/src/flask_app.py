@@ -27,7 +27,7 @@ def create_flask_app():
 
     limiter.init_app(app)
 
-    CORS(app, origins=os.environ.get('FRONTEND_ORIGIN'))
+    CORS(app, origins=os.environ.get("FRONTEND_ORIGIN"))
 
     for blueprint in controllers_blueprints:
         app.register_blueprint(blueprint)
@@ -35,11 +35,8 @@ def create_flask_app():
     @app.errorhandler(HTTPException)
     def send_json_error_response(error: HTTPException):
         return {
-            'error': {
-                'code': error.code,
-                'explanation': error.description
-            },
-            'data': None,
+            "error": {"code": error.code, "explanation": error.description},
+            "data": None,
         }, error.code or 500
 
     app.register_error_handler(ValidationError, create_validation_error_response)

@@ -3,7 +3,9 @@ from typing import Literal, TypedDict, get_args
 from marshmallow import Schema, fields, validate
 
 
-QuestionType = Literal['SHORT_TEXT', 'MULTILINE_TEXT', 'SINGLE_CHOICE', 'MULTIPLE_OPTION']
+QuestionType = Literal[
+    "SHORT_TEXT", "MULTILINE_TEXT", "SINGLE_CHOICE", "MULTIPLE_OPTION"
+]
 QUESTION_TYPES = get_args(QuestionType)
 
 
@@ -20,6 +22,5 @@ class QuestionValidationSchema(Schema):
     type = fields.Str(required=True, validate=validate.OneOf(QUESTION_TYPES))
 
     options = fields.List(
-        fields.Str(validate=validate.Length(min=1, max=150)),
-        allow_none=True
+        fields.Str(validate=validate.Length(min=1, max=150)), allow_none=True
     )
