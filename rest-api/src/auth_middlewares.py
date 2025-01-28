@@ -34,7 +34,7 @@ def authorize_request():
 
     try:
         payload = jwt.decode(
-            token, key=os.environ.get("JWT_SECRET_KEY"), algorithms=["HS256"]
+            token, key=os.environ["JWT_SECRET_KEY"], algorithms=["HS256"]
         )
         account_id = payload.get("account_id")
 

@@ -43,7 +43,7 @@ class AuthService:
         payload = {"account_id": str(new_account.inserted_id)}
 
         return SessionData(
-            jwt.encode(payload, os.environ.get("JWT_SECRET_KEY"), algorithm="HS256"),
+            jwt.encode(payload, os.environ["JWT_SECRET_KEY"], algorithm="HS256"),
             new_account_dict,
         )
 
@@ -64,7 +64,7 @@ class AuthService:
         return SessionData(
             jwt.encode(
                 {"account_id": str(account["_id"])},
-                os.environ.get("JWT_SECRET_KEY"),
+                os.environ["JWT_SECRET_KEY"],
             ),
             account,
         )
