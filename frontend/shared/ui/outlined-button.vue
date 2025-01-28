@@ -2,7 +2,7 @@
 withDefaults(
     defineProps<{
         tag?: string
-        color: 'purple' | 'grey'
+        color?: 'purple' | 'grey'
         buttonClass?: string
     }>(),
     { tag: 'button', color: 'purple', buttonClass: '' },
