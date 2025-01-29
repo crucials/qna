@@ -5,6 +5,7 @@ from pymongo.errors import DuplicateKeyError
 import jwt
 import bcrypt
 
+from models.auth_providers import AuthProvider
 from mongo_database import accounts_collection
 
 
@@ -20,7 +21,6 @@ SessionData = namedtuple("SessionData", ["token", "account"])
 
 
 class AuthService:
-
     def sign_up(self, name: str, password: str):
         """
         ### Returns
@@ -43,7 +43,7 @@ class AuthService:
         payload = {"account_id": str(new_account.inserted_id)}
 
         return SessionData(
-            jwt.encode(payload, os.environ.get("JWT_SECRET_KEY"), algorithm="HS256"),
+            jwt.encode(payload, os.environ["JWT_SECRET_KEY"], algorithm="HS256"),
             new_account_dict,
         )
 
@@ -64,9 +64,43 @@ class AuthService:
         return SessionData(
             jwt.encode(
                 {"account_id": str(account["_id"])},
-                os.environ.get("JWT_SECRET_KEY"),
+                os.environ["JWT_SECRET_KEY"],
             ),
             account,
+        )
+
+    def log_in_with_external_provider(
+        self, account_name: str, auth_provider: AuthProvider, external_account_id: str
+    ):
+        already_existing_account = accounts_collection.find_one(
+            {
+                "external_account_id": external_account_id,
+                "auth_provider": auth_provider.value,
+            }
+        )
+
+        if already_existing_account is not None:
+            return SessionData(
+                jwt.encode(
+                    {"account_id": str(already_existing_account["_id"])},
+                    os.environ["JWT_SECRET_KEY"],
+                ),
+                already_existing_account,
+            )
+
+        new_account_dict = {
+            "name": account_name,
+            "surveys": [],
+            "auth_provider": auth_provider.value,
+            "external_account_id": external_account_id,
+        }
+
+        new_account = accounts_collection.insert_one(new_account_dict)
+
+        payload = {"account_id": str(new_account.inserted_id)}
+        return SessionData(
+            jwt.encode(payload, os.environ["JWT_SECRET_KEY"], algorithm="HS256"),
+            new_account_dict,
         )
 
 

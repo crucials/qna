@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import TypedDict
+from typing import Optional, TypedDict
 
+from models.auth_providers import AuthProvider
 from models.survey import Survey
 
 
@@ -15,6 +16,8 @@ class AccountDto:
     _id: str
     name: str
     surveys: list
+    auth_provider: Optional[AuthProvider] = None
+    external_account_id: Optional[str] = None
 
     @staticmethod
     def create_from_account_document(account: dict):

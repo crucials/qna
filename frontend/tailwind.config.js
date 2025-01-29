@@ -42,10 +42,6 @@ export default {
         },
 
         extend: {
-            fontFamily: {
-                graphik: 'Graphik',
-            },
-
             minWidth: {
                 1: '100px',
                 1.5: '150px',

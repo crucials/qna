@@ -8,11 +8,9 @@ export default defineNuxtConfig({
         [
             '@pinia/nuxt',
             {
-                autoImports: [
-                    'defineStore', 'storeToRefs'
-                ]
-            }
-        ]
+                autoImports: ['defineStore', 'storeToRefs'],
+            },
+        ],
     ],
     postcss: {
         plugins: {
@@ -22,7 +20,7 @@ export default defineNuxtConfig({
     },
 
     dir: {
-        'middleware': 'app/*',
+        middleware: 'app/*',
     },
 
     components: [
@@ -49,7 +47,7 @@ export default defineNuxtConfig({
         {
             path: '~/app',
             pathPrefix: false,
-        }
+        },
     ],
 
     app: {
@@ -65,6 +63,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             apiBaseUrl: process.env.API_BASE_URL,
-        }
-    }
+            googleOauthClientId: '',
+        },
+    },
 })
