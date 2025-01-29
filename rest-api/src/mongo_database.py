@@ -11,9 +11,7 @@ main_database = client.get_database("main")
 
 accounts_collection = main_database.get_collection("accounts")
 accounts_collection.create_index(
-    {
-        "name": TEXT,
-    },
+    ["name"],
     unique=True,
 )
 
