@@ -9,7 +9,8 @@ interface ApiRequestOptions {
 }
 
 export async function fetchApi<TResponseData = null>(
-    path: string, options?: ApiRequestOptions
+    path: string,
+    options?: ApiRequestOptions,
 ) {
     type TypedApiResponse = ApiResponse<TResponseData>
 
@@ -26,30 +27,36 @@ export async function fetchApi<TResponseData = null>(
         } | null>
     }
 
-    if(process.server) {
+    if (process.server) {
         response = await useFetch<ApiResponse<TResponseData>>(
             config.public.apiBaseUrl + path,
             {
-                headers: { 'Authorization': 'Bearer ' + token.value },
+                headers: {
+                    Authorization: 'Bearer ' + token.value,
+                    'Content-Type': 'application/json',
+                },
                 method: options?.method,
                 deep: false,
-                body: options?.body
-            }
+                body: options?.body,
+            },
         )
-    }
-    else {
+    } else {
         response = await fetchOnClient(config.public.apiBaseUrl + path, {
-            headers: { 'Authorization': 'Bearer ' + token.value },
+            headers: {
+                Authorization: 'Bearer ' + token.value,
+                'Content-Type': 'application/json',
+            },
             method: options?.method,
-            body: JSON.stringify(options?.body)
+            body: JSON.stringify(options?.body),
         })
     }
 
-    if(response.error.value && options?.notificationOnError === true) {
-        if(response.error.value.data?.error) {
+    if (response.error.value && options?.notificationOnError === true) {
+        if (response.error.value.data?.error) {
             showNotification({
                 type: 'error',
-                message: 'Error: ' + response.error.value.data.error.explanation
+                message:
+                    'Error: ' + response.error.value.data.error.explanation,
             })
 
             return response
@@ -57,7 +64,7 @@ export async function fetchApi<TResponseData = null>(
 
         showNotification({
             type: 'error',
-            message: 'Failed to send request to the server. Try again later'
+            message: 'Failed to send request to the server. Try again later',
         })
     }
 
@@ -68,28 +75,26 @@ async function fetchOnClient(url: string, fetchOptions: RequestInit) {
     try {
         const clientFetchResponse = await fetch(url, fetchOptions)
 
-        if(clientFetchResponse.ok) {
+        if (clientFetchResponse.ok) {
             return {
                 data: ref(await clientFetchResponse.json()),
-                error: ref(null)
+                error: ref(null),
             }
-        }
-        else {
+        } else {
             return {
                 data: ref(null),
                 error: ref({
                     data: await clientFetchResponse.json(),
-                    statusCode: clientFetchResponse.status
-                })
+                    statusCode: clientFetchResponse.status,
+                }),
             }
         }
-    }
-    catch(error) {
+    } catch (error) {
         return {
             data: ref(null),
             error: ref({
-                message: `${error}`
-            })
+                message: `${error}`,
+            }),
         }
     }
 }

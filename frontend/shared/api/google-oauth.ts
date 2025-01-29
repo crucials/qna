@@ -9,8 +9,7 @@ export function getGoogleAuthorizationUrl(clientId: string) {
         'redirect_uri',
         window.location.origin + AUTH_CALLBACK_ROUTE,
     )
-    authUrl.searchParams.set('response_type', 'id_token token')
-    authUrl.searchParams.set('nonce', 'sopdfgds9guy89sdfgy89d7fs')
+    authUrl.searchParams.set('response_type', 'code')
     authUrl.searchParams.set('scope', 'email profile')
     return authUrl.toString()
 }

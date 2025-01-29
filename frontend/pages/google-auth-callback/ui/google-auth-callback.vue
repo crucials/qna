@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useCurrentAccountStore } from '~/shared/model/current-account-store'
+import { logInWithGoogle } from '../api/log-in-with-google'
 import { useTokenCookie } from '~/shared/model/token-cookie'
+import { useNotificationsStore } from '~/shared/model/notifications-store'
 
 definePageMeta({
     path: '/auth-callback',
@@ -8,20 +11,38 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 
+const { showNotification } = useNotificationsStore()
+
 const token = useTokenCookie()
+const { account } = storeToRefs(useCurrentAccountStore())
 
-onMounted(() => {
-    const googleAuthServerResponseData = new URLSearchParams(route.hash)
-    const authError = googleAuthServerResponseData.get('error')
-    const idToken = googleAuthServerResponseData.get('id_token')
+onMounted(async () => {
+    const authError = route.query.error
+    const code = route.query.code
 
-    if (authError !== null || idToken === null) {
+    if (authError || !code) {
         console.error('Google OAuth error' + authError ? `: ${authError}` : '')
 
         throw createError('Log in failed')
     }
 
-    token.value = idToken
+    const googleLogInResponse = (await logInWithGoogle(code.toString())).data
+        .value
+
+    if (!googleLogInResponse?.data?.token) {
+        console.error(
+            'Auth error:',
+            googleLogInResponse?.error?.explanation ||
+                'Token is missing in response body',
+        )
+
+        throw createError('Log in failed')
+    }
+
+    token.value = googleLogInResponse.data.token
+    account.value = googleLogInResponse.data.account
+
+    showNotification({ message: 'Logged in', type: 'success' })
     router.push('/dashboard')
 })
 </script>
