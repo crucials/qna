@@ -60,10 +60,9 @@ def fetch_tokens_from_google_authorization_code(code: str) -> GoogleTokensFetchR
     )
 
     if not response.ok:
-        print(response.text)
         raise GoogleTokenFetchError(
             "Token exchange request failed "
-            + f"with status code {response.status_code}"
+            + f"with status code {response.status_code}: ${response.text}"
         )
 
     return response.json()
