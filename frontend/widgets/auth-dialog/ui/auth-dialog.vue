@@ -75,6 +75,7 @@ function logInWithTestingAccount() {
 <template>
     <DialogWindow
         class="p-3.5 w-[44%] min-w-6 sm:p-3"
+        data-test-id="authDialog"
         v-model:opened="authDialogOpened"
     >
         <template #triggerButton>
@@ -116,11 +117,19 @@ function logInWithTestingAccount() {
                 />
 
                 <div class="flex gap-5 flex-wrap mt-2 mb-2">
-                    <SolidButton @click="sendLogInRequest" type="submit">
+                    <SolidButton
+                        @click="sendLogInRequest"
+                        data-test-id="logInButton"
+                        type="submit"
+                    >
                         Log in
                     </SolidButton>
 
-                    <OutlinedButton @click="sendSignUpRequest" type="submit">
+                    <OutlinedButton
+                        @click="sendSignUpRequest"
+                        data-test-id="signUpButton"
+                        type="submit"
+                    >
                         Sign up
                     </OutlinedButton>
                 </div>
