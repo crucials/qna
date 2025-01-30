@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import {
-    Chart, LinearScale, BarController, CategoryScale, BarElement, Legend
+    Chart,
+    LinearScale,
+    BarController,
+    CategoryScale,
+    BarElement,
+    Legend,
 } from 'chart.js'
 import type { SurveyStats } from '~/entities/survey-stats/model/survey-stats'
 
@@ -13,22 +18,27 @@ let chart: Chart<'bar'> | undefined = undefined
 onMounted(() => {
     const chartCanvasElement = document.getElementById('surveyVisitsChart')
 
-    const formattedDates = props.stats.weekly_page_visits.map(record => {
+    const formattedDates = props.stats.weekly_page_visits.map((record) => {
         return new Date(record.date).toLocaleDateString(undefined, {
-            weekday: 'short'
+            weekday: 'short',
         })
     })
 
-    if(Legend.defaults) {
+    if (Legend.defaults) {
         Legend.defaults.onClick = () => {}
-    }
-    else {
+    } else {
         Legend.defaults = {
-            onClick: () => {}
+            onClick: () => {},
         }
     }
 
-    Chart.register(LinearScale, BarController, CategoryScale, BarElement, Legend)
+    Chart.register(
+        LinearScale,
+        BarController,
+        CategoryScale,
+        BarElement,
+        Legend,
+    )
 
     updateChartOptions()
 
@@ -36,14 +46,18 @@ onMounted(() => {
         type: 'bar',
         data: {
             labels: formattedDates,
-            datasets: [{
-                label: 'Page visits count',
-                data: props.stats.weekly_page_visits.map(record => record.count),
-                backgroundColor: '#A965D7',
-                hoverBackgroundColor: '#ba85e1',
-                barThickness: 40,
-                borderRadius: 10
-            }],
+            datasets: [
+                {
+                    label: 'Page visits count',
+                    data: props.stats.weekly_page_visits.map(
+                        (record) => record.count,
+                    ),
+                    backgroundColor: '#A965D7',
+                    hoverBackgroundColor: '#ba85e1',
+                    barThickness: 40,
+                    borderRadius: 10,
+                },
+            ],
         },
         options: {
             maintainAspectRatio: false,
@@ -51,12 +65,12 @@ onMounted(() => {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        tickWidth :0,
+                        tickWidth: 0,
                         display: true,
-                        color: '#FFFFFF10'
-                    }
-                }
-            }
+                        color: '#FFFFFF10',
+                    },
+                },
+            },
         },
     })
 
@@ -68,12 +82,12 @@ onMounted(() => {
 
 function updateChartOptions() {
     let barThickness = 40
-    if(window.innerWidth <= 600) {
+    if (window.innerWidth <= 600) {
         barThickness = 25
     }
 
     let fontSize = 16
-    if(window.innerWidth <= 1200) {
+    if (window.innerWidth <= 1200) {
         fontSize = 14
     }
 
@@ -82,12 +96,12 @@ function updateChartOptions() {
     Chart.defaults.font.size = fontSize
     Chart.defaults.color = 'white'
 
-    if(chart) {
+    if (chart) {
         chart.data.datasets[0].barThickness = barThickness
     }
 }
 </script>
 
 <template>
-    <canvas id="surveyVisitsChart"></canvas>    
+    <canvas id="surveyVisitsChart"></canvas>
 </template>

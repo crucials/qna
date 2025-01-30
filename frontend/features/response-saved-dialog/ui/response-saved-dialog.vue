@@ -10,7 +10,7 @@ const emit = defineEmits<{
 <template>
     <DialogWindow
         :opened="opened"
-        @update:opened="newValue => emit('update:opened', newValue)"
+        @update:opened="(newValue) => emit('update:opened', newValue)"
     >
         <img
             src="~/assets/images/checkmark-icon.png"
@@ -27,5 +27,5 @@ const emit = defineEmits<{
                 Go to main page
             </OutlinedButton>
         </NuxtLink>
-    </DialogWindow>    
+    </DialogWindow>
 </template>

@@ -3,9 +3,7 @@ import { incrementSurveyVisitCounter } from '~/pages/survey/api/increment-survey
 import { getSurveyWithQuestions } from '~/pages/survey/api/get-survey-with-questions'
 import { fetchApi } from '~/shared/api/fetch-api'
 import type { ApiError } from '~/shared/model/api-response'
-import type {
-    SurveyResponseFormData
-} from '~/widgets/survey-response-form/model/form-data'
+import type { SurveyResponseFormData } from '~/widgets/survey-response-form/model/form-data'
 
 definePageMeta({
     path: '/:id',
@@ -15,23 +13,22 @@ const id = useRoute().params.id.toString()
 
 const { data: surveyResponse, error } = await getSurveyWithQuestions(id)
 
-if(error.value?.statusCode === 404) {
+if (error.value?.statusCode === 404) {
     throw createError({
         statusCode: 404,
-        message: 'Requested page not found'
+        message: 'Requested page not found',
     })
-}
-else if(error.value) {
+} else if (error.value) {
     throw createError({
         statusCode: 500,
-        message: 'Failed to get survey data'
+        message: 'Failed to get survey data',
     })
 }
 
 incrementSurveyVisitCounter(id)
 
 useHead({
-    title: surveyResponse.value?.data?.title
+    title: surveyResponse.value?.data?.title,
 })
 
 const responseSavedDialogOpened = ref(false)
@@ -46,15 +43,15 @@ async function createSurveyResponse(
         body: {
             name: surveyResponse.name,
             seconds_spent: secondsSpent,
-            answers: surveyResponse.answers.map(answer => ({
+            answers: surveyResponse.answers.map((answer) => ({
                 question_id: answer.question_id,
-                value: answer.value
-            }))
+                value: answer.value,
+            })),
         },
-        notificationOnError: true
+        notificationOnError: true,
     })
 
-    if(!apiResponse.error.value) {
+    if (!apiResponse.error.value) {
         responseSavedDialogOpened.value = true
     }
 }

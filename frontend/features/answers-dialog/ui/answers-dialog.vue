@@ -11,14 +11,16 @@ const emit = defineEmits<{
     (event: 'update:opened', newValue: boolean): void
 }>()
 
-const answersWithQuestion = computed(() =>
-    props.answers.filter(answer => answer.question) as Required<Answer>[])
+const answersWithQuestion = computed(
+    () =>
+        props.answers.filter((answer) => answer.question) as Required<Answer>[],
+)
 </script>
 
 <template>
     <DialogWindow
         :opened="opened"
-        @update:opened="newValue => emit('update:opened', newValue)"
+        @update:opened="(newValue) => emit('update:opened', newValue)"
     >
         <h2 class="font-semibold text-2xl mb-7">
             Answers from {{ senderName }}
@@ -26,7 +28,7 @@ const answersWithQuestion = computed(() =>
 
         <ul>
             <QuestionCard
-                v-for="answer, index in answersWithQuestion"
+                v-for="(answer, index) in answersWithQuestion"
                 :question="answer.question"
                 :order-number="index + 1"
                 tag="li"

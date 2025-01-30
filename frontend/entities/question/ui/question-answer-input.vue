@@ -14,14 +14,15 @@ const emit = defineEmits<{
 const { answers } = storeToRefs(useAnswersStore())
 
 const answerIndex = computed(() => {
-    return answers.value.findIndex(someAnswer =>
-        someAnswer.question_id === props.question._id)
+    return answers.value.findIndex(
+        (someAnswer) => someAnswer.question_id === props.question._id,
+    )
 })
 
 function updateAnswer(newValue: string) {
     const answer = answers.value[answerIndex.value]
 
-    if(answer) {
+    if (answer) {
         answer.value = newValue
     }
 }
@@ -29,14 +30,19 @@ function updateAnswer(newValue: string) {
 
 <template>
     <TextField
-        v-if="question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'"
+        v-if="
+            question.type === 'SHORT_TEXT' || question.type === 'MULTILINE_TEXT'
+        "
         :model-value="answers[answerIndex]?.value || null"
         @update:model-value="updateAnswer"
         :disabled="surveyCreationMode"
         :multiline="question.type === 'MULTILINE_TEXT'"
         rows="6"
-        :placeholder="surveyCreationMode ? 'Answer would be typed here'
-            : 'Enter the answer here'"
+        :placeholder="
+            surveyCreationMode
+                ? 'Answer would be typed here'
+                : 'Enter the answer here'
+        "
         class="mb-7 max-w-xl"
     />
 
@@ -50,7 +56,7 @@ function updateAnswer(newValue: string) {
             :options="question.options"
             :name="question.text"
             :removable-options="surveyCreationMode"
-            @remove-option="option => emit('remove-option', option)"
+            @remove-option="(option) => emit('remove-option', option)"
             :disabled="surveyCreationMode"
         />
     </div>

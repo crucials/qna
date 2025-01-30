@@ -4,7 +4,7 @@ import authorizedOnlyMiddleware from '~/shared/model/authorized-only-middleware'
 
 definePageMeta({
     path: '/dashboard/surveys/:id',
-    middleware: authorizedOnlyMiddleware
+    middleware: authorizedOnlyMiddleware,
 })
 
 const router = useRouter()
@@ -12,13 +12,12 @@ const id = useRoute().params.id.toString()
 
 const { data: stats, error } = await getSurveyStats(id)
 
-if(error.value?.statusCode === 404) {
+if (error.value?.statusCode === 404) {
     throw createError({
         statusCode: 404,
-        message: 'Requested survey not found'
+        message: 'Requested survey not found',
     })
-}
-else if(error.value?.statusCode === 403) {
+} else if (error.value?.statusCode === 403) {
     router.push('/')
 }
 </script>
@@ -36,12 +35,10 @@ else if(error.value?.statusCode === 403) {
                 <SurveyNumericStats :stats="stats.data">
                     <template #chart>
                         <div
-                            class="p-px rounded-xl bg-silver col-span-2 row-span-2
-                                lg:row-start-2 lg:col-span-full"
+                            class="p-px rounded-xl bg-silver col-span-2 row-span-2 lg:row-start-2 lg:col-span-full"
                         >
                             <article
-                                class="bg-neutral-950 rounded-xl p-6 h-full
-                                    flex items-center sm:overflow-x-scroll"
+                                class="bg-neutral-950 rounded-xl p-6 h-full flex items-center sm:overflow-x-scroll"
                             >
                                 <div class="min-w-4 min-h-3.5 h-full w-full">
                                     <SurveyVisitsChart :stats="stats.data" />
@@ -54,9 +51,7 @@ else if(error.value?.statusCode === 403) {
         </section>
 
         <ClientOnly>
-            <LazySurveyResponsesSection
-                :survey-id="id"
-            />
+            <LazySurveyResponsesSection :survey-id="id" />
         </ClientOnly>
     </div>
 </template>

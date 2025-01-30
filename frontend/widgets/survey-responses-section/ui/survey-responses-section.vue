@@ -2,7 +2,7 @@
 import { useAnswersStore } from '~/shared/model/answers-store'
 import {
     getSurveyResponses,
-    type SurveyResponse
+    type SurveyResponse,
 } from '~/widgets/survey-responses-section/api/get-survey-responses'
 
 const props = defineProps<{
@@ -15,7 +15,7 @@ const { answers } = storeToRefs(useAnswersStore())
 
 const answersDialogData = ref({
     senderName: '',
-    opened: false
+    opened: false,
 })
 
 function formatTime(seconds: number) {
@@ -29,16 +29,14 @@ function seeAnswers(response: SurveyResponse) {
     answers.value = response.answers
     answersDialogData.value = {
         senderName: response.name || '',
-        opened: true
+        opened: true,
     }
 }
 </script>
 
 <template>
     <section v-if="responses?.data">
-        <h2 class="text-3xl font-bold mb-10">
-            Responses
-        </h2>
+        <h2 class="text-3xl font-bold mb-10">Responses</h2>
 
         <div v-if="responses.data.length > 0">
             <TableBase class="max-w-3xl sm:hidden">
@@ -60,7 +58,7 @@ function seeAnswers(response: SurveyResponse) {
 
                 <template #body>
                     <tr
-                        v-for="response, index in responses.data"
+                        v-for="(response, index) in responses.data"
                         class="transition-colors hover:bg-neutral-900"
                     >
                         <TableCell>
@@ -85,10 +83,8 @@ function seeAnswers(response: SurveyResponse) {
 
             <ul class="hidden sm:block">
                 <li
-                    class="bg-neutral-900 rounded-xl p-4
-                        flex items-center gap-x-8 flex-wrap gap-y-4
-                        mb-6 last:mb-0"
-                    v-for="response, index in responses.data"
+                    class="bg-neutral-900 rounded-xl p-4 flex items-center gap-x-8 flex-wrap gap-y-4 mb-6 last:mb-0"
+                    v-for="(response, index) in responses.data"
                 >
                     <div class="flex items-center gap-x-2">
                         <UserIcon />
@@ -119,5 +115,5 @@ function seeAnswers(response: SurveyResponse) {
             :answers="answers"
             :sender-name="answersDialogData.senderName"
         />
-    </section>    
+    </section>
 </template>

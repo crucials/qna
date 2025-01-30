@@ -94,13 +94,14 @@ export default {
                     dark: '#7c499f',
                 },
                 error: {
-                    DEFAULT: '#EF2323'
-                }
+                    DEFAULT: '#EF2323',
+                },
             },
 
             backgroundImage: {
-                'enchanted-amethyst': 'linear-gradient(90deg, rgba(169,101,215,1) 0%, rgba(80,54,242,1) 100%)',
-                'silver': 'linear-gradient(90deg, rgba(64,64,64,1) 0%, rgba(104,104,104,1) 100%)',
+                'enchanted-amethyst':
+                    'linear-gradient(90deg, rgba(169,101,215,1) 0%, rgba(80,54,242,1) 100%)',
+                silver: 'linear-gradient(90deg, rgba(64,64,64,1) 0%, rgba(104,104,104,1) 100%)',
             },
 
             fontFamily: {

@@ -6,5 +6,5 @@
         </main>
 
         <Notifications />
-    </div>    
+    </div>
 </template>

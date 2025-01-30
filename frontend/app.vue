@@ -12,7 +12,7 @@
 @font-face {
     font-family: 'Inria Serif';
     src: url('~/assets/fonts/inria-serif-regular.ttf');
-    font-weight: normal
+    font-weight: normal;
 }
 
 @font-face {
@@ -34,7 +34,7 @@
 
 @layer base {
     html {
-        @apply scroll-smooth
+        @apply scroll-smooth;
     }
 
     body {

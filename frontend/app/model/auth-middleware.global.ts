@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async () => {
     const token = useTokenCookie()
     const { account } = storeToRefs(useCurrentAccountStore())
 
-    if(!account.value && token.value) {
+    if (!account.value && token.value) {
         account.value = await getCurrentAccount()
     }
 })

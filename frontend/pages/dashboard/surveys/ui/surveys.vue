@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { deleteSurveyAndUpdate } from '~/features/delete-survey-button/model/delete-and-update';
+import { deleteSurveyAndUpdate } from '~/features/delete-survey-button/model/delete-and-update'
 import authorizedOnlyMiddleware from '~/shared/model/authorized-only-middleware'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 
 definePageMeta({
     path: '/dashboard/surveys',
-    middleware: authorizedOnlyMiddleware
+    middleware: authorizedOnlyMiddleware,
 })
 
 const { account } = storeToRefs(useCurrentAccountStore())
@@ -13,9 +13,7 @@ const { account } = storeToRefs(useCurrentAccountStore())
 
 <template>
     <div v-if="account">
-        <h1 class="font-bold text-4xl mb-10 sm:text-3xl">
-            Your surveys
-        </h1>
+        <h1 class="font-bold text-4xl mb-10 sm:text-3xl">Your surveys</h1>
 
         <ul class="flex gap-6 flex-wrap" v-if="account.surveys.length > 0">
             <SurveyCard

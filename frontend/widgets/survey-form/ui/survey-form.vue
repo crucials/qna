@@ -12,46 +12,47 @@ const { showNotification } = useNotificationsStore()
 const { form, setError } = useForm<SurveyFormData>({
     title: '',
     anonymous: false,
-    questions: []
+    questions: [],
 })
 
 let lastQuestionId = 0
 function addQuestion(question: Question) {
     form.value.data.questions.push({
         ...question,
-        id: lastQuestionId
+        id: lastQuestionId,
     })
 
     lastQuestionId++
 }
 
 function updateQuestion(questionId: number, newValue: Question) {
-    const index = form.value.data.questions
-        .findIndex(question => question.id === questionId)
-    
+    const index = form.value.data.questions.findIndex(
+        (question) => question.id === questionId,
+    )
+
     form.value.data.questions[index] = {
         id: questionId,
-        ...newValue
+        ...newValue,
     }
 }
 
 async function saveSurvey() {
-    if(form.value.data.title.length < 3) {
+    if (form.value.data.title.length < 3) {
         setError({
             field: 'title',
-            explanation: 'Survey title must be minimum of 3 chars long'
+            explanation: 'Survey title must be minimum of 3 chars long',
         })
         showNotification({
             type: 'error',
-            message: 'Survey title must be minimum of 3 chars long'
+            message: 'Survey title must be minimum of 3 chars long',
         })
         return
     }
 
-    if(form.value.data.questions.length === 0) {
+    if (form.value.data.questions.length === 0) {
         showNotification({
             type: 'error',
-            message: 'Add at least one question'
+            message: 'Add at least one question',
         })
         return
     }
@@ -72,23 +73,21 @@ async function saveSurvey() {
                 :error="form.error?.field === 'title'"
             />
 
-            <ToggleInput v-model="form.data.anonymous">
-               Anonymous 
-            </ToggleInput>
-            
-            <CreateQuestionMenu
-                @create-question="addQuestion"
-            />
+            <ToggleInput v-model="form.data.anonymous"> Anonymous </ToggleInput>
+
+            <CreateQuestionMenu @create-question="addQuestion" />
         </div>
 
         <QuestionCard
-            v-for="question, index in form.data.questions"
+            v-for="(question, index) in form.data.questions"
             :key="index"
             :question="question"
             :order-number="index + 1"
             class="mb-16"
             survey-creation-mode
-            @update:question="newValue => updateQuestion(question.id, newValue)"
+            @update:question="
+                (newValue) => updateQuestion(question.id, newValue)
+            "
             @remove-question="form.data.questions.splice(index, 1)"
         />
 

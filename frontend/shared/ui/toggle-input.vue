@@ -15,11 +15,10 @@ const emit = defineEmits<{
         </span>
 
         <button
-            class="transition-all duration-300 w-16 p-1 rounded-3xl
-                shadow-xl shadow-transparent"
+            class="transition-all duration-300 w-16 p-1 rounded-3xl shadow-xl shadow-transparent"
             :class="{
                 'bg-amethyst shadow-white/20': modelValue,
-                'bg-neutral-700': !modelValue
+                'bg-neutral-700': !modelValue,
             }"
             tabindex="0"
             :aria-pressed="modelValue"

@@ -7,7 +7,7 @@ export default defineConfig({
     env: {
         ...process.env,
         NEW_ACCOUNT_NAME: `account_${crypto.randomUUID().slice(0, 6)}`,
-        NEW_ACCOUNT_PASSWORD: '123456'
+        NEW_ACCOUNT_PASSWORD: '123456',
     },
 
     requestTimeout: 2000,
@@ -22,7 +22,7 @@ export default defineConfig({
         specPattern: [
             'cypress/e2e/auth.cy.ts',
             'cypress/e2e/surveys.cy.ts',
-            'cypress/e2e/delete-account.cy.ts'
+            'cypress/e2e/delete-account.cy.ts',
         ],
     },
 })

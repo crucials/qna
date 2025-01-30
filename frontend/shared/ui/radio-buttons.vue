@@ -18,8 +18,7 @@ const emit = defineEmits<{
         <label
             v-for="option in options"
             :key="option"
-            class="mb-5 last-of-type:mb-0 w-fit min-w-48
-                flex gap-x-3 items-center"
+            class="mb-5 last-of-type:mb-0 w-fit min-w-48 flex gap-x-3 items-center"
             :class="{ 'hover:cursor-pointer': !disabled }"
         >
             <input
@@ -30,7 +29,7 @@ const emit = defineEmits<{
                 hidden
                 :disabled="disabled"
             />
-            
+
             <button
                 tabindex="0"
                 type="button"
@@ -38,7 +37,7 @@ const emit = defineEmits<{
                 :class="{
                     'border-neutral-700 border': modelValue !== option,
                     'border-amethyst border-[6px]': modelValue === option,
-                    'opacity-70': disabled
+                    'opacity-70': disabled,
                 }"
                 @click="emit('update:modelValue', option)"
             ></button>
@@ -50,8 +49,7 @@ const emit = defineEmits<{
             <button
                 v-if="removableOptions"
                 type="button"
-                class="ml-2 p-2 rounded-full bg-neutral-900
-                    hover:scale-110 transition-transform"
+                class="ml-2 p-2 rounded-full bg-neutral-900 hover:scale-110 transition-transform"
                 title="Remove option"
                 @click="emit('remove-option', option)"
             >
