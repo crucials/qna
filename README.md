@@ -10,9 +10,10 @@ https://github.com/crucials/qna/assets/83793845/a7c2953e-50be-46e8-bc93-3e31b50c
 
 ## main features
 
-- survey analysis page with survey visits chart, responses stats and answers view
-- survey creation through convenient form builder
+- survey analysis page with survey **activity chart**, responses stats and answers view
+- survey creation through convenient **form builder**
 - different types of questions to choose: short text, multi-line text, single choice
+- convenient auth via **Google**
 - product landing page
 
 ## tech info
