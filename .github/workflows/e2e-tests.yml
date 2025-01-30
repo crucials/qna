@@ -2,7 +2,7 @@ name: End-to-end tests
 on: [ deployment_status ]
 env:
   API_BASE_URL: 'https://qna.hopto.org'
-  FRONTEND_URL: 'https://try-qna.vercel.app'
+  FRONTEND_URL: 'https://try-qna.netlify.app'
 jobs:
   cypress-run:
     if: github.event.deployment_status.state == 'success'
