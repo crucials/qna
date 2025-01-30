@@ -8,6 +8,7 @@ from werkzeug.datastructures import Headers
 from werkzeug.exceptions import Unauthorized
 
 from services.accounts import accounts_service
+from utils.auth.tokens import verify_access_token_and_get_payload
 
 
 def authorize_request():
@@ -30,12 +31,10 @@ def authorize_request():
     if auth_header_parts[0] != "Bearer":
         return
 
-    token = auth_header_parts[1]
+    access_token = auth_header_parts[1]
 
     try:
-        payload = jwt.decode(
-            token, key=os.environ["JWT_SECRET_KEY"], algorithms=["HS256"]
-        )
+        payload = verify_access_token_and_get_payload(access_token)
         account_id = payload.get("account_id")
 
         if not account_id:

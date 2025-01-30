@@ -14,7 +14,7 @@ from services.auth import (
     UsernameAlreadyExistsError,
     auth_service,
 )
-from utils.google_oauth import (
+from utils.auth.google_oauth import (
     fetch_tokens_from_google_authorization_code,
     decode_google_id_token,
 )
@@ -40,7 +40,7 @@ def sign_up():
 
         session = auth_service.sign_up(**credentials)
         return {
-            "token": session.token,
+            "access_token": session.access_token,
             "account": convert_bson_to_json_dict(
                 vars(AccountDto.create_from_account_document(session.account))
             ),
@@ -62,7 +62,7 @@ def log_in():
 
         session = auth_service.log_in(**credentials)
         return {
-            "token": session.token,
+            "access_token": session.access_token,
             "account": convert_bson_to_json_dict(
                 vars(AccountDto.create_from_account_document(session.account))
             ),
@@ -94,7 +94,7 @@ def log_in_with_google():
         )
 
         return {
-            "token": new_session.token,
+            "access_token": new_session.access_token,
             "account": convert_bson_to_json_dict(
                 vars(AccountDto.create_from_account_document(new_session.account))
             ),

@@ -1,12 +1,11 @@
-import os
 from collections import namedtuple
 
 from pymongo.errors import DuplicateKeyError
-import jwt
 import bcrypt
 
 from models.auth_providers import AuthProvider
 from mongo_database import accounts_collection
+from utils.auth.tokens import create_access_token
 
 
 class UsernameAlreadyExistsError(ValueError):
@@ -17,7 +16,7 @@ class InvalidCredentialsError(ValueError):
     pass
 
 
-SessionData = namedtuple("SessionData", ["token", "account"])
+SessionData = namedtuple("SessionData", ["access_token", "account"])
 
 
 class AuthService:
@@ -43,7 +42,7 @@ class AuthService:
         payload = {"account_id": str(new_account.inserted_id)}
 
         return SessionData(
-            jwt.encode(payload, os.environ["JWT_SECRET_KEY"], algorithm="HS256"),
+            create_access_token(payload),
             new_account_dict,
         )
 
@@ -62,9 +61,8 @@ class AuthService:
             raise InvalidCredentialsError()
 
         return SessionData(
-            jwt.encode(
+            create_access_token(
                 {"account_id": str(account["_id"])},
-                os.environ["JWT_SECRET_KEY"],
             ),
             account,
         )
@@ -81,9 +79,8 @@ class AuthService:
 
         if already_existing_account is not None:
             return SessionData(
-                jwt.encode(
+                create_access_token(
                     {"account_id": str(already_existing_account["_id"])},
-                    os.environ["JWT_SECRET_KEY"],
                 ),
                 already_existing_account,
             )
@@ -99,7 +96,7 @@ class AuthService:
 
         payload = {"account_id": str(new_account.inserted_id)}
         return SessionData(
-            jwt.encode(payload, os.environ["JWT_SECRET_KEY"], algorithm="HS256"),
+            create_access_token(payload),
             new_account_dict,
         )
 
