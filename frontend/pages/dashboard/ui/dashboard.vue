@@ -18,9 +18,38 @@ const { account } = storeToRefs(useCurrentAccountStore())
 <template>
     <div v-if="account">
         <header class="flex justify-between gap-5 mb-12">
-            <h1 class="font-bold text-4xl sm:text-3xl">
-                What do you want to do?
-            </h1>
+            <div>
+                <div class="flex items-center gap-x-3 mb-2">
+                    <svg
+                        class="w-7"
+                        viewBox="0 0 98 98"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <g clip-path="url(#clip0_88_123)">
+                            <circle cx="49" cy="49" r="49" fill="#262626" />
+                            <path
+                                d="M49 25C43.2031 25 38.5 29.7031 38.5 35.5C38.5 41.2969 43.2031 46 49 46C54.7969 46 59.5 41.2969 59.5 35.5C59.5 29.7031 54.7969 25 49 25ZM43.75 49.5C35.0273 49.5 28 56.5273 28 65.25V67C28 70.8828 31.1172 74 35 74H63C66.8828 74 70 70.8828 70 67V65.25C70 56.5273 62.9727 49.5 54.25 49.5H43.75Z"
+                                fill="#3a3a3a"
+                            />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_88_123">
+                                <rect width="98" height="98" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                    <span
+                        class="text-neutral-500 text-base font-medium break-all xs:text-sm"
+                        >{{ account.name }}</span
+                    >
+                </div>
+
+                <h1 class="font-bold text-4xl sm:text-3xl">
+                    What do you want to do?
+                </h1>
+            </div>
 
             <button
                 @click="logout"
