@@ -1,12 +1,12 @@
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
-import { useTokenCookie } from '~/shared/model/token-cookie'
+import { useAccessTokenStore } from '~/shared/model/token-store'
 
 export function logout() {
-    const token = useTokenCookie()
+    const { accessToken } = storeToRefs(useAccessTokenStore())
     const { account } = storeToRefs(useCurrentAccountStore())
     const router = useRouter()
 
-    token.value = null
+    accessToken.value = null
     account.value = null
     router.push('/')
 }

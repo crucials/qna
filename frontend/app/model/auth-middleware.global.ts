@@ -1,12 +1,19 @@
 import { getCurrentAccount } from '~/app/api/get-current-account'
+import { refreshAccessTokenIfNeeded } from '~/shared/api/access-token-refresh'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
-import { useTokenCookie } from '~/shared/model/token-cookie'
+import { useAccessTokenStore } from '~/shared/model/token-store'
 
 export default defineNuxtRouteMiddleware(async () => {
-    const token = useTokenCookie()
+    const { accessToken } = storeToRefs(useAccessTokenStore())
     const { account } = storeToRefs(useCurrentAccountStore())
 
-    if (!account.value && token.value) {
-        account.value = await getCurrentAccount()
+    await refreshAccessTokenIfNeeded()
+
+    if (!account.value && accessToken.value) {
+        const currentAccountResponse = await getCurrentAccount()
+
+        if (currentAccountResponse?.data) {
+            account.value = currentAccountResponse?.data
+        }
     }
 })

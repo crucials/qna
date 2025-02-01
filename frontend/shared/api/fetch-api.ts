@@ -1,22 +1,41 @@
+import {
+    getNewAccessToken,
+    refreshAccessTokenIfNeeded,
+} from '~/shared/api/access-token-refresh'
 import type { ApiResponse } from '~/shared/model/api-response'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
-import { useTokenCookie } from '~/shared/model/token-cookie'
+import { useAccessTokenStore } from '~/shared/model/token-store'
 
 interface ApiRequestOptions {
     method?: 'GET' | 'POST' | 'DELETE' | 'PUT'
     notificationOnError?: boolean
     body?: Record<string, any>
+    credentials?: 'include' | 'omit'
+    headers?: HeadersInit
 }
 
+/**
+ * Utility function to fetch backend API. Handles SSR,
+ * auth (*inserts token in the request*) and access token refresh
+ *
+ * @param refreshAccessToken Flag that determines if access token must be
+ * checked and refreshed if necessary before the request. `true` by default.
+ * In most cases you do not need to disable it. This param is for internal use
+ */
 export async function fetchApi<TResponseData = null>(
     path: string,
     options?: ApiRequestOptions,
+    refreshAccessToken = true,
 ) {
     type TypedApiResponse = ApiResponse<TResponseData>
 
     const config = useRuntimeConfig()
-    const token = useTokenCookie()
+    const { accessToken } = storeToRefs(useAccessTokenStore())
     const { showNotification } = useNotificationsStore()
+
+    if (refreshAccessToken) {
+        refreshAccessTokenIfNeeded()
+    }
 
     let response: {
         data: Ref<TypedApiResponse | null>
@@ -32,22 +51,26 @@ export async function fetchApi<TResponseData = null>(
             config.public.apiBaseUrl + path,
             {
                 headers: {
-                    Authorization: 'Bearer ' + token.value,
+                    Authorization: 'Bearer ' + accessToken.value,
                     'Content-Type': 'application/json',
+                    ...options?.headers,
                 },
                 method: options?.method,
                 deep: false,
                 body: options?.body,
+                credentials: options?.credentials || 'omit',
             },
         )
     } else {
         response = await fetchOnClient(config.public.apiBaseUrl + path, {
             headers: {
-                Authorization: 'Bearer ' + token.value,
+                Authorization: 'Bearer ' + accessToken.value,
                 'Content-Type': 'application/json',
+                ...options?.headers,
             },
             method: options?.method,
             body: JSON.stringify(options?.body),
+            credentials: options?.credentials || 'omit',
         })
     }
 
