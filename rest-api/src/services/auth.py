@@ -5,7 +5,7 @@ import bcrypt
 
 from models.auth_providers import AuthProvider
 from mongo_database import accounts_collection
-from utils.auth.tokens import create_access_token
+from utils.auth.tokens import create_access_token, create_refresh_token
 
 
 class UsernameAlreadyExistsError(ValueError):
@@ -16,7 +16,7 @@ class InvalidCredentialsError(ValueError):
     pass
 
 
-SessionData = namedtuple("SessionData", ["access_token", "account"])
+SessionData = namedtuple("SessionData", ["access_token", "refresh_token", "account"])
 
 
 class AuthService:
@@ -43,6 +43,7 @@ class AuthService:
 
         return SessionData(
             create_access_token(payload),
+            create_refresh_token(payload),
             new_account_dict,
         )
 
@@ -60,10 +61,13 @@ class AuthService:
         if not bcrypt.checkpw(password.encode(), account["password"].encode()):
             raise InvalidCredentialsError()
 
+        jwt_payload = {"account_id": str(account["_id"])}
+
         return SessionData(
             create_access_token(
-                {"account_id": str(account["_id"])},
+                jwt_payload,
             ),
+            create_refresh_token(jwt_payload),
             account,
         )
 
@@ -78,10 +82,15 @@ class AuthService:
         )
 
         if already_existing_account is not None:
+            already_existing_account_jwt_payload = {
+                "account_id": str(already_existing_account["_id"])
+            }
+
             return SessionData(
                 create_access_token(
-                    {"account_id": str(already_existing_account["_id"])},
+                    already_existing_account_jwt_payload,
                 ),
+                create_refresh_token(already_existing_account_jwt_payload),
                 already_existing_account,
             )
 
@@ -94,9 +103,11 @@ class AuthService:
 
         new_account = accounts_collection.insert_one(new_account_dict)
 
-        payload = {"account_id": str(new_account.inserted_id)}
+        new_account_jwt_payload = {"account_id": str(new_account.inserted_id)}
+
         return SessionData(
-            create_access_token(payload),
+            create_access_token(new_account_jwt_payload),
+            create_refresh_token(new_account_jwt_payload),
             new_account_dict,
         )
 

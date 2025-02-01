@@ -7,6 +7,7 @@ from marshmallow import EXCLUDE
 from models.account_dto import AccountDto
 from models.account_credentials_schema import AccountCredentialsValidationSchema
 from models.auth_providers import AuthProvider
+from utils.auth.tokens import create_access_token, verify_refresh_token_and_get_payload
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
 from services.auth import (
@@ -20,7 +21,7 @@ from utils.auth.google_oauth import (
 )
 
 
-TOKEN_COOKIE_MAX_AGE = 2592000
+REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
 
 logger = logging.getLogger(__name__)
 
@@ -39,12 +40,26 @@ def sign_up():
             raise InternalServerError()
 
         session = auth_service.sign_up(**credentials)
-        return {
-            "access_token": session.access_token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(session.account))
-            ),
-        }
+
+        response = flask.jsonify(
+            {
+                "access_token": session.access_token,
+                "account": convert_bson_to_json_dict(
+                    vars(AccountDto.create_from_account_document(session.account))
+                ),
+            }
+        )
+
+        response.set_cookie(
+            "refresh-token",
+            session.refresh_token,
+            httponly=True,
+            samesite="None",
+            secure=True,
+            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+        )
+
+        return response
     except UsernameAlreadyExistsError as error:
         raise Conflict("account with specified username already exists") from error
 
@@ -61,14 +76,47 @@ def log_in():
             raise InternalServerError()
 
         session = auth_service.log_in(**credentials)
-        return {
-            "access_token": session.access_token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(session.account))
-            ),
-        }
+
+        response = flask.jsonify(
+            {
+                "access_token": session.access_token,
+                "account": convert_bson_to_json_dict(
+                    vars(AccountDto.create_from_account_document(session.account))
+                ),
+            }
+        )
+
+        response.set_cookie(
+            "refresh-token",
+            session.refresh_token,
+            httponly=True,
+            samesite="None",
+            secure=True,
+            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+        )
+
+        return response
     except InvalidCredentialsError as error:
         raise BadRequest("invalid username or password") from error
+
+
+@auth_controller_blueprint.post("/access-token")
+@api_response()
+def get_new_access_token():
+    refresh_token = flask.request.cookies.get("refresh-token")
+
+    if refresh_token is None:
+        raise Unauthorized("Refresh token cookie (`refresh-token`) is missing")
+
+    try:
+        refresh_token_payload: dict = verify_refresh_token_and_get_payload(
+            refresh_token
+        )
+        refresh_token_payload.pop("exp")
+
+        return create_access_token(refresh_token_payload)
+    except:
+        raise Unauthorized("Refresh token is invalid")
 
 
 @auth_controller_blueprint.post("/log-in/google")
@@ -93,12 +141,25 @@ def log_in_with_google():
             id_token_payload["email"], AuthProvider.Google, id_token_payload["sub"]
         )
 
-        return {
-            "access_token": new_session.access_token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(new_session.account))
-            ),
-        }
+        response = flask.jsonify(
+            {
+                "access_token": new_session.access_token,
+                "account": convert_bson_to_json_dict(
+                    vars(AccountDto.create_from_account_document(new_session.account))
+                ),
+            }
+        )
+
+        response.set_cookie(
+            "refresh-token",
+            new_session.refresh_token,
+            httponly=True,
+            samesite="None",
+            secure=True,
+            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+        )
+
+        return response
     except Exception as error:
         logger.error(str(error))
         raise Unauthorized(
