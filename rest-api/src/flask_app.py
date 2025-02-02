@@ -25,7 +25,7 @@ def create_flask_app():
 
     limiter.init_app(app)
 
-    CORS(app, origins=os.environ.get("FRONTEND_ORIGIN"))
+    CORS(app, origins=os.environ.get("FRONTEND_ORIGIN"), supports_credentials=True)
 
     for blueprint in controllers_blueprints:
         app.register_blueprint(blueprint)

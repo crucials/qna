@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound, Forbidden
 from auth_middlewares import restrict_unauthorized_access
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from utils.get_account_from_headers import get_account_from_headers
+from utils.auth.get_account_from_headers import get_account_from_headers
 from services.surveys import surveys_service
 from services.surveys.stats import survey_stats_service, StatsNotFoundError
 from limiter import limiter

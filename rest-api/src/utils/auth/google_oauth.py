@@ -48,16 +48,20 @@ class GoogleTokensFetchResponse(TypedDict):
 
 
 def fetch_tokens_from_google_authorization_code(code: str) -> GoogleTokensFetchResponse:
-    response = requests.post(
-        f"{_GOOGLE_OAUTH_API_BASE_URL}/token",
-        data={
-            "code": code,
-            "client_id": _GOOGLE_OAUTH_CLIENT_ID,
-            "client_secret": _GOOGLE_OAUTH_CLIENT_SECRET,
-            "grant_type": "authorization_code",
-            "redirect_uri": _GOOGLE_OAUTH_REDIRECT_URI,
-        },
-    )
+    try:
+        response = requests.post(
+            f"{_GOOGLE_OAUTH_API_BASE_URL}/token",
+            data={
+                "code": code,
+                "client_id": _GOOGLE_OAUTH_CLIENT_ID,
+                "client_secret": _GOOGLE_OAUTH_CLIENT_SECRET,
+                "grant_type": "authorization_code",
+                "redirect_uri": _GOOGLE_OAUTH_REDIRECT_URI,
+            },
+            timeout=10,
+        )
+    except requests.RequestException as error:
+        raise GoogleTokenFetchError("Token exchange request failed") from error
 
     if not response.ok:
         raise GoogleTokenFetchError(

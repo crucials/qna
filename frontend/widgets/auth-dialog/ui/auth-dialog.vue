@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useTokenCookie } from '~/shared/model/token-cookie'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
 import { useForm } from '~/shared/model/form'
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
+import { useAccessTokenStore } from '~/shared/model/token-store'
 import { useAuthDialogOpenedStore } from '../model/opened-store'
 import { logIn } from '../api/log-in'
 import { signUp } from '../api/sign-up'
 
 const router = useRouter()
-const token = useTokenCookie()
+const { accessToken } = storeToRefs(useAccessTokenStore())
 const { showNotification } = useNotificationsStore()
 const { account } = storeToRefs(useCurrentAccountStore())
 
@@ -30,7 +30,7 @@ async function sendLogInRequest() {
     if (response.data.value?.data) {
         const sessionData = response.data.value.data
 
-        token.value = sessionData.token
+        accessToken.value = sessionData.access_token
         account.value = sessionData.account
 
         showNotification({ message: 'Logged in', type: 'success' })
@@ -53,7 +53,7 @@ async function sendSignUpRequest() {
     if (response.data.value?.data) {
         const sessionData = response.data.value.data
 
-        token.value = sessionData.token
+        accessToken.value = sessionData.access_token
         account.value = sessionData.account
 
         showNotification({ message: 'Account created', type: 'success' })

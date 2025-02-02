@@ -25,7 +25,7 @@ def api_response(json_content=True):
                 result.set_data(
                     json.dumps(
                         {
-                            "data": result.get_data(as_text=True),
+                            "data": result.json,
                             "error": None,
                         }
                     )

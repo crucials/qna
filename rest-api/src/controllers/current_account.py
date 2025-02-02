@@ -5,7 +5,7 @@ from models.account_dto import AccountDto
 from services.accounts import accounts_service
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from utils.get_account_from_headers import get_account_from_headers
+from utils.auth.get_account_from_headers import get_account_from_headers
 
 
 current_account_controller_blueprint = flask.Blueprint(

@@ -11,7 +11,7 @@ from models.survey import SurveyValidationSchema
 from models.survey_response import SurveyResponseValidationSchema
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
-from utils.get_account_from_headers import get_account_from_headers
+from utils.auth.get_account_from_headers import get_account_from_headers
 from services.surveys import InvalidResponseDataError, surveys_service
 from services.surveys.responses import survey_responses_service
 

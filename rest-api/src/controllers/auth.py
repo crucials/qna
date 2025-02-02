@@ -7,20 +7,50 @@ from marshmallow import EXCLUDE
 from models.account_dto import AccountDto
 from models.account_credentials_schema import AccountCredentialsValidationSchema
 from models.auth_providers import AuthProvider
+from utils.auth.tokens import create_access_token, verify_refresh_token_and_get_payload
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
+from utils.auth.google_oauth import (
+    fetch_tokens_from_google_authorization_code,
+    decode_google_id_token,
+)
 from services.auth import (
     InvalidCredentialsError,
     UsernameAlreadyExistsError,
     auth_service,
-)
-from utils.google_oauth import (
-    fetch_tokens_from_google_authorization_code,
-    decode_google_id_token,
+    SessionData,
 )
 
 
-TOKEN_COOKIE_MAX_AGE = 2592000
+REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
+
+
+def create_user_session_response(session_data: SessionData):
+    """
+    Creates flask response containing access token and account data in json body
+    and the refresh token in http-only cookie
+    """
+
+    response = flask.jsonify(
+        {
+            "access_token": session_data.access_token,
+            "account": convert_bson_to_json_dict(
+                vars(AccountDto.create_from_account_document(session_data.account))
+            ),
+        }
+    )
+
+    response.set_cookie(
+        "refresh-token",
+        session_data.refresh_token,
+        httponly=True,
+        samesite="None",
+        secure=True,
+        max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+    )
+
+    return response
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,13 +68,8 @@ def sign_up():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        session = auth_service.sign_up(**credentials)
-        return {
-            "token": session.token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(session.account))
-            ),
-        }
+        session_data = auth_service.sign_up(**credentials)
+        return create_user_session_response(session_data)
     except UsernameAlreadyExistsError as error:
         raise Conflict("account with specified username already exists") from error
 
@@ -60,15 +85,29 @@ def log_in():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        session = auth_service.log_in(**credentials)
-        return {
-            "token": session.token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(session.account))
-            ),
-        }
+        session_data = auth_service.log_in(**credentials)
+        return create_user_session_response(session_data)
     except InvalidCredentialsError as error:
         raise BadRequest("invalid username or password") from error
+
+
+@auth_controller_blueprint.post("/access-token")
+@api_response()
+def get_new_access_token():
+    refresh_token = flask.request.cookies.get("refresh-token")
+
+    if refresh_token is None:
+        raise Unauthorized("Refresh token cookie (`refresh-token`) is missing")
+
+    try:
+        refresh_token_payload: dict = verify_refresh_token_and_get_payload(
+            refresh_token
+        )
+        refresh_token_payload.pop("exp")
+
+        return create_access_token(refresh_token_payload)
+    except Exception as error:
+        raise Unauthorized("Refresh token is invalid") from error
 
 
 @auth_controller_blueprint.post("/log-in/google")
@@ -90,17 +129,19 @@ def log_in_with_google():
         id_token_payload = decode_google_id_token(google_tokens["id_token"])
 
         new_session = auth_service.log_in_with_external_provider(
-            id_token_payload["email"], AuthProvider.Google, id_token_payload["sub"]
+            id_token_payload["email"], AuthProvider.GOOGLE, id_token_payload["sub"]
         )
-
-        return {
-            "token": new_session.token,
-            "account": convert_bson_to_json_dict(
-                vars(AccountDto.create_from_account_document(new_session.account))
-            ),
-        }
+        return create_user_session_response(new_session)
     except Exception as error:
         logger.error(str(error))
         raise Unauthorized(
             "Log in failed, perhaps authorization code you passed is invalid"
-        )
+        ) from error
+
+
+@auth_controller_blueprint.delete("/logout")
+@api_response()
+def logout():
+    response = flask.jsonify(None)
+    response.delete_cookie("refresh-token")
+    return response

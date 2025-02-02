@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useCurrentAccountStore } from '~/shared/model/current-account-store'
 import { logInWithGoogle } from '../api/log-in-with-google'
-import { useTokenCookie } from '~/shared/model/token-cookie'
 import { useNotificationsStore } from '~/shared/model/notifications-store'
+import { useAccessTokenStore } from '~/shared/model/token-store'
 
 definePageMeta({
     path: '/auth-callback',
@@ -13,7 +13,7 @@ const router = useRouter()
 
 const { showNotification } = useNotificationsStore()
 
-const token = useTokenCookie()
+const { accessToken } = storeToRefs(useAccessTokenStore())
 const { account } = storeToRefs(useCurrentAccountStore())
 
 onMounted(async () => {
@@ -29,7 +29,7 @@ onMounted(async () => {
     const googleLogInResponse = (await logInWithGoogle(code.toString())).data
         .value
 
-    if (!googleLogInResponse?.data?.token) {
+    if (!googleLogInResponse?.data?.access_token) {
         console.error(
             'Auth error:',
             googleLogInResponse?.error?.explanation ||
@@ -39,7 +39,7 @@ onMounted(async () => {
         throw createError('Log in failed')
     }
 
-    token.value = googleLogInResponse.data.token
+    accessToken.value = googleLogInResponse.data.access_token
     account.value = googleLogInResponse.data.account
 
     showNotification({ message: 'Logged in', type: 'success' })
