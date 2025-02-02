@@ -18,10 +18,39 @@ from services.auth import (
     InvalidCredentialsError,
     UsernameAlreadyExistsError,
     auth_service,
+    SessionData,
 )
 
 
 REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
+
+
+def create_user_session_response(session_data: SessionData):
+    """
+    Creates flask response containing access token and account data in json body
+    and the refresh token in http-only cookie
+    """
+
+    response = flask.jsonify(
+        {
+            "access_token": session_data.access_token,
+            "account": convert_bson_to_json_dict(
+                vars(AccountDto.create_from_account_document(session_data.account))
+            ),
+        }
+    )
+
+    response.set_cookie(
+        "refresh-token",
+        session_data.refresh_token,
+        httponly=True,
+        samesite="None",
+        secure=True,
+        max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+    )
+
+    return response
+
 
 logger = logging.getLogger(__name__)
 
@@ -39,27 +68,8 @@ def sign_up():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        session = auth_service.sign_up(**credentials)
-
-        response = flask.jsonify(
-            {
-                "access_token": session.access_token,
-                "account": convert_bson_to_json_dict(
-                    vars(AccountDto.create_from_account_document(session.account))
-                ),
-            }
-        )
-
-        response.set_cookie(
-            "refresh-token",
-            session.refresh_token,
-            httponly=True,
-            samesite="None",
-            secure=True,
-            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
-        )
-
-        return response
+        session_data = auth_service.sign_up(**credentials)
+        return create_user_session_response(session_data)
     except UsernameAlreadyExistsError as error:
         raise Conflict("account with specified username already exists") from error
 
@@ -75,27 +85,8 @@ def log_in():
         if not isinstance(credentials, dict):
             raise InternalServerError()
 
-        session = auth_service.log_in(**credentials)
-
-        response = flask.jsonify(
-            {
-                "access_token": session.access_token,
-                "account": convert_bson_to_json_dict(
-                    vars(AccountDto.create_from_account_document(session.account))
-                ),
-            }
-        )
-
-        response.set_cookie(
-            "refresh-token",
-            session.refresh_token,
-            httponly=True,
-            samesite="None",
-            secure=True,
-            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
-        )
-
-        return response
+        session_data = auth_service.log_in(**credentials)
+        return create_user_session_response(session_data)
     except InvalidCredentialsError as error:
         raise BadRequest("invalid username or password") from error
 
@@ -140,26 +131,7 @@ def log_in_with_google():
         new_session = auth_service.log_in_with_external_provider(
             id_token_payload["email"], AuthProvider.GOOGLE, id_token_payload["sub"]
         )
-
-        response = flask.jsonify(
-            {
-                "access_token": new_session.access_token,
-                "account": convert_bson_to_json_dict(
-                    vars(AccountDto.create_from_account_document(new_session.account))
-                ),
-            }
-        )
-
-        response.set_cookie(
-            "refresh-token",
-            new_session.refresh_token,
-            httponly=True,
-            samesite="None",
-            secure=True,
-            max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
-        )
-
-        return response
+        return create_user_session_response(new_session)
     except Exception as error:
         logger.error(str(error))
         raise Unauthorized(
