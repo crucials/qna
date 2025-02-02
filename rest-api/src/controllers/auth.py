@@ -143,5 +143,5 @@ def log_in_with_google():
 @api_response()
 def logout():
     response = flask.jsonify(None)
-    response.set_cookie("refresh-token", "", expires=0)
+    response.delete_cookie("refresh-token")
     return response
