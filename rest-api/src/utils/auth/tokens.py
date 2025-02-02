@@ -1,5 +1,4 @@
 import datetime
-from math import exp
 import os
 
 import jwt

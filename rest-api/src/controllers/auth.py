@@ -10,14 +10,14 @@ from models.auth_providers import AuthProvider
 from utils.auth.tokens import create_access_token, verify_refresh_token_and_get_payload
 from utils.convert_bson_to_json_dict import convert_bson_to_json_dict
 from utils.decorators.api_response import api_response
+from utils.auth.google_oauth import (
+    fetch_tokens_from_google_authorization_code,
+    decode_google_id_token,
+)
 from services.auth import (
     InvalidCredentialsError,
     UsernameAlreadyExistsError,
     auth_service,
-)
-from utils.auth.google_oauth import (
-    fetch_tokens_from_google_authorization_code,
-    decode_google_id_token,
 )
 
 
@@ -115,8 +115,8 @@ def get_new_access_token():
         refresh_token_payload.pop("exp")
 
         return create_access_token(refresh_token_payload)
-    except:
-        raise Unauthorized("Refresh token is invalid")
+    except Exception as error:
+        raise Unauthorized("Refresh token is invalid") from error
 
 
 @auth_controller_blueprint.post("/log-in/google")
@@ -138,7 +138,7 @@ def log_in_with_google():
         id_token_payload = decode_google_id_token(google_tokens["id_token"])
 
         new_session = auth_service.log_in_with_external_provider(
-            id_token_payload["email"], AuthProvider.Google, id_token_payload["sub"]
+            id_token_payload["email"], AuthProvider.GOOGLE, id_token_payload["sub"]
         )
 
         response = flask.jsonify(
@@ -164,4 +164,4 @@ def log_in_with_google():
         logger.error(str(error))
         raise Unauthorized(
             "Log in failed, perhaps authorization code you passed is invalid"
-        )
+        ) from error

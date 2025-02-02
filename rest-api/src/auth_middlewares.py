@@ -1,4 +1,4 @@
-import os
+import logging
 
 import bson.json_util
 import bson
@@ -9,6 +9,9 @@ from werkzeug.exceptions import Unauthorized
 
 from services.accounts import accounts_service
 from utils.auth.tokens import verify_access_token_and_get_payload
+
+
+logger = logging.getLogger(__name__)
 
 
 def authorize_request():
@@ -48,8 +51,8 @@ def authorize_request():
         updated_headers = Headers(flask.request.headers)
         updated_headers.add("Account", bson.json_util.dumps(account))
         flask.request.headers = updated_headers
-    except Exception as error:
-        print(error)
+    except jwt.PyJWTError as error:
+        logger.error(error)
         pass
 
 
