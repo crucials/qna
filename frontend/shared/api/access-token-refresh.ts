@@ -17,8 +17,6 @@ export async function getNewAccessToken() {
         false,
     )
 
-    console.log(accessTokenResponse.data.value?.data)
-
     return accessTokenResponse.data.value?.data
 }
 
