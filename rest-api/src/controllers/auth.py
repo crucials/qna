@@ -137,3 +137,11 @@ def log_in_with_google():
         raise Unauthorized(
             "Log in failed, perhaps authorization code you passed is invalid"
         ) from error
+
+
+@auth_controller_blueprint.delete("/logout")
+@api_response()
+def logout():
+    response = flask.jsonify(None)
+    response.set_cookie("refresh-token", "", expires=0)
+    return response
