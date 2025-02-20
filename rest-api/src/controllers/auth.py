@@ -1,6 +1,4 @@
 import logging
-import os
-from urllib.parse import urlparse
 
 import flask
 from werkzeug.exceptions import BadRequest, InternalServerError, Conflict, Unauthorized
@@ -33,8 +31,6 @@ def create_user_session_response(session_data: SessionData):
     and the refresh token in http-only cookie
     """
 
-    frontend_domain = urlparse(os.environ["FRONTEND_ORIGIN"]).netloc
-
     response = flask.jsonify(
         {
             "access_token": session_data.access_token,
@@ -49,7 +45,6 @@ def create_user_session_response(session_data: SessionData):
         session_data.refresh_token,
         httponly=True,
         samesite="None",
-        domain=frontend_domain,
         secure=True,
         max_age=REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
     )
